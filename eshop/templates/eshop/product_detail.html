@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<dev>
+    <h4>name</h4>
+    <p>{{ product.name }}</p>
+</dev>
+
+<dev>
+    <h4>description</h4>
+    <p>{{ product.description }}</p>
+</dev>
+
+<dev>
+    <h4>price</h4>
+    <p>{{ product.price }}</p>
+</dev>
+<dev>
+    <h4>images</h4>
+    {% for image in product.images.all %}
+        <p>{{ image.image }}</p>
+    {% empty %}
+        zadný obrázek
+    {% endfor %}
+
+</dev>
+<dev>
+    <h4>množství</h4>
+    <p>{{ product.stock_quantity }}</p>
+</dev>
+<dev>
+    <h4>kategorie</h4>
+    {% for category in product.category.all %}
+    <p>{{ category.name }}</p>
+    {% empty %}
+        žádná kategorie
+    {% endfor %}
+</dev>
+
+
+
+</body>
+</html>

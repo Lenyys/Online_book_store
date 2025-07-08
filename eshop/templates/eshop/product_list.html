@@ -7,7 +7,7 @@
 <body>
 
 {% for product in products %}
-    {{ product.name }}
+ <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
 {% empty %}
     žádné produkty
 {% endfor %}
