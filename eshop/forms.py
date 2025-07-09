@@ -18,7 +18,6 @@ class ProductForm(forms.ModelForm):
             'category': 'Kategorie',
             'isbn': 'ISBN',
             'ean': 'EAN',
-
         }
         widgets = {
             'name': forms.TextInput(attrs={
