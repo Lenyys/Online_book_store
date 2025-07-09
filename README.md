@@ -30,12 +30,12 @@
 - [ ] 10. autentizace
 - [ ] 11. autorizace
 
-[ ] 12. košík
-  [ ] 12.1 přidávání
-  [ ] 12.2 mazání z košíku
-  [ ] 12.3 update košíku
+- [ ] 12. košík
+  - [ ] 12.1 přidávání
+  - [ ] 12.2 mazání z košíku
+  - [ ] 12.3 update košíku
   
-[ ] 13. objednávka
+- [ ] 13. objednávka
 
 
 --------------------------------------
