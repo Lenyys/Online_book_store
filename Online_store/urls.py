@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from eshop.views import ProductListView, ProductDetailView, ProductCreateView, ProductUpdateView
+from eshop.views import ProductListView, ProductDetailView, ProductCreateView, ProductUpdateView, ProductDeleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +26,8 @@ urlpatterns = [
     path('eshop/product_detail/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
     path('eshop/product_create/', ProductCreateView.as_view(), name='product_create'),
     path('eshop/product_update/<int:pk>/', ProductUpdateView.as_view(), name='product_update'),
+    path('eshop/product_delete/<int:pk>/', ProductDeleteView.as_view(), name='product_delete'),
+
+
+
 ]

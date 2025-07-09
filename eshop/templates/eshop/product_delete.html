@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1> opravdu chcete odstranit knihu: {{ object.name }}</h1>
+<form method="post" >
+    {% csrf_token %}
+    <button type="submit">Ano smazat</button>
+</form>
+<a href="{% url 'products_list' %}">Zpět na seznam knih</a>
+
+
+
+</body>
+</html>
