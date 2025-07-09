@@ -7,21 +7,21 @@
 <body>
 <dev>
     <h4>name</h4>
-    <p>{{ product.name }}</p>
+    <p>{{ book.name }}</p>
 </dev>
 
 <dev>
     <h4>description</h4>
-    <p>{{ product.description }}</p>
+    <p>{{ book.description }}</p>
 </dev>
 
 <dev>
     <h4>price</h4>
-    <p>{{ product.price }}</p>
+    <p>{{ book.price }}</p>
 </dev>
 <dev>
     <h4>images</h4>
-    {% for image in product.images.all %}
+    {% for image in book.images.all %}
         <p>{{ image.image }}</p>
     {% empty %}
         zadný obrázek
@@ -30,18 +30,18 @@
 </dev>
 <dev>
     <h4>množství</h4>
-    <p>{{ product.stock_quantity }}</p>
+    <p>{{ book.stock_quantity }}</p>
 </dev>
 <dev>
     <h4>kategorie</h4>
-    {% for category in product.category.all %}
+    {% for category in book.category.all %}
     <p>{{ category.name }}</p>
     {% empty %}
         žádná kategorie
     {% endfor %}
 </dev>
-<a href="{% url 'product_update' product.id %}">Upravit knihu</a>
-<a href="{% url 'product_delete' product.id %}">Smazat knihu</a>
+<a href="{% url 'book_update' book.id %}">Upravit knihu</a>
+<a href="{% url 'book_delete' book.id %}">Smazat knihu</a>
 
 
 </body>

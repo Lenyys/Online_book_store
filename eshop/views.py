@@ -2,42 +2,42 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from eshop.forms import ProductForm
-from eshop.models import Product
+from eshop.forms import BookForm
+from eshop.models import Book
 
 
 # Create your views here.
 
 
-class ProductListView(ListView):
-    model = Product
-    template_name = 'eshop/products_list.html'
-    context_object_name = 'products'
+class BookListView(ListView):
+    model = Book
+    template_name = 'eshop/book_list.html'
+    context_object_name = 'books'
 
     paginate_by = 10
     ordering = ['-price']
 
-class ProductDetailView(DetailView):
-    model = Product
-    template_name = 'eshop/product_detail.html'
-    context_object_name = 'product'
+class BookDetailView(DetailView):
+    model = Book
+    template_name = 'eshop/book_detail.html'
+    context_object_name = 'book'
 
 
-class ProductCreateView(CreateView):
-    model = Product
-    template_name = 'eshop/product_create.html'
-    form_class = ProductForm
-    success_url = reverse_lazy('products_list')
+class BookCreateView(CreateView):
+    model = Book
+    template_name = 'eshop/book_create.html'
+    form_class = BookForm
+    success_url = reverse_lazy('book_list')
 
 
-class ProductUpdateView(UpdateView):
-    model = Product
-    template_name = 'eshop/product_update.html'
-    form_class = ProductForm
-    success_url = reverse_lazy('products_list')
+class BookUpdateView(UpdateView):
+    model = Book
+    template_name = 'eshop/book_update.html'
+    form_class = BookForm
+    success_url = reverse_lazy('book_list')
 
 
-class ProductDeleteView(DeleteView):
-    model = Product
-    template_name = 'eshop/product_delete.html'
-    success_url = reverse_lazy('products_list')
+class BookDeleteView(DeleteView):
+    model = Book
+    template_name = 'eshop/book_delete.html'
+    success_url = reverse_lazy('book_list')

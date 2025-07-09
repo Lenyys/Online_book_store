@@ -1,12 +1,12 @@
 from django import forms
 from rest_framework.exceptions import ValidationError
 
-from eshop.models import Product
+from eshop.models import Book
 
 
-class ProductForm(forms.ModelForm):
+class BookForm(forms.ModelForm):
     class Meta:
-        model = Product
+        model = Book
         fields = ['name','autor','price', 'description', 'stock_quantity',
             'category', 'isbn', 'ean']
         labels = {

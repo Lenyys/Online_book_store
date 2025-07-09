@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="cz">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% for book in books %}
+ <a href="{% url 'book_detail' book.id %}">{{ book.name }}</a>
+{% empty %}
+    žádné knihy
+{% endfor %}
+
+<a href="{% url 'book_create' %}">Zadat novou knihu</a>
+
+</body>
+</html>

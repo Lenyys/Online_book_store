@@ -17,16 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from eshop.views import ProductListView, ProductDetailView, ProductCreateView, ProductUpdateView, ProductDeleteView
+from eshop.views import BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('eshop/products_list/', ProductListView.as_view(), name='products_list'),
-    path('eshop/product_detail/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
-    path('eshop/product_create/', ProductCreateView.as_view(), name='product_create'),
-    path('eshop/product_update/<int:pk>/', ProductUpdateView.as_view(), name='product_update'),
-    path('eshop/product_delete/<int:pk>/', ProductDeleteView.as_view(), name='product_delete'),
+    path('eshop/book_list/', BookListView.as_view(), name='book_list'),
+    path('eshop/book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
+    path('eshop/book_create/', BookCreateView.as_view(), name='book_create'),
+    path('eshop/book_update/<int:pk>/', BookUpdateView.as_view(), name='book_update'),
+    path('eshop/book_delete/<int:pk>/', BookDeleteView.as_view(), name='book_delete'),
 
 
 
