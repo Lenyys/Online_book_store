@@ -2,7 +2,6 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-# Create your models here.
 
 class Category(models.Model):
     name = models.CharField(max_length=80, null=False, blank=False)
@@ -20,6 +19,12 @@ class Autor(models.Model):
     name = models.CharField(max_length=80, null=False, blank=False)
     lastname = models.CharField(max_length=150, null=False, blank=False)
     date_of_birth = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        pass
+
+    def __repr__(self):
+        pass
 
 
 class Product(models.Model):
@@ -101,4 +106,5 @@ class SelectedProduct(models.Model):
         pass
     def __repr__(self):
         pass
+
 
