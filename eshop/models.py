@@ -2,7 +2,6 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-# Create your models here.
 
 class Category(models.Model):
     name = models.CharField(max_length=80, null=False, blank=False)
@@ -20,17 +19,23 @@ class Autor(models.Model):
     name = models.CharField(max_length=80, null=False, blank=False)
     lastname = models.CharField(max_length=150, null=False, blank=False)
     date_of_birth = models.DateField(null=True, blank=True)
+    # biografie, datum 
+    def __str__(self):
+        return f"{self.name} {self.lastname}"
+
+    def __repr__(self):
+        pass
 
 
-class Product(models.Model):
+class Book(models.Model):
     name = models.CharField(max_length=150, null=False, blank=False)
-    autor = models.ManyToManyField(Autor, related_name='products')
+    autor = models.ManyToManyField(Autor, related_name='books')
     isbn = models.CharField(max_length=20, null=True, blank=True)
     ean = models.PositiveIntegerField(null=True, blank=True)
     description = models.TextField(null=False, blank=False)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=False, blank=False)
     stock_quantity = models.PositiveIntegerField(null=False, blank=True, default=0)
-    category = models.ManyToManyField(Category, related_name='products')
+    category = models.ManyToManyField(Category, related_name='books')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='products_created')
@@ -48,7 +53,7 @@ class Product(models.Model):
 
 class Image(models.Model):
     image = models.ImageField(upload_to='images/', default=None, null=False, blank=False)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    product = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='images')
     description = models.TextField(null=False, blank=False)
 
     class Meta:
@@ -89,7 +94,7 @@ class Order(models.Model):
 
 
 class SelectedProduct(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=False)
+    product = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, blank=False)
     product_price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=True, default=0)
     quantity = models.PositiveIntegerField(null=False, blank=True, default=0)
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True, blank=True, related_name='selected_products')
@@ -101,4 +106,5 @@ class SelectedProduct(models.Model):
         pass
     def __repr__(self):
         pass
+
 
