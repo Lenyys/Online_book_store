@@ -3,5 +3,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('eshop.urls')),  # Předpoklad: aplikace se jmenuje "eshop"
+    path('', include('eshop.urls')),
 ]
+
