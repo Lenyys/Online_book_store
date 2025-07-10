@@ -22,8 +22,6 @@ from eshop.views import BookListView, BookDetailView, BookCreateView, BookUpdate
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('accounts/login/',),
-
 
     path('eshop/book_list/', BookListView.as_view(), name='book_list'),
     path('eshop/book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),

@@ -2,7 +2,7 @@ from django import forms
 
 from rest_framework.exceptions import ValidationError
 
-from eshop.models import Book
+from eshop.models import Book, Category
 
 
 class BookForm(forms.ModelForm):
@@ -79,9 +79,6 @@ class BookForm(forms.ModelForm):
         return cleaned_data
 
 
-
-
-from .models import Category
 
 class CategoryForm(forms.ModelForm):
     class Meta:
