@@ -14,9 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
+from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.urls import path, include
+
+from accounts.views import user_logout, SignUpView
 from eshop.views import home
 
 
@@ -25,6 +28,14 @@ urlpatterns = [
     path('', home, name='home'),
     path('eshop/', include('eshop.urls')),
 
+    path('accounts/login/', LoginView.as_view(template_name='form.html'), name='login'),
+    path('accounts/logout/', user_logout, name='logout'),
+    path('accounts/password_change/',
+         PasswordChangeView.as_view(template_name='form.html'),
+         name='password_change'),
+    # ostatní defaultní cesty
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/signup/', SignUpView.as_view(), name='signup'),
     # path('categories/', CategoryListView.as_view(), name='category-list'),
     # path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
     # path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete')
