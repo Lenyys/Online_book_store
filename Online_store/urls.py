@@ -14,19 +14,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
 from django.contrib import admin
-from django.urls import path, include
-from eshop.views import home
-
+from django.urls import path
+from eshop.views import BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView
+from .views import CategoryListView, CategoryUpdateView, CategoryDeleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home, name='home'),
-    path('eshop/', include('eshop.urls')),
 
-    # path('categories/', CategoryListView.as_view(), name='category-list'),
-    # path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
-    # path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete')
+    path('eshop/book_list/', BookListView.as_view(), name='book_list'),
+    path('eshop/book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
+    path('eshop/book_create/', BookCreateView.as_view(), name='book_create'),
+    path('eshop/book_update/<int:pk>/', BookUpdateView.as_view(), name='book_update'),
+    path('eshop/book_delete/<int:pk>/', BookDeleteView.as_view(), name='book_delete'),
+    path('categories/', CategoryListView.as_view(), name='category-list'),
+    path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
+    path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete')
+
 
 ]
