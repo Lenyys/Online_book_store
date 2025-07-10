@@ -1,6 +1,5 @@
 from django import forms
-
-from rest_framework.exceptions import ValidationError
+from django.core.exceptions import ValidationError
 
 from eshop.models import Book, Category
 
@@ -26,6 +25,9 @@ class BookForm(forms.ModelForm):
                 'placeholder':'Nazev knihy'
             }),
             'autor': forms.SelectMultiple(attrs={
+                'class': 'form-control'
+            }),
+            'price': forms.NumberInput(attrs={
                 'class': 'form-control'
             }),
             'description': forms.Textarea(attrs={
