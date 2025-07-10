@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Seznam kategorií</title>
+</head>
+<body>
+    <h1>Kategorie</h1>
+    <ul>
+        {% for category in categories %}
+            <li>{{ category.name }}</li>
+        {% empty %}
+            <li>Žádné kategorie nejsou k dispozici.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

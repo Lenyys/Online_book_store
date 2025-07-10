@@ -1,4 +1,5 @@
 from django import forms
+
 from rest_framework.exceptions import ValidationError
 
 from eshop.models import Book
@@ -78,4 +79,12 @@ class BookForm(forms.ModelForm):
         return cleaned_data
 
 
+
+
+from .models import Category
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
 

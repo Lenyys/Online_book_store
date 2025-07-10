@@ -1,4 +1,5 @@
 from django.shortcuts import render
+
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -39,3 +40,36 @@ class BookDeleteView(DeleteView):
     model = Book
     template_name = 'eshop/book_delete.html'
     success_url = reverse_lazy('book_list')
+
+from .models import Category
+
+def category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'eshop/category_list.html', {'categories': categories})
+
+
+from django.shortcuts import get_object_or_404, redirect
+from .forms import CategoryForm
+
+def category_edit(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return redirect('category-list')
+    else:
+        form = CategoryForm(instance=category)
+    return render(request, 'eshop/category_form.html', {'form': form})
+
+
+from django.views.decorators.http import require_http_methods
+
+@require_http_methods(["GET", "POST"])
+def category_delete(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    if request.method == 'POST':
+        category.delete()
+        return redirect('category-list')
+    return render(request, 'eshop/category_confirm_delete.html', {'category': category})
+
