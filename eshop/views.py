@@ -6,9 +6,6 @@ from eshop.forms import BookForm
 from eshop.models import Book
 
 
-# Create your views here.
-
-
 class BookListView(ListView):
     model = Book
     template_name = 'eshop/book_list.html'
@@ -16,6 +13,7 @@ class BookListView(ListView):
 
     paginate_by = 10
     ordering = ['-price']
+
 
 class BookDetailView(DetailView):
     model = Book
