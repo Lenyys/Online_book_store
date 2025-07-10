@@ -14,22 +14,15 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-
-from django.urls import path, include
-
-
-from django.urls import path
-
-from eshop.views import BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView
-# from .views import CategoryListView, CategoryUpdateView, CategoryDeleteView
 from django.urls import path, include
 from eshop.views import *
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    path('', home, name='home'),
 
     path('eshop/book_list/', BookListView.as_view(), name='book_list'),
     path('eshop/book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
@@ -42,9 +35,5 @@ urlpatterns = [
     # path('categories/', CategoryListView.as_view(), name='category-list'),
     # path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
     # path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete')
-
-
-    path('', home, name='home'),
-
 
 ]

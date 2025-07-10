@@ -1,12 +1,13 @@
-from django.contrib.auth.decorators import login_required
+
 from django.shortcuts import render
-
-
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from eshop.forms import BookForm
-from eshop.models import Book
+from eshop.models import Book, Category
+
+def home(request):
+    return render(request, 'home.html')
 
 
 class BookListView(ListView):
@@ -44,7 +45,8 @@ class BookDeleteView(DeleteView):
     success_url = reverse_lazy('book_list')
 
 
-from .models import Category
+
+########################################################################################
 
 def category_list(request):
     categories = Category.objects.all()
@@ -76,6 +78,5 @@ def category_delete(request, pk):
         return redirect('category-list')
     return render(request, 'eshop/category_confirm_delete.html', {'category': category})
 
-def home(request):
-    return render(request, 'home.html')
+
 
