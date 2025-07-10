@@ -1,18 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<h5>Přidání nové knihy</h5>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Uložit</button>
-</form>
-<a href="{% url 'book_list' %}">Zpět na seznam knih</a>
+{% block content %}
 
-</body>
-</html>
+<div class="row my-3">
+    <div class="col-12 text-center ">
+        <h1>Přidání nové knihy</h1>
+    </div>
+</div>
+<div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Uložit</button>
+    </form>
+    <a href="{% url 'book_list' %}">Zpět na seznam knih</a>
+</div>
+
+{% endblock %}

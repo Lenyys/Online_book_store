@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
 <dev>
     <h4>name</h4>
     <p>{{ book.name }}</p>
@@ -44,5 +40,4 @@
 <a href="{% url 'book_delete' book.id %}">Smazat knihu</a>
 
 
-</body>
-</html>
+{% endblock %}}

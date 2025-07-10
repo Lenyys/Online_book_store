@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
+{% block content %}
 <h5>Editace knihy</h5>
 <form method="post">
     {% csrf_token %}
@@ -14,5 +9,4 @@
 </form>
 <a href="{% url 'book_list' %}">Zpět na seznam knih</a>
 
-</body>
-</html>
+{% endblock %}}

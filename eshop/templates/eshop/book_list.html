@@ -1,18 +1,37 @@
-<!DOCTYPE html>
-<html lang="cz">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-{% for book in books %}
- <a href="{% url 'book_detail' book.id %}">{{ book.name }}</a>
-{% empty %}
-    žádné knihy
-{% endfor %}
+{% block content %}
 
-<a href="{% url 'book_create' %}">Zadat novou knihu</a>
+<div class="row my-3">
+    <div class="col-12 text-center">
+       <a href="{% url 'book_create' %}" class="btn btn-success">Zadat novou knihu</a>
+    </div>
+</div>
+<div class="row my-3">
+    {% for book in books %}
+    <div class="col-4 col-md-2">
+        <div class="card h-100">
+            {% comment %}
+            <a href="{% url 'book_detail' book.id %}">
+                <img class="card-img-top" src="{{ book.image.url }}" alt="{{ book.name }}">
+            </a>
+                {% endcomment %}
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{% url 'book_detail' book.id %}">{{ book.name }}</a>
+                </h5>
+                {% comment %}
+                <p class="card-text">
+                    Autor: <a href="{% url 'autor_detail' book.autor.id %}"></a>
+                </p>
+                {% endcomment %}
+                <p class="card-text font weight-bold">Cena: {{ book.price }}</p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        žádné knihy
+    {% endfor %}
+</div>
 
-</body>
-</html>
+{% endblock %}
