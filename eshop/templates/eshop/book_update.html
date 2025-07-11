@@ -1,12 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h5>Editace knihy</h5>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Uložit</button>
-</form>
-<a href="{% url 'book_list' %}">Zpět na seznam knih</a>
+
+<div class="row my-3">
+    <div class="col-12 text-center ">
+        <h1>Editace knihy</h1>
+    </div>
+</div>
+<div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success mr-3 my-2">Uložit</button>
+        <a href="{% url 'book_detail' object.id %}" class="btn btn-success">Zpět na detail knihy</a>
+    </form>
+
+</div>
 
 {% endblock %}}

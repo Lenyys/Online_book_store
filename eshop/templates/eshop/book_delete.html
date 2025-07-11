@@ -1,14 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="row my-3">
+    <div class="col-12 text-center">
+        <h4> Opravdu chcete odstranit knihu:</h4>
+        <h4>{{ object.name }}</h4>
+    </div>
+</div>
+<div class="row my-3">
+    <div class="col-12 text-center">
+        <form method="post" >
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger mr-3">Ano smazat</button>
+            <a href="{% url 'book_detail' object.id %}" class="btn btn-success">Zpět na detail knihy</a>
+        </form>
 
-<h1> opravdu chcete odstranit knihu: {{ object.name }}</h1>
-<form method="post" >
-    {% csrf_token %}
-    <button type="submit">Ano smazat</button>
-</form>
-<a href="{% url 'book_list' %}">Zpět na seznam knih</a>
-
-
-
+    </div>
+</div>
 {% endblock %}
