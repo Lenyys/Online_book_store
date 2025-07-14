@@ -3,20 +3,53 @@
 {% block content %}
 <div class="row my-3">
     <div class="col-12 text-center">
+        <a href="{% url 'add_image' book.id %}" class="btn btn-success mr-3">Přidat obrázek</a>
         <a href="{% url 'book_update' book.id %}" class="btn btn-success mr-3">Upravit knihu</a>
         <a href="{% url 'book_delete' book.id %}" class="btn btn-success">Smazat knihu</a>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-12 col-md-4 d-flex flex-column border ">
+    <div class="col-12 col-md-4 d-flex flex-column">
         {% if book.images.all|length > 0 %}
-            <div class="flex-fill mb-2">
-                <img src="{{ book.images.all.0.url }}" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Hlavní obrázek">
+            <div class="d-flex mb-2  justify-content-center align-items-center max-height-400 ">
+                <img src="{{ book.images.all.0.image.url }}" class="img-fluid max-size-img" alt="Hlavní obrázek">
             </div>
+        {% else %}
+            <p>Žádné obrázky nejsou k dispozici.</p>
+        {% endif %}
+    </div>
+
+    <div class="col-12 col-md-8 d-flex flex-column  p-4">
+        <div>
+            <p><h1>{{ book.name }}</h1></p>
+
+        </div>
+        <div>
+            <h4>Popis</h4>
+            <p>{{ book.description }}</p>
+        </div>
+        <div>
+
+            {% if book.stock_quantity > 2 %}
+                <p><h4>Na skladě: 2+ ks</h4></p>
+            {% else %}
+                <p><h4>Na skladě: {{ book.stock_quantity }} ks</h4></p>
+            {% endif %}
+        </div>
+        <div>
+            <h2>Cena: {{ book.price }} Kč</h2>
+            <p></p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-md-4 d-flex flex-column">
+        {% if book.images.all|length > 0 %}
             <div class="d-flex justify-content-between flex-fill">
                {% for img in book.images.all|slice:"1:4" %}
-                  <img src="{{ img.url }}" class="img-fluid" style="width: 32%; height: 100%; object-fit: cover;" alt="Menší obrázek {{ forloop.counter }}">
+                  <img src="{{ img.image.url }}" class="img-fluid" style="width: 32%; height: 100%; object-fit: cover;" alt="Menší obrázek {{ forloop.counter }}">
                {% endfor %}
             </div>
         {% else %}
@@ -24,25 +57,9 @@
         {% endif %}
     </div>
 
-    <div class="col-12 col-md-8 d-flex flex-column border p-4">
-        <div class="flex-fill ">
-            <h4>Název knihy</h4>
-            <p>{{ book.name }}</p>
-        </div>
-        <div>
-            <h4>Popis</h4>
-            <p>{{ book.description }}</p>
-        </div>
-        <div>
-            <p><h5>Na skladě:</h5>{{ book.stock_quantity }}</p>
-        </div>
-        <div>
-            <h4>Cena</h4>
-            <p>{{ book.price }}</p>
-        </div>
+    <div class="col-12 col-md-8 d-flex flex-column  p-4">
+
     </div>
 </div>
-
-
 
 {% endblock %}}

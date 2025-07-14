@@ -1,3 +1,4 @@
+from PIL import Image as PILImage, UnidentifiedImageError
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -52,12 +53,39 @@ class Book(models.Model):
 
 
 class Image(models.Model):
-    image = models.ImageField(upload_to='images/', default=None, null=False, blank=False)
+    image = models.ImageField(upload_to='eshop/images/', default=None, null=False, blank=False)
     product = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='images')
     description = models.TextField(null=False, blank=False)
 
     class Meta:
         ordering = ['product']
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img_path = self.image.path
+        # img = Image.open(img_path)
+        #
+        # max_size = (800, 800)
+        #
+        # if img.height > 800 or img.width > 800:
+        #     img.thumbnail(max_size)
+        #     img.save(img_path)
+        try:
+            img = PILImage.open(img_path)
+            max_size = (800, 800)
+
+            if img.height > 800 or img.width > 800:
+                img.thumbnail(max_size)
+                img.save(img_path, quality=85, optimize=True)
+
+        except UnidentifiedImageError:
+            # Tento typ chyby nastane, pokud soubor není obrázek
+            print(f"Soubor {img_path} není platný obrázek.")
+        except FileNotFoundError:
+            print(f"Soubor {img_path} nebyl nalezen.")
+        except Exception as e:
+            # Pro všechny ostatní chyby (např. při ukládání)
+            print(f"Chyba při zpracování obrázku: {e}")
 
     def __str__(self):
         return f"Image: {self.image}"

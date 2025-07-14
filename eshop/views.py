@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from eshop.forms import BookForm
-from eshop.models import Book, Category
+from eshop.forms import BookForm, ImageForm
+from eshop.models import Book, Category, Image
+
 
 def home(request):
     return render(request, 'home.html')
@@ -42,6 +43,23 @@ class BookDeleteView(DeleteView):
     model = Book
     template_name = 'eshop/book_delete.html'
     success_url = reverse_lazy('book_list')
+
+class ImageCreateView(CreateView):
+    model = Image
+    template_name = 'eshop/image_create.html'
+    form_class = ImageForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.book = get_object_or_404(Book, pk=kwargs.get('pk'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.product = self.book
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('book_detail', kwargs={'pk':self.book.pk})
+
 
 
 
