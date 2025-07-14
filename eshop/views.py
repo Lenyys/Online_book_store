@@ -1,32 +1,65 @@
-from django.shortcuts import render
-from .models import Category
-
-def category_list(request):
-    categories = Category.objects.all()
-    return render(request, 'eshop/category_list.html', {'categories': categories})
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Book, Category  # musíš mít oba modely
+from .forms import BookForm, CategoryForm  # a oba formuláře
 
 
-from django.shortcuts import get_object_or_404, redirect
-from .forms import CategoryForm
+# ---------- Book views ----------
 
-def category_edit(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    if request.method == 'POST':
-        form = CategoryForm(request.POST, instance=category)
-        if form.is_valid():
-            form.save()
-            return redirect('category-list')
-    else:
-        form = CategoryForm(instance=category)
-    return render(request, 'eshop/category_form.html', {'form': form})
+class BookListView(ListView):
+    model = Book
+    template_name = 'eshop/book_list.html'
+    context_object_name = 'books'
+
+class BookDetailView(DetailView):
+    model = Book
+    template_name = 'eshop/book_detail.html'
+    context_object_name = 'book'
+
+class BookCreateView(CreateView):
+    model = Book
+    form_class = BookForm
+    template_name = 'eshop/book_form.html'
+    success_url = reverse_lazy('book-list')
+
+class BookUpdateView(UpdateView):
+    model = Book
+    form_class = BookForm
+    template_name = 'eshop/book_form.html'
+    success_url = reverse_lazy('book-list')
+
+class BookDeleteView(DeleteView):
+    model = Book
+    template_name = 'eshop/book_confirm_delete.html'
+    success_url = reverse_lazy('book-list')
+
+# ---------- Category views ----------
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = 'eshop/category_list.html'
+    context_object_name = 'categories'
+
+class CategoryCreateView(CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'eshop/category_form.html'
+    success_url = reverse_lazy('category-list')
+
+class CategoryUpdateView(UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'eshop/category_form.html'
+    success_url = reverse_lazy('category-list')
+
+class CategoryDeleteView(DeleteView):
+    model = Category
+    template_name = 'eshop/category_confirm_delete.html'
+    success_url = reverse_lazy('category-list')
 
 
-from django.views.decorators.http import require_http_methods
+from django.shortcuts import render  # to už tam možná máš nahoře
 
-@require_http_methods(["GET", "POST"])
-def category_delete(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    if request.method == 'POST':
-        category.delete()
-        return redirect('category-list')
-    return render(request, 'eshop/category_confirm_delete.html', {'category': category})
+def homepage(request):
+    return render(request, 'eshop/homepage.html')
+
