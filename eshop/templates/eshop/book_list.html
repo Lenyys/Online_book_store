@@ -9,9 +9,13 @@
               Filter
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item text-decoration-none" href="#">Odkaz 1</a></li>
-              <li><a class="dropdown-item text-decoration-none" href="#">Odkaz 2</a></li>
-              <li><a class="dropdown-item text-decoration-none" href="#">Odkaz 3</a></li>
+                  <li><a class="dropdown-item text-decoration-none" href="">kategorie</a></li>
+
+                {% comment %}
+                {% for category in categories %}
+                    <li><a class="dropdown-item text-decoration-none" href="{% url '' category.id %}">{{ category.name }}</a></li>
+                {% endfor %}
+                {% endcomment %}
             </ul>
       </div>
     </div>
@@ -25,15 +29,15 @@
         <div class="card h-100">
                 <img class="card-img-top" src="{{ book.images.all.0.image.url }}" alt="{{ book.name }}">
             <div class="card-body">
-                <h5 class="card-title">
-                    <a href="{% url 'book_detail' book.id %}">{{ book.name }}</a>
-                </h5>
+                <p class="card-title">
+                    <a href="{% url 'book_detail' book.id %}" class="text-decoration-none text-dark">{{ book.name }}</a>
+                </p>
                 {% comment %}
                 <p class="card-text">
                     Autor: <a href="{% url 'autor_detail' book.autor.id %}"></a>
                 </p>
                 {% endcomment %}
-                <p class="card-text font weight-bold">Cena: {{ book.price }}</p>
+                <p class="card-text font weight-bold">Cena: {{ book.price }} Kč</p>
             </div>
         </div>
     </div>
