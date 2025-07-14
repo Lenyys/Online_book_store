@@ -19,9 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-
 from eshop.views import home
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +28,6 @@ urlpatterns = [
     # path('categories/', CategoryListView.as_view(), name='category-list'),
     # path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
     # path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete')
-
 ]
 
 if settings.DEBUG:
