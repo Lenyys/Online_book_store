@@ -49,6 +49,7 @@ class BookDeleteView(DeleteView):
     template_name = 'eshop/book_delete.html'
     success_url = reverse_lazy('book_list')
 
+
 class ImageCreateView(CreateView):
     model = Image
     template_name = 'eshop/image_create.html'
@@ -71,11 +72,13 @@ class CategoryListView(ListView):
     template_name = 'eshop/category_list.html'
     context_object_name = 'categories'
 
+
 class CategoryCreateView(CreateView):
     model = Category
     form_class = CategoryForm
     template_name = 'eshop/category_form.html'
     success_url = reverse_lazy('category-list')
+
 
 class CategoryUpdateView(UpdateView):
     model = Category
@@ -83,10 +86,17 @@ class CategoryUpdateView(UpdateView):
     template_name = 'eshop/category_form.html'
     success_url = reverse_lazy('category-list')
 
+
 class CategoryDeleteView(DeleteView):
     model = Category
     template_name = 'eshop/category_confirm_delete.html'
     success_url = reverse_lazy('category-list')
+
+
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = 'eshop/category_detail.html'
+    context_object_name = 'category'
 
 
 
