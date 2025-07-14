@@ -34,8 +34,8 @@ urlpatterns = [
          PasswordChangeView.as_view(template_name='form.html'),
          name='password_change'),
     # ostatní defaultní cesty
-    path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/signup/', SignUpView.as_view(), name='signup'),
+    path('accounts/', include('django.contrib.auth.urls')),
     # path('categories/', CategoryListView.as_view(), name='category-list'),
     # path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
     # path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete')

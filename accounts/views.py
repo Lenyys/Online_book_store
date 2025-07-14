@@ -2,7 +2,6 @@ from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-
 from accounts.forms import SignUpForm
 
 

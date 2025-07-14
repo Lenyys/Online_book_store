@@ -20,7 +20,7 @@
 }
 
 html{
-    font-size: 62.5%;
+    font-size: 100%;
     overflow-x: hidden;
     scroll-padding-top: 5rem;
     scroll-behavior: smooth;
@@ -56,7 +56,7 @@ html::-webkit-scrollbar-thumb{
     color: var(--green);
 }
 
-.header .header-1 .search-from{
+.header .header-1 .search-form{
     width: 50rem;
     height: 5rem;
     border: var(--boarder);
@@ -67,7 +67,7 @@ html::-webkit-scrollbar-thumb{
     border-radius: .5rem;
 }
 
-.header .header-1 .search-from input{
+.header .header-1 .search-form input{
     font-size: 1.6rem;
     padding: 0 1.2rem;
     height: 100%;
@@ -76,21 +76,27 @@ html::-webkit-scrollbar-thumb{
     color: var(--black);
 }
 
-.header .header-1 .search-from label{
+.header .header-1 .search-form label{
     font-size: 2.5rem;
     padding-right: 1.5rem;
     color: var(--black);
     cursor: pointer;
 }
 
-.header .header-1 .search-from label:hover{
+.header .header-1 .search-form label:hover{
     color: var(--green);
+}
+
+.header .header-1 .icons {
+    display: flex;           /* ⬅️ hlavní změna */
+    align-items: center;     /* zarovnání na střed vertikálně */
+    gap: 1.5rem;             /* mezera mezi ikonami – můžeš nahradit za marginy, pokud chceš */
 }
 
 .header .header-1 .icons div,
 .header .header-1 .icons a{
     font-size: 2.5rem;
-    margin-left: 1.5rem;
+     margin-left: 0; /* odstranit, pokud používáš gap */
     color:var(--black);
     cursor: pointer;
 }
@@ -109,7 +115,8 @@ html::-webkit-scrollbar-thumb{
 }
 
 .header .header-2 .navbar{
-    text-align: center;
+    display: flex;
+    justify-content: space-around;
 }
 
 .header .header-2 .navbar a{
@@ -129,9 +136,56 @@ html::-webkit-scrollbar-thumb{
     z-index: 1000;
 }
 
-body{
-    height: 300rem;
+.form-box {
+    max-width: 900px;
+    width: 90%;         /* přizpůsobení menším obrazovkám */
+    margin: 5rem auto;
+    padding: 3rem;
+    background: white;
+    border-radius: .5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
 }
+
+.form-box table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 1.5rem 1rem;  /* horizontální a vertikální mezera */
+}
+
+.form-box th {
+    text-align: right;
+    padding-right: 1rem;
+    white-space: nowrap;
+    font-weight: 600;
+    vertical-align: middle;
+    font-size: 1.5rem;
+}
+
+.form-box td {
+    width: 100%;
+}
+
+.form-box input,
+.form-box textarea,
+.form-box select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1.4rem;
+    border: 1px solid #ddd;
+    border-radius: .3rem;
+    background-color: #f0f7ff;
+}
+
+input[type="submit"].btn-save {
+  background-color: var(--green);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  border-radius: .3rem;
+  width: 100%;
+}
+
 
 .bottom-navbar{
     text-align: center;
@@ -152,29 +206,45 @@ body{
     background: var(--dark-color);
 }
 
+footer.bg-dark {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.user-dropdown {
+    position: relative;
+}
+
+.user-dropdown .dropdown-toggle {
+    font-size: 2.5rem;
+    color: var(--black);
+    cursor: pointer;
+    margin-left: 1.5rem;
+}
+
+.user-dropdown .dropdown-toggle:hover {
+    color: var(--green);
+}
+
+.dropdown-menu .dropdown-item {
+    font-size: 1.3rem; /* nebo třeba 1.2rem podle potřeby */
+    padding: 0.4rem 1rem;
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+body {
+    padding-bottom: 6rem; /* přidáno kvůli pevnému footeru */
+}
 
 @media (max-width: 991px) {
 
     html{
-        font-size: 55%;
+        font-size: 20%;
     }
 
     .header .header-1{
@@ -209,14 +279,14 @@ body{
         position: relative;
     }
 
-    .header .header-1 .search-from{
+    .header .header-1 .search-form{
         position: absolute;
         top:-115%; right: 2rem;
         width: 90%;
         box-shadow: var(--box-shadow);
     }
 
-    .header .header-1 .search-from.active{
+    .header .header-1 .search-form.active{
         top: 115%;
     }
 
@@ -229,3 +299,4 @@ body{
     }
 
 }
+.container
