@@ -1,5 +1,9 @@
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from .models import Category
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import get_object_or_404, redirect
+from .forms import CategoryForm
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 

@@ -5,20 +5,22 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {% comment "Formulář pomocí tabulky" %} {% endcomment %}
-        <table>{{ form.as_table }}</table>
+    <div class="form-box">
+        <form method="post">
+            {% csrf_token %}
+            {% comment "Formulář pomocí tabulky" %} {% endcomment %}
+            <table>{{ form.as_table }}</table>
 
-        {% comment "Furmulář pomocí odstavců %}
-        {{ form.as_p }}
-        {% endcomment %}
+            {% comment "Furmulář pomocí odstavců %}
+            {{ form.as_p }}
+            {% endcomment %}
 
-        {% comment "Formulář jako nečíslovaný seznam %}
-        <ul>
-            {{ form.as_ul }}
-        </ul>
-        {% endcomment %}
-        <input type="submit" id="id_submit" value="Uložit" class="btn btn-primary">
-    </form>
+            {% comment "Formulář jako nečíslovaný seznam %}
+            <ul>
+                {{ form.as_ul }}
+            </ul>
+            {% endcomment %}
+          <input type="submit" id="id_submit" value="Uložit" class="btn-save">
+        </form>
+    </div>
 {% endblock %}

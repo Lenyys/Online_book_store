@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<html {% if LANGUAGE_CODE %}lang="{{ LANGUAGE_CODE }}"{% endif %}>
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,30 +33,46 @@
 <body>
 
 <!--header section start -->
-
     <header class="header">
         <div class="header-1">
             <a href="#" class="logo"> <i class="fas fa-book"></i>  Jirásek </a>
 
-            <from action="" class="search-from">
+            <from action="" class="search-form">
                 <input type="search" name="" placeholder="search here..."  id="search-box">
                 <label for="search-box" class="fas fa-search"></label>
             </from>
 
             <div class="icons">
+
                 <div id="search-btn" class="fas fa-search"></div>
 
                 <a href="#" class="fas fa-heart"></a>
                 <a href="#" class="fas fa-shopping-cart"></a>
 
-                <div id="login-btn" class="fas fa-user"></div>
+                <div class="user-dropdown dropdown">
+        <a href="#" id="userDropdown" class="fas fa-user dropdown-toggle" data-toggle="dropdown"></a>
+
+        <div class="dropdown-menu dropdown-menu-right mt-2">
+            {% if user.is_authenticated %}
+                <span class="dropdown-item-text font-weight-bold text-dark">{{ user.username }}</span>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'logout' %}">Odhlásit</a>
+                <a class="dropdown-item" href="{% url 'password_change' %}">Změna hesla</a>
+            {% else %}
+                <a class="dropdown-item" href="{% url 'login' %}">Přihlásit</a>
+                <a class="dropdown-item" href="{% url 'signup' %}">Registrace</a>
+                <a class="dropdown-item" href="{% url 'password_reset' %}">Reset hesla</a>
+            {% endif %}
+        </div>
+    </div>
             </div>
         </div>
 
-
-        <div class="header-2">
-            {% include 'top_navbar.html' %}
-        </div>
+        {% if show_navbar|default:True %}
+            <div class="header-2">
+                {% include 'top_navbar.html' %}
+            </div>
+        {% endif %}
     </header>
 
 
