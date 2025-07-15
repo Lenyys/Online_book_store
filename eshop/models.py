@@ -63,13 +63,6 @@ class Image(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         img_path = self.image.path
-        # img = Image.open(img_path)
-        #
-        # max_size = (800, 800)
-        #
-        # if img.height > 800 or img.width > 800:
-        #     img.thumbnail(max_size)
-        #     img.save(img_path)
         try:
             img = PILImage.open(img_path)
             max_size = (800, 800)

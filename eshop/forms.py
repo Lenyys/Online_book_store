@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from eshop.models import Book, Category, Image
+from eshop.models import Book, Category, Image, Autor
 
 
 class BookForm(forms.ModelForm):
@@ -85,8 +85,10 @@ class ImageForm(forms.ModelForm):
         model = Image
         fields = ['image', 'description']
 
-
-
+class AuthorForm(forms.ModelForm):
+    class Meta:
+        model = Autor
+        fields = '__all__'
 
 
 class CategoryForm(forms.ModelForm):

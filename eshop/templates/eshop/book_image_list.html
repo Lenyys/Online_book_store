@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row text-center border-bottom border-dark">
+    <h2>Obrázky ke knize: {{ book.name }}</h2>
+</div>
+<div class="row justify-content-center">
+    {% for image in images %}
+    <div class="row mx-2 border-bottom border-dark py-2">
+        <div class="col-6 text-right ">
+            <img style="max-height: 200px;" src="{{ image.image.url }}" alt="">
+        </div>
+        <div class="col-6">
+            <div>
+                <a class="btn border  m-3"
+                   href="{% url 'image_delete' image.id %}?next={{ request.path }}">Smazat ❌</a>
+            </div>
+            <div>
+                 <a class="btn border m-3"
+                    href="{% url 'image_update' image.product.id image.id %}?next={{ request.path }}">Upravit ✏️</a>
+            </div>
+
+        </div>
+    </div>
+    {% empty %}
+       žádné obrázky
+    {% endfor %}
+
+</div>
+
+{% endblock %}

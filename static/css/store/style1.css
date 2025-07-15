@@ -244,7 +244,7 @@ body {
 @media (max-width: 991px) {
 
     html{
-        font-size: 20%;
+        font-size: 80%;
     }
 
     .header .header-1{
@@ -311,6 +311,10 @@ body {
 
 .max-height-400 {
   max-height: 400px;
+}
+
+.max-height-200 {
+    max-height: 200px;
 }
 
 .font-size-160 {

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row text-center border-bottom border-dark">
+    <h2>Autoři knihy: {{ book.name }}</h2>
+</div>
+<div class="mt-3">
+    {% for author in authors %}
+    <div class="m-2">
+       <strong>{{ forloop.counter }}. {{ author.name }} {{ author.lastname }}</strong>
+        <a class="btn border"
+           href="{% url 'remove_author' book.id author.id %}?next={{ request.path }}">Odebrat ❌</a>
+
+        <a class="btn border"
+           href="{% url 'author_update' author.id %}?next={{ request.path }}">Upravit ✏️</a>
+
+        {% comment %}
+
+                <a class="btn border"
+                   href="{% url 'remove_author' book.id author.id %}?next={{ request.path }}">Smazat ❌</a>
+
+                 <a class="btn border"
+                    href="{% url 'author_update' book.id author.id %}?next={{ request.path }}">Upravit ✏️</a>
+
+        {% endcomment %}
+    </div>
+
+
+{% empty %}
+    žádné obrázky
+{% endfor %}
+
+    </div>
+
+{% endblock %}
