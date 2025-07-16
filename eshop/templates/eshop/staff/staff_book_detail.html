@@ -4,8 +4,8 @@
 <h1>Detail Knihy</h1>
 
 <div>
-    <a class="btn btn-success" href="{% url 'book_update' book.id %}">Upravit knihu</a>
-    <a class="btn btn-danger" href="{% url 'book_delete' book.id %}">Smazat knihu</a>
+    <a class="btn btn-success" href="{% url 'book_update' book.id %}?next={{ request.path }}">Upravit knihu</a>
+    <a class="btn btn-danger" href="{% url 'book_delete' book.id %}?next={{ request.path }}">Smazat knihu</a>
     <a class="btn btn-success" href="{% url 'staff_book_list'%}">Zpět na seznam knih</a>
 </div>
 <div>

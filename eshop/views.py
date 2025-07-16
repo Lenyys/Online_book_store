@@ -1,16 +1,13 @@
-from django.contrib.auth.decorators import login_required
+
 from django.shortcuts import render
 from django.views import View
 
-from .models import Category, Autor
-from django.views.decorators.http import require_http_methods
 from django.shortcuts import get_object_or_404, redirect
-from .forms import CategoryForm, AddOrCreateAuthorForm
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
 
-from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm
-from eshop.models import Book, Category, Image
+from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm
+from eshop.models import Book, Category, Image, Autor
 
 
 def home(request):
@@ -66,7 +63,7 @@ class BookCreateView(CreateView):
     model = Book
     template_name = 'eshop/staff/book_create.html'
     form_class = BookForm
-    success_url = reverse_lazy('book_list')
+    success_url = reverse_lazy('staff_book_list')
 
 
 class BookUpdateView(UpdateView):
@@ -74,14 +71,29 @@ class BookUpdateView(UpdateView):
     template_name = 'eshop/staff/book_update.html'
     form_class = BookForm
 
+    # def get_success_url(self):
+    #     return reverse('staff_book_detail', kwargs={'pk': self.object.pk})
+    #
     def get_success_url(self):
-        return reverse('staff_book_detail', kwargs={'pk': self.object.pk})
+        next_url = self.request.GET.get('next') or self.request.POST.get('next')
+        return next_url or reverse_lazy('staff_book_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next','/')
+        return context
 
 
 class BookDeleteView(DeleteView):
     model = Book
     template_name = 'eshop/staff/book_delete.html'
     success_url = reverse_lazy('staff_book_list')
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next','/')
+        return context
 
 
 class ImageCreateView(CreateView):
@@ -121,8 +133,7 @@ class ImageUpdateView(UpdateView):
 
     def get_success_url(self):
         next_url = self.request.GET.get('next') or self.request.POST.get('next')
-        print("mazání ok , přesměrování na:", next_url )
-        return next_url or reverse_lazy('book_list')
+        return next_url or reverse_lazy('staff_book_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -136,8 +147,7 @@ class ImageDeleteView(DeleteView):
 
     def get_success_url(self):
         next_url = self.request.GET.get('next') or self.request.POST.get('next')
-        print("mazání ok , přesměrování na:", next_url )
-        return next_url or reverse_lazy('book_list')
+        return next_url or reverse_lazy('staff_book_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -157,7 +167,10 @@ class AddOrCreateAuthorView(FormView):
     def form_valid(self, form):
         author = form.cleaned_data.get('existing_author')
         if not author:
-            author = Autor.objects.create(name=form.cleaned_data.get('name'), lastname=form.cleaned_data.get('lastname'), date_of_birth=form.cleaned_data.get('date_of_birth', None))
+            author = Autor.objects.create(
+                name=form.cleaned_data.get('new_author_name'),
+                lastname=form.cleaned_data.get('new_author_lastname'),
+                date_of_birth=form.cleaned_data.get('new_author_birthdate', None))
 
         self.book.autor.add(author)
         return redirect('staff_book_detail', pk=self.book.pk)
@@ -179,7 +192,6 @@ class StaffAuthorDetailView(DetailView):
     template_name = 'eshop/staff/staff_author_detail.html'
     context_object_name = 'author'
 
-
 class AuthorUpdateView(UpdateView):
     model = Autor
     template_name = 'eshop/staff/author_update.html'
@@ -187,8 +199,7 @@ class AuthorUpdateView(UpdateView):
 
     def get_success_url(self):
         next_url = self.request.GET.get('next') or self.request.POST.get('next')
-        print("mazání ok , přesměrování na:", next_url )
-        return next_url or reverse_lazy('book_list')
+        return next_url or reverse_lazy('staff_author_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -206,9 +217,14 @@ class AuthorDeleteView(DeleteView):
     template_name = 'eshop/staff/author_delete.html'
     success_url = reverse_lazy('staff_author_list')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next','/')
+        return context
+
 
 class RemoveAuthorFromBook(View):
-    template_name = 'eshop/remove_author_from_book.html'
+    template_name = 'eshop/staff/remove_author_from_book.html'
 
     def dispatch(self, request, *args, **kwargs):
         self.book = get_object_or_404(Book, pk=kwargs['book_id'])

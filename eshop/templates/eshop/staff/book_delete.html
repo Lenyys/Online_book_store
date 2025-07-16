@@ -11,8 +11,9 @@
     <div class="col-12 text-center">
         <form method="post" >
             {% csrf_token %}
+            <input type="hidden" name="next" value="{{ back_url }}">
             <button type="submit" class="btn btn-danger mr-3">Ano smazat</button>
-            <a href="{% url 'staff_book_detail' object.id %}" class="btn btn-success">Zpět na detail knihy</a>
+            <a href="{{ back_url }}" class="btn btn-success">Zpět</a>
         </form>
 
     </div>
