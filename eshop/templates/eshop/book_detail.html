@@ -2,36 +2,6 @@
 
 {% block content %}
 
-<div class="row my-3 justify-content-center">
-    <div class="col-3 text-center  p-1">
-        <a class="btn btn-success" href="{% url 'book_update' book.id %}">Upravit knihu</a>
-    </div>
-    <div class="col-3 text-center p-1">
-        <a class="btn btn-danger" href="{% url 'book_delete' book.id %}">Smazat knihu</a>
-    </div>
-
-    <div class="col-4 text-center  p-1">
-        <div class="dropdown">
-            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-             Další úpravy knihy
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item text-decoration-none"
-                       href="{% url 'add_image' book.id %}">Přidání obrázku</a></li>
-                <li><a class="dropdown-item text-decoration-none"
-                       href="{% url 'book_image_list' book.id %}">Úprava Obrázků</a></li>
-                <li><a class="dropdown-item text-decoration-none"
-                       href="{% url 'add_author' book.id %}">Přidání autora</a></li>
-                 <li><a class="dropdown-item text-decoration-none"
-                       href="{% url 'book_author_list' book.id %}">Úprava Autorů</a></li>
-
-    {% comment %}
-                {% endcomment %}
-            </ul>
-        </div>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-12 col-md-4 d-flex flex-column my-4 border-right">
         {% if book.images.all|length > 0 %}

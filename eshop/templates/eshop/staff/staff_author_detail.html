@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Detail Autora</h1>
+<div>
+    <a class="btn btn-success" href="{% url 'author_update' author.id %}">Upravit autora</a>
+    <a class="btn btn-danger" href="{% url 'author_delete' author.id %}">Smazat autora</a>
+    <a class="btn btn-success" href="{% url 'staff_author_list'%}">Zpět na seznam autorů</a>
+</div>
+<div class="mt-3 border-top">
+    <div>
+        <h3>Jméno autora: </h3>
+        <p>{{ author.name }}</p>
+    </div>
+    <div>
+        <h3>Příjmení autora: </h3>
+        <p>{{ author.lastname }}</p>
+    </div>
+    <div>
+        <h4>Datum narození:</h4>
+        {% if author.date_of_birth %}
+            <p>{{ author.date_of_birth }}</p>
+        {% else %}
+            Nezadáno
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

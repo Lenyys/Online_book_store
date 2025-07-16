@@ -85,6 +85,34 @@ class ImageForm(forms.ModelForm):
         model = Image
         fields = ['image', 'description']
 
+class AddOrCreateAuthorForm(forms.Form):
+    existing_author = forms.ModelChoiceField(
+        queryset=Autor.objects.all(),
+        required=False,
+        label='Autor'
+    )
+    new_author_name = forms.CharField(
+        required=False,
+        label='Jméno nového autora'
+    )
+    new_author_lastname = forms.CharField(
+        required=False,
+        label='Příjmení nového autora'
+    )
+    new_author_birthdate = forms.DateField(
+        required=False,
+        label='datum narození nového autora'
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not cleaned_data.get('existing_author') and \
+            not cleaned_data.get('new_author_name') and \
+                not cleaned_data.get('new_author_lastname'):
+            raise forms.ValidationError('Vyber autora nebo zadej nového')
+        return cleaned_data
+
+
 class AuthorForm(forms.ModelForm):
     class Meta:
         model = Autor

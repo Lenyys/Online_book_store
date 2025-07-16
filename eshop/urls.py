@@ -2,30 +2,45 @@
 
 from django.urls import path
 from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView, ImageCreateView,
-                         CategoryListView, CategoryUpdateView, CategoryDeleteView, ImageListView, ImageDeleteView,
-                         ImageUpdateView, AuthorCreateView, AuthorListView, RemoveAuthorFromBook, AuthorUpdateView,
+                         CategoryListView, CategoryUpdateView, CategoryDeleteView, ImageDeleteView,
+                         ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
+                         staff_page, StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
+                         StaffAuthorDetailView, AuthorDeleteView,
                          )
 
 urlpatterns = [
-
+    path('staff/', staff_page, name='staff'),
     path('book_list/', BookListView.as_view(), name='book_list'),
     path('book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
+    path('staff_book_list/', StaffBookListView.as_view(), name='staff_book_list'),
+    path('staff_book_detail/<int:pk>/', StaffBookDetailView.as_view(), name='staff_book_detail'),
     path('book_create/', BookCreateView.as_view(), name='book_create'),
     path('book_update/<int:pk>/', BookUpdateView.as_view(), name='book_update'),
     path('book_delete/<int:pk>/', BookDeleteView.as_view(), name='book_delete'),
+
+    path('book/<int:pk>/staff_add_author/', AddOrCreateAuthorView.as_view(), name='add_or_create_author'),
+    path('book/<int:book_id>/remove_author/<int:author_id>/',RemoveAuthorFromBook.as_view(), name='remove_author'),
+    path('book/author_update/<int:pk>/', AuthorUpdateView.as_view(), name='author_update'),
+
+
     path('book/<int:pk>/add_image/', ImageCreateView.as_view(), name='add_image'),
+    path('image_delete/<int:pk>/', ImageDeleteView.as_view(), name='image_delete'),
+    path('book/<int:book_id>/image_update/<int:pk>/', ImageUpdateView.as_view(), name='image_update'),
+
+    path('staff_autor_list',StaffAuthorListView.as_view(), name="staff_author_list"),
+    path('staff_author_detail/<int:pk>/', StaffAuthorDetailView.as_view(), name='staff_author_detail'),
+    path('autor_create', AuthorCreateView.as_view()  , name='author_create'),
+    path('author_delete/<int:pk>/',AuthorDeleteView.as_view(), name='author_delete'),
+
+
+
+
     path('categories/', CategoryListView.as_view(), name='category-list'),
     path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
     path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
-    path('book/<int:pk>/image_list/',ImageListView.as_view() , name='book_image_list'),
-    path('image_delete/<int:pk>/', ImageDeleteView.as_view(), name='image_delete'),
-    path('book/<int:book_id>/image_update/<int:pk>/', ImageUpdateView.as_view(), name='image_update'),
-    path('book/<int:pk>/add_author/', AuthorCreateView.as_view()  , name='add_author'),
 
-    path('book/<int:pk>/author_list/',AuthorListView.as_view() , name='book_author_list'),
 
-    path('book/<int:book_id>/remove_author/<int:author_id>/',RemoveAuthorFromBook.as_view(), name='remove_author'),
-    path('book/author_update/<int:pk>/', AuthorUpdateView.as_view(), name='author_update'),
+
 
 
 

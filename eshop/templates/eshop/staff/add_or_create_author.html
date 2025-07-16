@@ -4,16 +4,16 @@
 
 <div class="row my-3">
     <div class="col-12 text-center ">
-        <h1>Přidání obrázku ke knize: </h1>
+        <h1>Přidání autora ke knize: </h1>
         <h2>{{ book.name }}</h2>
     </div>
 </div>
 <div>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-success mr-3 my-2">Uložit</button>
-        <a href="" class="btn btn-success">Zpět</a>
+        <a href="{% url 'staff_book_detail' book.id %}" class="btn btn-success">Zpět</a>
     </form>
 
 </div>
