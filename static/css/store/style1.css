@@ -1,193 +1,260 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-:root{
-    --green:#27ae60;
-    --dark-color:#219150;
-    --black:#444;
-    --light-color:#666;
-    --boarder:.1rem solid rgba(0,0,0,.1);
-    --box-shadow:0 .5rem 1rem rgba(0,0,0,.1)
+:root {
+    --green: #27ae60;
+    --dark-color: #219150;
+    --black: #444;
+    --light-color: #666;
+    --boarder: .1rem solid rgba(0, 0, 0, .1);
+    --border-hover:.1rem solit var(--black);
+    --box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
 }
 
-*{
+
+* {
     font-family: "Poppins", sans-serif;
-    margin:0; padding:0;
+    margin: 0; padding: 0;
     box-sizing: border-box;
     outline: none; border: none;
     text-decoration: none;
     text-transform: none;
-    transition:all .2s linear;
+    transition: all .2s linear;
 }
 
-html{
+html {
     font-size: 100%;
     overflow-x: hidden;
     scroll-padding-top: 5rem;
     scroll-behavior: smooth;
 }
 
-html::-webkit-scrollbar{
-    width:1rem;
+html::-webkit-scrollbar {
+    width: 1rem;
 }
 
-html::-webkit-scrollbar-track{
-    background:transparent;
+html::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-html::-webkit-scrollbar-thumb{
-    background:var(--black);
+html::-webkit-scrollbar-thumb {
+    background: var(--black);
 }
 
-.header .header-1{
-    background:#fff;
-    padding:1.5rem 9%;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+.header .header-1 {
+    background: #fff;
+    padding: 1.5rem 9%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.header .header-1 .logo{
-    font-size: 2.5rem;
+.header .header-1 .logo {
+    font-size: 1.9rem;
     font-weight: bolder;
-    color:var(--black);
+    color: var(--black);
 }
 
-.header .header-1 .logo i{
+.header .header-1 .logo i {
     color: var(--green);
 }
 
-.header .header-1 .search-form{
-    width: 50rem;
-    height: 5rem;
+.header .header-1 .search-form {
+    width: 31.25rem;
+    height: 3.1rem;
     border: var(--boarder);
     overflow: hidden;
     background: #fff;
     display: flex;
     align-items: center;
     border-radius: .5rem;
+    justify-content: space-between;
+
 }
 
-.header .header-1 .search-form input{
-    font-size: 1.6rem;
-    padding: 0 1.2rem;
+.header .header-1 .search-form input {
+    flex-grow: 1;
+    font-size: 1rem;
+    padding: 0 1rem;
     height: 100%;
-    width: 100%;
-    text-transform: none;
     color: var(--black);
+    border: none;
+    outline: none;
+    background: transparent;
 }
 
-.header .header-1 .search-form label{
-    font-size: 2.5rem;
-    padding-right: 1.5rem;
-    color: var(--black);
+.header .header-1 .search-form .search-btn{
+    width: 3.1rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
     cursor: pointer;
+    font-size: 1.4rem;
+    color: var(--black);
+}
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 4rem; /* výška spodního navbaru */
+    justify-content: flex-start; /* ✅ zarovnání nahoře */
+}
+main {
+    padding-bottom: 4rem;
 }
 
-.header .header-1 .search-form label:hover{
+.header .header-1 .search-form label:hover {
     color: var(--green);
 }
 
+/* Zarovná do jednoho řádku */
 .header .header-1 .icons {
-    display: flex;           /* ⬅️ hlavní změna */
-    align-items: center;     /* zarovnání na střed vertikálně */
-    gap: 1.5rem;             /* mezera mezi ikonami – můžeš nahradit za marginy, pokud chceš */
+    display: flex;
+    align-items: center; /* zarovná ikony vertikálně */
+    justify-content: flex-end; /* rovnoměrně v rámci bloku */
+    gap: 1.0rem; /* vzdálenost mezi ikonami */
+    height: 100%;
+    position: relative; /* klíčové pro dropdown */
+    z-index: 10;
 }
 
 .header .header-1 .icons div,
-.header .header-1 .icons a{
-    font-size: 2.5rem;
-     margin-left: 0; /* odstranit, pokud používáš gap */
-    color:var(--black);
+.header .header-1 .icons a {
+    font-size: 1.4rem;
+    color: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.2rem; /* výška pro centrování */
+    width: 2.2rem;  /* čtverec pro rovnováhu */
+    padding: 0;
+    margin: 0;
     cursor: pointer;
 }
 
 .header .header-1 .icons div:hover,
-.header .header-1 .icons a:hover{
-    color:var(--green);
+.header .header-1 .icons a:hover {
+    color: var(--green);
 }
+
+.header .header-1 .icons .dropdown {
+    position: relative; /* nutné pro správné zobrazení dropdownu */
+}
+
+.header .header-1 .icons .dropdown-toggle {
+    line-height: 0; /* odstraní posun kvůli textu */
+    font-size: 1.4rem;
+    padding: 0;
+    margin: 0;
+}
+
+.user-dropdown-wrapper {
+    position: relative; /* Nutné pro absolutní pozici dropdown-menu */
+}
+
+.dropdown-menu {
+    top: 120%; /* nebo např. top: 2.5rem; dle výšky ikon */
+    z-index: 2000; /* výš než header */
+}
+
+.user-dropdown {
+    position: relative;
+    z-index: 100;
+}
+
+/*.user-dropdown:hover .dropdown-menu {
+    display: flex;
+}*/
+
+/* Opraví překrývání a zobrazování dropdownu */
+.header .header-1 .icons .dropdown-menu {
+    top: 2.5rem;
+    right: 0;
+    z-index: 9999;
+    position: absolute;
+    background: white;
+    border: var(--boarder);
+    box-shadow: var(--box-shadow);
+    min-width: 12rem;
+    padding: 0.5rem 0;
+    display: none;
+    flex-direction: column;
+    transform: translateY(0);
+}
+
+/* Zobrazení při aktivaci dropdownu */
+.header .header-1 .icons .dropdown:hover .dropdown-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.header .header-1 .icons .dropdown-menu a {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: var(--black);
+    white-space: nowrap;
+}
+
+.header .header-1 .icons .dropdown-menu a:hover {
+    background: var(--green);
+    color: white;
+}
+
+
+/* Odstranění bootstrap šipky, pokud ruší */
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+.header .header-2 {
+    background: var(--green);
+}
+
+.header .header-2 .container {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header .header-2 .container .navbar {
+    padding: 0.0rem 2%; /* stejné jako header-1 */
+    display: flex;
+    align-items: center;
+}
+
+.header .header-2 .container .navbar a {
+    color: #fff;
+    display: inline-block;
+    font-size: 1rem;
+    padding: 1rem;
+}
+
+.header .header-2 .container .navbar a:hover {
+    background: var(--dark-color);
+}
+
+
+
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
 
 #search-btn{
     display: none;
 }
 
-.header .header-2{
-    background: var(--green);
-}
 
-.header .header-2 .navbar{
-    display: flex;
-    justify-content: space-around;
-}
-
-.header .header-2 .navbar a{
-    color:#fff;
-    display: inline-block;
-    padding: 1.2rem;
-    font-size: 1.7rem;
-}
-
-.header .header-2 .navbar a:hover{
-    background: var(--dark-color);
-}
-
-.header .header-2.active{
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 1000;
-}
-
-.form-box {
-    max-width: 900px;
-    width: 90%;         /* přizpůsobení menším obrazovkám */
-    margin: 5rem auto;
-    padding: 3rem;
-    background: white;
-    border-radius: .5rem;
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
-}
-
-.form-box table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 1.5rem 1rem;  /* horizontální a vertikální mezera */
-}
-
-.form-box th {
-    text-align: right;
-    padding-right: 1rem;
-    white-space: nowrap;
-    font-weight: 600;
-    vertical-align: middle;
-    font-size: 1.5rem;
-}
-
-.form-box td {
-    width: 100%;
-}
-
-.form-box input,
-.form-box textarea,
-.form-box select {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    font-size: 1.4rem;
-    border: 1px solid #ddd;
-    border-radius: .3rem;
-    background-color: #f0f7ff;
-}
-
-input[type="submit"].btn-save {
-  background-color: var(--green);
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1.6rem;
-  border-radius: .3rem;
-  width: 100%;
-}
-
-
-.bottom-navbar{
+.bottom-navbar {
     text-align: center;
     background: var(--green);
     position: fixed;
@@ -196,127 +263,99 @@ input[type="submit"].btn-save {
     display: none;
 }
 
-.bottom-navbar a{
-    font-size: 2.5rem;
+.bottom-navbar a {
+    font-size: 2rem;
     padding: 2rem;
     color: #fff;
 }
 
-.bottom-navbar a:hover{
+.bottom-navbar a:hover {
     background: var(--dark-color);
 }
 
-footer.bg-dark {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.user-dropdown {
-    position: relative;
-}
-
-.user-dropdown .dropdown-toggle {
-    font-size: 2.5rem;
-    color: var(--black);
-    cursor: pointer;
-    margin-left: 1.5rem;
-}
-
-.user-dropdown .dropdown-toggle:hover {
-    color: var(--green);
-}
-
-.dropdown-menu .dropdown-item {
-    font-size: 1.3rem; /* nebo třeba 1.2rem podle potřeby */
-    padding: 0.4rem 1rem;
-}
-
-
-body {
-    padding-bottom: 6rem; /* přidáno kvůli pevnému footeru */
-}
 
 @media (max-width: 991px) {
-
-    html{
+    html {
         font-size: 80%;
     }
 
-    .header .header-1{
+    .header .header-1 {
         padding: 2rem;
     }
+
+    .wrapper {
+        padding-bottom: 0rem; /* výška spodního navbaru + rezerva */
+    }
+
 }
 
 @media (max-width: 768px) {
-
-    html{
+    html {
         scroll-padding-top: 0;
     }
 
-    body{
+    body {
         padding-bottom: 6rem;
     }
 
-    .header .header-2{
+    .header .header-2 {
         display: none;
     }
 
-    #search-btn{
-        display: inline-block;
+    .wrapper {
+        padding-bottom: 0rem; /* výška spodního navbaru + rezerva */
     }
 
-    .bottom-navbar{
+
+    #search-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        color: var(--black);
+        width: 2.5rem;
+        height: 2.5rem;
+        cursor: pointer;
+    }
+
+    .bottom-navbar {
         display: block;
     }
 
-    .header .header-1{
+    .header .header-1 {
         box-shadow: var(--box-shadow);
         position: relative;
     }
 
-    .header .header-1 .search-form{
+    .header .header-1 .search-form {
         position: absolute;
-        top:-115%; right: 2rem;
+        top: -115%; right: 2rem;
         width: 90%;
         box-shadow: var(--box-shadow);
     }
 
-    .header .header-1 .search-form.active{
+    .header .header-1 .search-form.active {
         top: 115%;
     }
-
 }
 
 @media (max-width: 450px) {
-
-    html{
+    html {
         font-size: 50%;
     }
-
 }
 
 
-
-/*####################################################################################*/
 .max-size-img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 .max-height-400 {
-  max-height: 400px;
-}
-
-.max-height-200 {
-    max-height: 200px;
+    max-height: 400px;
 }
 
 .font-size-160 {
-    font-size: 1.4rem;
+    font-size: 0.88rem;
 }
