@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row my-3">
     <div class="col-12 text-center">
-        <a href="{% url 'add_image' book.id %}" class="btn btn-success mr-3">Přidat obrázek</a>
+        <a href="{% url 'image_add' book.id %}" class="btn btn-success mr-3">Přidat obrázek</a>
         <a href="{% url 'book_update' book.id %}" class="btn btn-success mr-3">Upravit knihu</a>
         <a href="{% url 'book_delete' book.id %}" class="btn btn-success">Smazat knihu</a>
     </div>

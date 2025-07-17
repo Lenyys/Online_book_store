@@ -29,7 +29,14 @@ class Autor(models.Model):
 
 
 class Book(models.Model):
+    TYPE_CHOICES = [
+        ('book', 'Tištěná kniha'),
+        ('ebook', 'E-kniha'),
+        ('audiobook', 'Audiokniha'),
+    ]
+
     name = models.CharField(max_length=150, null=False, blank=False)
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='book')  # <-- TADY
     autor = models.ManyToManyField(Autor, related_name='books')
     isbn = models.CharField(max_length=20, null=True, blank=True)
     ean = models.PositiveIntegerField(null=True, blank=True)
@@ -41,6 +48,7 @@ class Book(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='products_created')
     updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='products_updated')
+
 
     class Meta:
         ordering = ['name']

@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>{{ category.name }}</h1>
-    <p>{{ category.description }}</p>
+
 
     <a href="{% url 'category-edit' category.pk %}">Upravit kategorii</a><br>
     <a href="{% url 'category-delete' category.pk %}">Smazat kategorii</a><br>
