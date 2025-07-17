@@ -1,13 +1,15 @@
-
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import receiver
 from django.shortcuts import render
 from django.views import View
 
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, TemplateView
 
 from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm
-from eshop.models import Book, Category, Image, Autor
+from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct
 
 
 def home(request):
@@ -47,7 +49,7 @@ class BookDetailView(DetailView):
     context_object_name = 'book'
 
 
-class StaffBookListView(ListView):
+class StaffBookListView(LoginRequiredMixin, ListView):
     model = Book
     template_name = 'eshop/staff/staff_book_list.html'
     context_object_name = 'books'
@@ -267,6 +269,71 @@ class CategoryDeleteView(DeleteView):
     success_url = reverse_lazy('category-list')
 
 
+class CartDetailView(TemplateView):
+    template_name = 'eshop/cart_detail.html'
+
+    def get_cart(self):
+        request = self.request
+        if request.user.is_authenticated:
+            cart = Cart.objects.filter(user=request.user).first()
+        else:
+            session_key = request.session.session_key
+            if not session_key:
+                request.session.create()
+                session_key = request.session.session_key
+            cart = Cart.objects.filter(session_key=session_key, user=None).first()
+        return cart
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = self.get_cart()
+        context['cart'] = cart
+        context['total_price'] = cart.get_total_cart_price()
+        context['items'] = cart.selected_products.all() if cart else []
+        return context
+
+
+class AddToCartView(View):
+    def post(self, request, *args, **kwargs):
+        book = get_object_or_404(Book, pk=kwargs['pk'])
+
+        session_key = request.session.session_key
+        if not session_key:
+            request.session.create()
+            session_key = request.session.session_key
+
+        if request.user.is_authenticated:
+            cart, created = Cart.objects.get_or_create(user=request.user)
+        else:
+            cart, created = Cart.objects.get_or_create(session_key=session_key, user=None)
+
+        cart_item, created = SelectedProduct.objects.get_or_create(cart=cart, product=book)
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+
+        return redirect('cart_detail')
 
 
 
+# @receiver(user_logged_in)
+# def merge_cart_on_login(sender, request, user, **kwargs):
+#     session_key = request.session.session_key
+#     if not session_key:
+#         return
+#
+#     try:
+#         session_cart = Cart.objects.get(session_key=session_key, user=None)
+#         user_cart, created = Cart.objects.get_or_create(user=user)
+#
+#         for item in session_cart.items.all():
+#             existing, created = user_cart.items.get_or_create(book=item.book)
+#             if not created:
+#                 existing.quantity += item.quantity
+#                 existing.save()
+#             else:
+#                 item.cart = user_cart
+#                 item.save()
+#         session_cart.delete()
+#     except Cart.DoesNotExist:
+#         pass

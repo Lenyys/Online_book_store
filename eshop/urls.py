@@ -5,13 +5,16 @@ from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdat
                          CategoryListView, CategoryUpdateView, CategoryDeleteView, ImageDeleteView,
                          ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
                          staff_page, StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
-                         StaffAuthorDetailView, AuthorDeleteView,
+                         StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
                          )
 
 urlpatterns = [
     path('staff/', staff_page, name='staff'),
     path('book_list/', BookListView.as_view(), name='book_list'),
     path('book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
+
+
+
     path('staff_book_list/', StaffBookListView.as_view(), name='staff_book_list'),
     path('staff_book_detail/<int:pk>/', StaffBookDetailView.as_view(), name='staff_book_detail'),
     path('book_create/', BookCreateView.as_view(), name='book_create'),
@@ -38,6 +41,9 @@ urlpatterns = [
     path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
 
 
+
+    path('cart/add/<int:pk>/', AddToCartView.as_view(), name='add_to_cart'),
+    path('cart_detail/', CartDetailView.as_view(), name='cart_detail')
 
 
 

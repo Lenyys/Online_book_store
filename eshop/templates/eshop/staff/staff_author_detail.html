@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Detail Autora</h1>
+<h1>Detail autora</h1>
 <div>
     <a class="btn btn-success" href="{% url 'author_update' author.id %}?next={{ request.path }}">Upravit autora</a>
     <a class="btn btn-danger" href="{% url 'author_delete' author.id %}?next={{ request.path }}">Smazat autora</a>

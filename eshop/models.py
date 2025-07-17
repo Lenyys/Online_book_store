@@ -30,7 +30,7 @@ class Autor(models.Model):
 
 class Book(models.Model):
     name = models.CharField(max_length=150, null=False, blank=False)
-    autor = models.ManyToManyField(Autor, related_name='books')
+    autor = models.ManyToManyField(Autor, related_name='books') # blak true jinak to ve formulá5i budeme muset zadat i když tam ještě třeba nebude daný autor
     isbn = models.CharField(max_length=20, null=True, blank=True)
     ean = models.PositiveIntegerField(null=True, blank=True)
     description = models.TextField(null=False, blank=False)
@@ -92,13 +92,18 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_temporary = models.BooleanField(null=False, default=True)
+    session_key = models.CharField(max_length=40, null=True, blank=True)
 
     def __str__(self):
         pass
 
     def __repr__(self):
         pass
-
+    def get_total_cart_price(self):
+        total_price = 0
+        for item in self.selected_products.all():
+            total_price += (item.product.price * item.quantity)
+        return total_price
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='orders')
@@ -117,7 +122,7 @@ class Order(models.Model):
 class SelectedProduct(models.Model):
     product = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, blank=False)
     product_price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=True, default=0)
-    quantity = models.PositiveIntegerField(null=False, blank=True, default=0)
+    quantity = models.PositiveIntegerField(null=False, blank=True, default=1)
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True, blank=True, related_name='selected_products')
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True, related_name='selected_products')
     created_at = models.DateTimeField(auto_now_add=True)
