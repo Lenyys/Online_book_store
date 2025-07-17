@@ -25,15 +25,15 @@
         <div class="card h-100">
                 <img class="card-img-top" src="{{ book.images.all.0.image.url }}" alt="{{ book.name }}">
             <div class="card-body">
-                <h5 class="card-title">
+                <h6 class="card-title">
                     <a href="{% url 'book_detail' book.id %}" class="text-decoration-none text-dark">{{ book.name }}</a>
-                </h5>
+                </h6>
                 {% comment %}
-                <p class="card-text">
+                <div class="card-text">
                     Autor: <a href="{% url 'autor_detail' book.autor.id %}"></a>
-                </p>
+                </div>
                 {% endcomment %}
-                <p class="card-text font weight-bold">Cena: {{ book.price }} Kč</p>
+                <div class="card-text ">Cena: {{ book.price }} Kč</div>
             </div>
         </div>
     </div>

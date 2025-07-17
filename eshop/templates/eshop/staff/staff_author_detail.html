@@ -7,17 +7,17 @@
     <a class="btn btn-danger" href="{% url 'author_delete' author.id %}?next={{ request.path }}">Smazat autora</a>
     <a class="btn btn-success" href="{% url 'staff_author_list'%}">Zpět na seznam autorů</a>
 </div>
-<div class="mt-3 border-top">
+<div class="mt-3 pt-3 border-top">
     <div>
-        <h3>Jméno autora: </h3>
+        <h4>Jméno autora: </h4>
         <p>{{ author.name }}</p>
     </div>
     <div>
-        <h3>Příjmení autora: </h3>
+        <h4>Příjmení autora: </h4>
         <p>{{ author.lastname }}</p>
     </div>
     <div>
-        <h4>Datum narození:</h4>
+        <h5>Datum narození:</h5>
         {% if author.date_of_birth %}
             <p>{{ author.date_of_birth }}</p>
         {% else %}

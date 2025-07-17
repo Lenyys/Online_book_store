@@ -9,12 +9,12 @@
     <a class="btn btn-success" href="{% url 'staff_book_list'%}">Zpět na seznam knih</a>
 </div>
 <div>
-    <div class="border-bottom border-top mt-2">
-        <h3>Název knihy: </h3>
+    <div class="border-bottom border-top mt-2 pt-3">
+        <h4>Název knihy: </h4>
         <p>{{ book.name }}</p>
     </div>
     <div class="border-bottom mt-2">
-        <h4>Popis:</h4>
+        <h5>Popis:</h5>
         <p>{{ book.description }}</p>
     </div>
     <div class="border-bottom mt-2">
@@ -22,23 +22,23 @@
         <p>{{ book.price }} Kč</p>
     </div>
     <div class="border-bottom mt-2">
-        <h4>Na skladě: </h4>
+        <h5>Na skladě: </h5>
         <p>{{ book.stock_quantity }}</p>
 
     </div>
     <div class="border-bottom mt-2">
-        <h4>ISBN: </h4>
+        <h5>ISBN: </h5>
         <p>{{ book.isbn }}</p>
     </div>
     <div class="border-bottom mt-2">
-        <h4>EAN: </h4>
+        <h5>EAN: </h5>
         <p>{{ book.ean }}</p>
     </div>
     <div class="border-bottom mt-2">
-        <h3>
+        <h4>
             Autoři knihy:
             <a class="btn border" href="{% url 'add_or_create_author' book.id %}">Přidat autora</a>
-        </h3>
+        </h4>
 
         {% for author in book.autor.all %}
         <div>
@@ -66,7 +66,7 @@
     </div>
 </div>
 <div>
-    <h4>
+    <h4 class="mt-3">
         Obrázky:
         <a class="btn border" href="{% url 'add_image' book.id %}">Přidat obrázek</a>
 
