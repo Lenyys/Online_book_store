@@ -53,7 +53,7 @@ class StaffBookViewsTest(TestCase):
         self.assertTrue(Book.objects.filter(name='New Book').exists())
         self.assertRedirects(response, reverse('staff_book_list'))
 
-    @skip
+    # @skip
     def test_book_create_view_post_blank_m2m(self):
         self.client.login(username='staff', password='pass1234test')
         response = self.client.post(reverse('book_create'), {

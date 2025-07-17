@@ -67,18 +67,6 @@ class BookForm(forms.ModelForm):
             raise forms.ValidationError("Cena musí být větší než 0 Kč.")
         return price
 
-    def clean(self):
-        cleaned_data = super().clean()
-        isbn = cleaned_data.get('isbn')
-        ean = cleaned_data.get('ean')
-
-        if not isbn and not ean:
-            raise forms.ValidationError("Musíte zadat alespoň ISBN nebo EAN.")
-
-        if isbn and len(isbn.replace('-', '').strip()) < 10:
-            self.add_error('isbn', "ISBN vypadá příliš krátce – zkontrolujte formát.")
-
-        return cleaned_data
 
 class ImageForm(forms.ModelForm):
     class Meta:

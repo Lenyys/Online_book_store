@@ -43,7 +43,7 @@ class Book(models.Model):
     description = models.TextField(null=False, blank=False)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=False, blank=False)
     stock_quantity = models.PositiveIntegerField(null=False, blank=True, default=0)
-    category = models.ManyToManyField(Category, related_name='books')
+    category = models.ManyToManyField(Category, blank=True, related_name='books')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='products_created')
