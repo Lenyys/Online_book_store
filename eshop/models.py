@@ -107,6 +107,7 @@ class Cart(models.Model):
 
     def __repr__(self):
         pass
+
     def get_total_cart_price(self):
         total_price = 0
         for item in self.selected_products.all():

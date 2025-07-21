@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
@@ -286,12 +287,16 @@ class CartDetailView(TemplateView):
         request = self.request
         if request.user.is_authenticated:
             cart = Cart.objects.filter(user=request.user).first()
+            if not cart:
+                cart = Cart.objects.create(user=request.user)
         else:
             session_key = request.session.session_key
             if not session_key:
                 request.session.create()
                 session_key = request.session.session_key
             cart = Cart.objects.filter(session_key=session_key, user=None).first()
+            if not cart:
+                cart = Cart.objects.create(session_key=session_key)
         return cart
 
     def get_context_data(self, **kwargs):
@@ -307,14 +312,13 @@ class AddToCartView(View):
     def post(self, request, *args, **kwargs):
         book = get_object_or_404(Book, pk=kwargs['pk'])
 
-        session_key = request.session.session_key
-        if not session_key:
-            request.session.create()
-            session_key = request.session.session_key
-
         if request.user.is_authenticated:
             cart, created = Cart.objects.get_or_create(user=request.user)
         else:
+            session_key = request.session.session_key
+            if not session_key:
+                request.session.create()
+                session_key = request.session.session_key
             cart, created = Cart.objects.get_or_create(session_key=session_key, user=None)
 
         cart_item, created = SelectedProduct.objects.get_or_create(cart=cart, product=book)
@@ -323,6 +327,46 @@ class AddToCartView(View):
             cart_item.save()
 
         return redirect('cart_detail')
+
+class UpdateCartView(View):
+    def post(self, request, *args, **kwargs):
+        for key, value in request.POST.items():
+            if key.startswith('quantity-'):
+                try:
+                    item_id = int(key.split('-')[1])
+                    quantity = int(value)
+
+                    if quantity < 1:
+                        continue  # nebo item.delete() pokud chceš mazat
+
+                    item = SelectedProduct.objects.get(id=item_id)
+                    item.quantity = quantity
+                    item.save()
+                except (ValueError, SelectedProduct.DoesNotExist):
+                    continue
+
+        # messages.success(request, "Košík úspěšně aktualizován")
+        return redirect('cart_detail')
+
+
+class RemoveFromCartView(View):
+    def get(self, request, item_id, *args, **kwargs):
+        try:
+            item = SelectedProduct.objects.get(id=item_id)
+            item.delete()
+            messages.success(request, "Položka byla odstraněna z košíku.")
+        except SelectedProduct.DoesNotExist:
+            messages.error(request, "Položka nebyla nalezena.")
+        return redirect('cart_detail')
+
+# def remove_from_cart(request, item_id):
+#     try:
+#         item = SelectedProduct.objects.get(id=item_id)
+#         item.delete()
+#         messages.success(request, "Položka byla odstraněna z košíku.")
+#     except SelectedProduct.DoesNotExist:
+#         messages.error(request, "Položka nebyla nalezena.")
+#     return redirect('cart_detail')
 
 
 
