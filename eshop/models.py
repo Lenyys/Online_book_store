@@ -1,17 +1,20 @@
 from PIL import Image as PILImage, UnidentifiedImageError
-
 from django.contrib.auth.models import User
+from django.db import models
+from mptt.models import MPTTModel, TreeForeignKey
 from django.db import models
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=80, null=False, blank=False)
+class Category(MPTTModel):
+    name = models.CharField(max_length=100)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
-    class Meta:
-        ordering = ['name']
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
     def __repr__(self):
         return f"Category(name={self.name})"
