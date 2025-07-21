@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Shrnutí objednávky</h1>
+<div>Objednávka č. {{ object.id }}</div>
+<div>
+    {% for product in object.selected_products.all %}
+     {{ product.name }}
+    {% empty %}
+
+    {% endfor %}
+    <form method="post" action="{% url 'order_sent' object.id %}">
+        {% csrf_token %}
+        <button type="submit">Závazně odeslat objednávku</button>
+    </form>
+</div>
+{% endblock %}

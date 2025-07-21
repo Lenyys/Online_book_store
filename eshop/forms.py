@@ -113,4 +113,42 @@ class CategoryForm(forms.ModelForm):
         fields = '__all__'
 
 
+class OrderForm(forms.Form):
+    delivery_addres = forms
+    first_name = forms.CharField(label='Jméno', max_length=50)
+    last_name = forms.CharField(label='Příjmení', max_length=50)
+    email = forms.EmailField(label='E-mail')
+    phone = forms.CharField(label='Telefon', max_length=20, required=False)
+    delivery_address = forms.CharField(
+        label='Dodací adresa',
+        widget=forms.Textarea(attrs={'rows': 3}),
+    )
+    city = forms.CharField(label='Město', max_length=100)
+    postal_code = forms.CharField(label='PSČ', max_length=10)
+    note = forms.CharField(
+        label='Poznámka k objednávce',
+        widget=forms.Textarea(attrs={'rows': 3}),
+        required=False
+    )
 
+    # accept_terms = forms.BooleanField(label='Souhlasím s obchodními podmínkami')
+    #
+    # DELIVERY_CHOICES = [
+    #     ('ppl', 'PPL kurýr'),
+    #     ('zasilkovna', 'Zásilkovna'),
+    #     ('osobne', 'Osobní odběr'),
+    # ]
+    # delivery_method = forms.ChoiceField(
+    #     choices=DELIVERY_CHOICES,
+    #     label='Způsob doručení'
+    # )
+    #
+    # PAYMENT_CHOICES = [
+    #     ('dobirka', 'Dobírka'),
+    #     ('prevod', 'Bankovní převod'),
+    #     ('online', 'Online platba kartou'),
+    # ]
+    # payment_method = forms.ChoiceField(
+    #     choices=PAYMENT_CHOICES,
+    #     label='Způsob platby'
+    # )

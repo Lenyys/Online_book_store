@@ -1,7 +1,8 @@
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.signals import user_logged_in
-from django.dispatch import receiver
+from django.core.mail import  EmailMessage
+from django.db import transaction
 from django.shortcuts import render
 from django.views import View
 
@@ -9,8 +10,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, TemplateView
 
-from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm
-from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct
+from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm
+from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Order
 
 
 def home(request):
@@ -359,35 +360,85 @@ class RemoveFromCartView(View):
             messages.error(request, "Položka nebyla nalezena.")
         return redirect('cart_detail')
 
-# def remove_from_cart(request, item_id):
-#     try:
-#         item = SelectedProduct.objects.get(id=item_id)
-#         item.delete()
-#         messages.success(request, "Položka byla odstraněna z košíku.")
-#     except SelectedProduct.DoesNotExist:
-#         messages.error(request, "Položka nebyla nalezena.")
-#     return redirect('cart_detail')
+class CreateOrderWithFormView(FormView):
+    template_name = 'eshop/order_form.html'
+    form_class = OrderForm
+
+    def form_valid(self, form):
+        delivery_address = form.cleaned_data.get('delivery_address')
+        note = form.cleaned_data.get('note')
+        first_name = form.cleaned_data.get('first_name')
+        last_name = form.cleaned_data.get('last_name')
+        email = form.cleaned_data.get('email')
+        phone = form.cleaned_data.get('phone')
+        postal_code = form.cleaned_data.get('postal_code')
+
+        if self.request.user.is_authenticated:
+            cart = get_object_or_404(Cart, user=self.request.user, is_temporary=True)
+        else:
+            cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
+        with transaction.atomic():
+            if self.request.user.is_authenticated:
+                order = Order.objects.create(
+                    user=self.request.user,
+                    delivery_address=delivery_address,
+                    total_price=cart.get_total_cart_price(),
+                    paid=False,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    phone=phone,
+                    postal_code=postal_code,
+                    note=note
+                )
+            else:
+                order = Order.objects.create(
+                    user=None,
+                    delivery_address=delivery_address,
+                    total_price=cart.get_total_cart_price(),
+                    paid=False,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    phone=phone,
+                    postal_code=postal_code,
+                    note=note
+                )
+            for item in cart.selected_products.all():
+                item.order = order
+                item.cart = None
+                item.product_price = item.product.price
+                item.save()
+
+            cart.is_temporary = True
+            cart.save()
+
+        return redirect('order_detail', pk=order.id)
 
 
+class OrderDetailView(DetailView):
+    model = Order
+    template_name = 'eshop/order_detail.html'
 
-# @receiver(user_logged_in)
-# def merge_cart_on_login(sender, request, user, **kwargs):
-#     session_key = request.session.session_key
-#     if not session_key:
-#         return
-#
-#     try:
-#         session_cart = Cart.objects.get(session_key=session_key, user=None)
-#         user_cart, created = Cart.objects.get_or_create(user=user)
-#
-#         for item in session_cart.items.all():
-#             existing, created = user_cart.items.get_or_create(book=item.book)
-#             if not created:
-#                 existing.quantity += item.quantity
-#                 existing.save()
-#             else:
-#                 item.cart = user_cart
-#                 item.save()
-#         session_cart.delete()
-#     except Cart.DoesNotExist:
-#         pass
+class OrderSentView(View):
+    def post(self, request, *args, **kwargs):
+        order_id = self.kwargs.get('pk')
+        order = get_object_or_404(Order, id=order_id)
+        email = EmailMessage(
+            subject='Potvrzení objednávky',
+            body=f'Děkujeme za objednávku... č. {order.id}',
+            from_email='eshop@example.com',
+            to=[order.email],
+        )
+        email.send()
+        return redirect('order_confirmation', pk=order_id)
+
+class OrderConfirmationView(TemplateView):
+    template_name = 'eshop/order_confirmation.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order_id = self.kwargs.get('pk')
+        order = get_object_or_404(Order, id=order_id)
+        context['order'] = order
+        return context

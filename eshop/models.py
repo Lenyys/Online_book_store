@@ -119,10 +119,17 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     paid = models.BooleanField(default=False)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=True, default=0)
+
     delivery_address = models.TextField(null=False, blank=False)
+    first_name = models.CharField(max_length=150, null=True, blank=True)
+    last_name = models.CharField(max_length=150, null=True, blank=True)
+    email = models.EmailField(default='')
+    phone = models.CharField(max_length=20, null=True, blank=True)
+    postal_code = models.CharField(max_length=10, default="")
+    note = models.TextField(blank=True)
 
     def __str__(self):
-        pass
+        return f"objednávka #{self.id} - {self.user_name} {self.user_last_name}"
 
     def __repr__(self):
         pass

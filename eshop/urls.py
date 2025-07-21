@@ -6,7 +6,8 @@ from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdat
                          ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
                          staff_page, StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
-                         CategoryCreateView, CategoryDetailView, UpdateCartView, RemoveFromCartView)
+                         CategoryCreateView, CategoryDetailView, UpdateCartView, RemoveFromCartView, OrderDetailView,
+                         CreateOrderWithFormView, OrderConfirmationView, OrderSentView)
 
 urlpatterns = [
     path('staff/', staff_page, name='staff'),
@@ -49,7 +50,10 @@ urlpatterns = [
     path('cart/update/', UpdateCartView.as_view(), name='update_cart'),
     path('cart/remove/<int:item_id>/', RemoveFromCartView.as_view(), name='remove_from_cart'),
 
-
+    path('create_order/', CreateOrderWithFormView.as_view(), name='create_order'),
+    path('order_detail/<int:pk>/', OrderDetailView.as_view(), name='order_detail'),
+    path('order_confirmation/<int:pk>/' ,OrderConfirmationView.as_view() , name='order_confirmation'),
+    path('order_send/<int:pk>/', OrderSentView.as_view(), name='order_sent'),
 
 
 
