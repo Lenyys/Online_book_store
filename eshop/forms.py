@@ -284,25 +284,3 @@ class OrderForm(forms.Form):
 
         psc = postal_code.replace(" ", "")
         return psc
-
-    # accept_terms = forms.BooleanField(label='Souhlasím s obchodními podmínkami')
-    #
-    # DELIVERY_CHOICES = [
-    #     ('ppl', 'PPL kurýr'),
-    #     ('zasilkovna', 'Zásilkovna'),
-    #     ('osobne', 'Osobní odběr'),
-    # ]
-    # delivery_method = forms.ChoiceField(
-    #     choices=DELIVERY_CHOICES,
-    #     label='Způsob doručení'
-    # )
-    #
-    # PAYMENT_CHOICES = [
-    #     ('dobirka', 'Dobírka'),
-    #     ('prevod', 'Bankovní převod'),
-    #     ('online', 'Online platba kartou'),
-    # ]
-    # payment_method = forms.ChoiceField(
-    #     choices=PAYMENT_CHOICES,
-    #     label='Způsob platby'
-    # )

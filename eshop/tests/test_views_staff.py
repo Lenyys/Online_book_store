@@ -1,10 +1,7 @@
-from io import BytesIO
-from PIL import Image as PILImage
-from unittest import skip
+
 
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
@@ -25,7 +22,7 @@ class StaffBookViewsTest(TestCase):
 
     def test_staff_book_list_requires_login(self):
         response = self.client.get(reverse('staff_book_list'))
-        self.assertEqual(response.status_code, 302)  # Redirect to login
+        self.assertEqual(response.status_code, 302)
 
         self.client.login(username='staff', password='pass1234test')
         response = self.client.get(reverse('staff_book_list'))

@@ -75,9 +75,6 @@ class BookUpdateView(UpdateView):
     template_name = 'eshop/staff/book_update.html'
     form_class = BookForm
 
-    # def get_success_url(self):
-    #     return reverse('staff_book_detail', kwargs={'pk': self.object.pk})
-    #
     def get_success_url(self):
         next_url = self.request.GET.get('next') or self.request.POST.get('next')
         return next_url or reverse_lazy('staff_book_list')
@@ -349,8 +346,6 @@ class UpdateCartView(View):
                     item.save()
                 except (ValueError, SelectedProduct.DoesNotExist):
                     continue
-
-        # messages.success(request, "Košík úspěšně aktualizován")
         return redirect('cart_detail')
 
 
