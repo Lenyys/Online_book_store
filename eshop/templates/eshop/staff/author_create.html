@@ -2,19 +2,15 @@
 
 {% block content %}
 
-<div class="row my-3">
-    <div class="col-12 text-center ">
-        <h1>Přidání autora: </h1>
-    </div>
-</div>
-<div>
-    <form method="post">
+<div class="form-container">
+    <h1 class="form-title">Přidání autora</h1>
+    <form method="post" class="styled-form">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-success mr-3 my-2">Uložit</button>
-        <a href="{% url 'staff_author_list' %}" class="btn btn-success">Zpět</a>
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-success">Uložit</button>
+            <a href="{% url 'staff_author_list' %}" class="btn btn-secondary">Zpět</a>
+        </div>
     </form>
-
 </div>
-
 {% endblock %}

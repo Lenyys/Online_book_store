@@ -199,3 +199,21 @@ var swiper2 = new Swiper(".blogs-slider", {
         },
     },
 });;
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const bookListLink = document.getElementById('book-list-link');
+    let loginForm = document.querySelector('.login-form-container');
+
+    bookListLink.addEventListener('click', function (event) {
+        const isAuthenticated = bookListLink.getAttribute('data-auth') === 'true';
+        const redirectUrl = bookListLink.getAttribute('data-url');
+
+        if (isAuthenticated) {
+            window.location.href = redirectUrl;
+        } else {
+            event.preventDefault();
+            loginForm.classList.add('active');
+        }
+    });
+});

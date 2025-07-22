@@ -8,11 +8,12 @@
             <input type="text" name="username" class="box" placeholder="enter your email" required>
             <span>Password</span>
             <input type="password" name="password" class="box" placeholder="enter your password" required>
+            <!--
             <div class="checkbox">
                 <input type="checkbox" name="" id="remember-me">
                 <label for="remember-me">remember me</label>
             </div>
-
+            -->
            <div class="login-message">
                 {% if messages %}
                     {% for message in messages %}
@@ -25,7 +26,9 @@
 
             <input type="submit" value="sign in" class="btn" id="login-submit">
 
-            <p>forget password ? <a href="#">click here</a> </p>
+            <!--
+            <p>forget password ? <a href="{% url 'password_change' %}">click here</a> </p>
+            -->
             <p>don't have an account ? <a href="{% url 'signup' %}">create one</a> </p>
         </form>
   </div>

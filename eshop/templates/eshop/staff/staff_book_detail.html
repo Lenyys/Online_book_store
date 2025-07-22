@@ -1,93 +1,66 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Detail Knihy</h1>
+<div class="book-detail-container">
+    <div class="book-detail-header">
+        <h1>📘 Detail knihy</h1>
+        <div class="book-actions">
+            <a class="btn btn-edit" href="{% url 'book_update' book.id %}?next={{ request.path }}">Upravit</a>
+            <a class="btn btn-delete" href="{% url 'book_delete' book.id %}?next={{ request.path }}">Smazat</a>
+            <a class="btn btn-back" href="{% url 'staff_book_list' %}">Zpět</a>
+        </div>
+    </div>
 
-<div>
-    <a class="btn btn-success" href="{% url 'book_update' book.id %}?next={{ request.path }}">Upravit knihu</a>
-    <a class="btn btn-danger" href="{% url 'book_delete' book.id %}?next={{ request.path }}">Smazat knihu</a>
-    <a class="btn btn-success" href="{% url 'staff_book_list'%}">Zpět na seznam knih</a>
-</div>
-<div>
-    <div class="border-bottom border-top mt-2 pt-3">
-        <h4>Název knihy: </h4>
-        <p>{{ book.name }}</p>
+    <div class="book-info">
+        <div><strong>Název:</strong> {{ book.name }}</div>
+        <div><strong>Popis:</strong> {{ book.description }}</div>
+        <div><strong>Cena:</strong> {{ book.price }} Kč</div>
+        <div><strong>Na skladě:</strong> {{ book.stock_quantity }}</div>
+        <div><strong>ISBN:</strong> {{ book.isbn }}</div>
+        <div><strong>EAN:</strong> {{ book.ean }}</div>
     </div>
-    <div class="border-bottom mt-2">
-        <h5>Popis:</h5>
-        <p>{{ book.description }}</p>
-    </div>
-    <div class="border-bottom mt-2">
-        <h4>Cena: </h4>
-        <p>{{ book.price }} Kč</p>
-    </div>
-    <div class="border-bottom mt-2">
-        <h5>Na skladě: </h5>
-        <p>{{ book.stock_quantity }}</p>
 
-    </div>
-    <div class="border-bottom mt-2">
-        <h5>ISBN: </h5>
-        <p>{{ book.isbn }}</p>
-    </div>
-    <div class="border-bottom mt-2">
-        <h5>EAN: </h5>
-        <p>{{ book.ean }}</p>
-    </div>
-    <div class="border-bottom mt-2">
-        <h4>
-            Autoři knihy:
-            <a class="btn border" href="{% url 'add_or_create_author' book.id %}">Přidat autora</a>
-        </h4>
-
+    <div class="book-authors">
+        <h3>Autoři knihy
+            <a class="btn btn-small" href="{% url 'add_or_create_author' book.id %}">+ Autor</a>
+        </h3>
         {% for author in book.autor.all %}
-        <div>
-            <a class="text-decoration-none text-dark"
-               href="">{{ author.name }} {{ author.lastname }}</a>
-            <a class="btn border"
-               href="{% url 'remove_author' book.id author.id %}?next={{ request.path }}">Odebrat ❌</a>
-            <a class="btn border"
-               href="{% url 'author_update' author.id %}?next={{ request.path }}">Upravit ✏️</a>
+        <div class="author-item">
+            {{ author.name }} {{ author.lastname }}
+            <a href="{% url 'remove_author' book.id author.id %}?next={{ request.path }}">Odebrat ❌</a>
+            <a href="{% url 'author_update' author.id %}?next={{ request.path }}">Upravit ✏️</a>
         </div>
         {% empty %}
-            Žádný autor u této knihy
+            <p>Žádný autor u této knihy</p>
         {% endfor %}
     </div>
-    <div class="border-bottom mt-2">
-        <h4>Kategorie knihy:</h4>
+
+    <div class="book-categories">
+        <h3>Kategorie knihy</h3>
         {% for category in book.category.all %}
-        <div>
-            <a class="text-decoration-none text-dark"
-               href="">{{ category.name }}</a>
-        </div>
+            <div>{{ category.name }}</div>
         {% empty %}
-            Žádná kategorie u této knihy
+            <p>Žádná kategorie</p>
         {% endfor %}
     </div>
-</div>
-<div>
-    <h4 class="mt-3">
-        Obrázky:
-        <a class="btn border" href="{% url 'add_image' book.id %}">Přidat obrázek</a>
 
-    </h4>
-</div>
-<div class="row mt-2">
-    {% for image in book.images.all %}
-        <div class="col-4 col-md-6 border-right">
-            <img style="max-height: 200px;" src="{{ image.image.url }}" alt="">
-            <div>
-                <a class="btn border  mx-3 my-1"
-                   href="{% url 'image_delete' image.id %}?next={{ request.path }}">Smazat ❌</a>
+    <div class="book-images">
+        <h3>Obrázky
+            <a class="btn btn-small" href="{% url 'add_image' book.id %}">+ Obrázek</a>
+        </h3>
+        <div class="image-gallery">
+        {% for image in book.images.all %}
+            <div class="image-card">
+                <img src="{{ image.image.url }}" alt="" class="book-image">
+                <div>
+                    <a class="btn btn-small" href="{% url 'image_delete' image.id %}?next={{ request.path }}">Smazat ❌</a>
+                    <a class="btn btn-small" href="{% url 'image_update' book.id image.id %}?next={{ request.path }}">Upravit ✏️</a>
+                </div>
             </div>
-            <div>
-                 <a class="btn border mx-3 my-1"
-                    href="{% url 'image_update' book.id image.id %}?next={{ request.path }}">Upravit ✏️</a>
-            </div>
+        {% empty %}
+            <p>Žádný obrázek</p>
+        {% endfor %}
         </div>
-    {% empty %}
-        Žádný obrázek k této knize
-    {% endfor %}
+    </div>
 </div>
-
 {% endblock %}

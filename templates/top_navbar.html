@@ -1,9 +1,12 @@
    <div class="header-2">
        <nav class="navbar">
-           <a href="{% url 'home' %}">Domů</a>
-           <a href="{% url 'book_list' %}">Knihy</a>
-           <a href="#featured">Doporučený</a>
-           <a href="#arrivals">Arrivals</a>
-           <a href="#reviews">Recenze</a><a href="#blogs">Blogs</a>
+           <a href="{% url 'home' %}">Home</a>
+           <a href="#" id="book-list-link" data-auth="{% if user.is_authenticated %}true{% else %}false{% endif %}" data-url="{% url 'staff_book_list' %}">Book List</a>
+           <a href="{% url 'staff_author_list' %}">List of Authors</a>
+           <a href="{% url 'category-list' %}">Category list</a>
+           <!--
+           <a href="#reviews">Recenze</a>
+           <a href="#blogs">Blogs</a>
+           -->
        </nav>
    </div>
