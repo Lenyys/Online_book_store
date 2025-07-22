@@ -237,15 +237,16 @@ class RemoveAuthorFromBook(View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        print(f"autor: self.author.name")
         return render(request, self.template_name, {
             'book': self.book,
             'author': self.author,
-            'next': request.GET.get('next', reverse('book_detail', kwargs={'pk': self.book.pk}))
+            'next': request.GET.get('next', reverse('staff_book_detail', kwargs={'pk': self.book.pk}))
         })
 
     def post(self, request, *args, **kwargs):
         self.book.autor.remove(self.author)
-        next_url = request.POST.get('next') or reverse('book_detail', kwargs={'pk': self.book.pk})
+        next_url = request.POST.get('next') or reverse('staff_book_detail', kwargs={'pk': self.book.pk})
         return redirect(next_url)
 
 
@@ -336,12 +337,15 @@ class UpdateCartView(View):
                 try:
                     item_id = int(key.split('-')[1])
                     quantity = int(value)
-
                     if quantity < 1:
                         continue  # nebo item.delete() pokud chceš mazat
-
                     item = SelectedProduct.objects.get(id=item_id)
-                    item.quantity = quantity
+                    if item.product.stock_quantity < quantity:
+                        item.quantity = item.product.stock_quantity
+                        messages.info(request, f"Množství, které jste zadali u knihy {item.product.name} je větší než dostupné množství "
+                                               "- zadanou hodnotu jsme upravili na největší možnou")
+                    else:
+                        item.quantity = quantity
                     item.save()
                 except (ValueError, SelectedProduct.DoesNotExist):
                     continue
@@ -360,9 +364,21 @@ class RemoveFromCartView(View):
             messages.error(request, "Položka nebyla nalezena.")
         return redirect('cart_detail')
 
+
 class CreateOrderWithFormView(FormView):
     template_name = 'eshop/order_form.html'
     form_class = OrderForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            cart = get_object_or_404(Cart, user=self.request.user, is_temporary=True)
+        else:
+            cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
+        for cart_item in cart.selected_products.all():
+            if cart_item.product.stock_quantity < cart_item.quantity:
+                messages.warning(request, f"Položka {cart_item.product.name} již není dostupná prosím aktualizujte si nákupní košík")
+                return redirect('cart_detail')
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         delivery_address = form.cleaned_data.get('delivery_address')
@@ -405,8 +421,12 @@ class CreateOrderWithFormView(FormView):
                     note=note
                 )
             for item in cart.selected_products.all():
+                # print (f"item.product.stock_quantity {item.product.stock_quantity}")
+                # print (f"item.quantity {item.quantity}")
+                item.product.stock_quantity -= item.quantity
+                item.product.save()
                 item.order = order
-                item.cart = None
+                # item.cart = None
                 item.product_price = item.product.price
                 item.save()
 
@@ -431,6 +451,9 @@ class OrderSentView(View):
             to=[order.email],
         )
         email.send()
+        for item in order.selected_products.all():
+            item.cart = None
+            item.save()
         return redirect('order_confirmation', pk=order_id)
 
 class OrderConfirmationView(TemplateView):
@@ -442,3 +465,4 @@ class OrderConfirmationView(TemplateView):
         order = get_object_or_404(Order, id=order_id)
         context['order'] = order
         return context
+

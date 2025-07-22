@@ -25,6 +25,12 @@ class AddProductToCartTest(TestCase):
         self.assertEqual(cart_item.product.name,"testbook1")
         self.assertEqual(cart_item.quantity,1)
 
+    def test_no_stock_quantity_no_adding_button(self):
+        response = self.client.get(reverse('book_detail', kwargs={'pk':self.book_2.id}))
+
+        self.assertContains(response, 'Produkt vyprodán')
+        self.assertNotContains(response, 'Přidat do košíku')
+
     def test_add_to_cart_user_authenticated(self):
         self.client.login(username='testuser', password='testpass123')
         response = self.client.post(reverse('add_to_cart',

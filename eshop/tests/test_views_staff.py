@@ -45,7 +45,7 @@ class StaffBookViewsTest(TestCase):
             'name': 'New Book',
             'price': 123,
             'description': 'Popis new book',
-            'ean':1234,
+            'ean':1234567891012,
             'autor': [self.autor.pk],
             'category': [self.category.pk]
         })
@@ -60,7 +60,7 @@ class StaffBookViewsTest(TestCase):
             'name': 'New Book',
             'price': 123,
             'description': 'Popis new book',
-            'ean':1234,
+            'ean':1234567890101
         })
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Book.objects.filter(name='New Book').exists())
@@ -155,7 +155,7 @@ class StaffBookDetailViewTest(TestCase):
         self.assertTrue(author in self.book.autor.all())
         self.assertRedirects(response, reverse('staff_book_detail', kwargs={'pk': self.book.id}))
 
-    def remove_autor_from_book_view_get(self):
+    def test_remove_autor_from_book_view_get(self):
         self.client.login(username='staff', password='pass1234test')
         author = Autor.objects.create(name='Jan', lastname='Novák')
         self.book.autor.set([author])
@@ -173,7 +173,7 @@ class StaffBookDetailViewTest(TestCase):
         self.assertContains(response, '<form')
         self.assertContains(response, 'Novák')
 
-    def remove_autor_from_book_view_post(self):
+    def test_remove_autor_from_book_view_post(self):
         self.client.login(username='staff', password='pass1234test')
         author = Autor.objects.create(name='Jan', lastname='Novák')
         self.book.autor.set([author])
@@ -231,7 +231,7 @@ class BookUpdateViewTest(TestCase):
                 'category': [category.id],
                 'price':self.book.price,
                 'description': self.book.description,
-                'ean': 1234
+                'ean': 1234567891011
             }
         )
         self.assertEqual(response.status_code, 302)

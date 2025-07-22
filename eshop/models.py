@@ -42,7 +42,7 @@ class Book(models.Model):
     ean = models.PositiveIntegerField(null=True, blank=True)
     description = models.TextField(null=False, blank=False)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=False, blank=False)
-    stock_quantity = models.PositiveIntegerField(null=False, blank=True, default=0)
+    stock_quantity = models.PositiveIntegerField(null=False, blank=True, default=1)
     category = models.ManyToManyField(Category, blank=True, related_name='books')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
