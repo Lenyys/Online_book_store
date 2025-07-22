@@ -9,6 +9,9 @@
     <title>{% block title %}{% endblock %}</title>
 
     <!-- Bootstrap -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
@@ -28,59 +31,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <!-- Vlastní CSS -->
-    <link rel="stylesheet" href="{% static 'css/store/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/store/style2.css' %}">
 </head>
 
 <body>
-<div class="wrapper">
-    <header class="header">
-        <div class="header-1">
-            <a href="{% url 'home' %}" class="logo"> <i class="fas fa-book"></i> Jirásek </a>
-            <form action="" class="search-form">
-                <input type="search" placeholder="search here..." id="search-box">
-                <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
-            </form>
-            <div class="icons">
-                <div id="search-btn" class="fas fa-search"></div>
-                <a href="#" class="fas fa-heart"></a>
-                <a href="#" class="fas fa-shopping-cart"></a>
-                <div class="dropdown ml-3">
-                    <a class="nav-link dropdown-toggle fas fa-user" href="#" id="userDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        {% if user.is_authenticated %}
-                            <span class="dropdown-item-text font-weight-bold text-dark">{{ user.username }}</span>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'logout' %}">Odhlásit</a>
-                            <a class="dropdown-item" href="{% url 'password_change' %}">Změna hesla</a>
-                        {% else %}
-                            <a class="dropdown-item" href="{% url 'login' %}">Přihlásit</a>
-                            <a class="dropdown-item" href="{% url 'signup' %}">Registrace</a>
-                            <a class="dropdown-item" href="{% url 'password_reset' %}">Reset hesla</a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        {% if show_navbar|default:True %}
-            <div class="header-2">
-                <div class="container">
-                    {% include 'top_navbar.html' %}
-                </div>
-            </div>
-        {% endif %}
+    <header class="header">
+        {% include 'top_view.html' %}
+
+        {% include 'top_navbar.html' %}
     </header>
 
-    <main class="container my-3 mt-4 flex-grow-1">
-        {% block content %}{% endblock %}
-    </main>
+    {% include 'bottom_navbar.html' %}
+
+    {% include 'login_form.html' %}
+
+     {% block content %}{% endblock %}
 
     {% include 'footer.html' %}
-</div>
 
-{% include 'bottom_navbar.html' %}
-
-<script src="{% static 'js/script.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    {% load static %}
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

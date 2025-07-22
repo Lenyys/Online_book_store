@@ -1,0 +1,30 @@
+<div class="header-1">
+    <a href="{% url 'home' %}" class="logo"> <i class="fas fa-book"></i> Jirásek </a>
+
+    <form action="" class="search-form">
+        <input type="search" placeholder="search here..." id="search-box">
+        <label for="search-box" class="fas fa-search"></i></label>
+    </form>
+
+    <div class="icons">
+        <div id="search-btn" class="fas fa-search"></div>
+        <a href="#" class="fas fa-heart"></a>
+        <a href="#" class="fas fa-shopping-cart"></a>
+            <div id="login-btn-wrapper">
+                   <div id="login-btn"
+                         class="fas fa-user"
+                         data-auth="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+                         data-username="{{ user.username }}"
+                         title="{% if user.is_authenticated %}{{ user.username }}{% else %}Nikdo není přihlášen{% endif %}">
+                    </div>
+
+                    <!-- Dropdown menu - zobrazí se pouze pokud je uživatel přihlášen -->
+                    {% if user.is_authenticated %}
+                    <div id="user-dropdown-menu" class="custom-user-dropdown">
+                        <a href="{% url 'password_change' %}">Změna hesla</a>
+                        <a href="{% url 'logout' %}">Odhlásit</a>
+                    </div>
+                    {% endif %}
+            </div>
+    </div>
+</div>
