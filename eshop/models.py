@@ -29,18 +29,26 @@ class Autor(models.Model):
 
 
 class Book(models.Model):
+    TYPE_CHOICES = [
+        ('book', 'Tištěná kniha'),
+        ('ebook', 'E-kniha'),
+        ('audiobook', 'Audiokniha'),
+    ]
+
     name = models.CharField(max_length=150, null=False, blank=False)
-    autor = models.ManyToManyField(Autor, related_name='books')
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='book')  # <-- TADY
+    autor = models.ManyToManyField(Autor,blank=True, related_name='books')
     isbn = models.CharField(max_length=20, null=True, blank=True)
     ean = models.PositiveIntegerField(null=True, blank=True)
     description = models.TextField(null=False, blank=False)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=False, blank=False)
     stock_quantity = models.PositiveIntegerField(null=False, blank=True, default=0)
-    category = models.ManyToManyField(Category, related_name='books')
+    category = models.ManyToManyField(Category, blank=True, related_name='books')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='products_created')
     updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='products_updated')
+
 
     class Meta:
         ordering = ['name']
@@ -63,13 +71,6 @@ class Image(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         img_path = self.image.path
-        # img = Image.open(img_path)
-        #
-        # max_size = (800, 800)
-        #
-        # if img.height > 800 or img.width > 800:
-        #     img.thumbnail(max_size)
-        #     img.save(img_path)
         try:
             img = PILImage.open(img_path)
             max_size = (800, 800)
@@ -99,13 +100,18 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_temporary = models.BooleanField(null=False, default=True)
+    session_key = models.CharField(max_length=40, null=True, blank=True)
 
     def __str__(self):
         pass
 
     def __repr__(self):
         pass
-
+    def get_total_cart_price(self):
+        total_price = 0
+        for item in self.selected_products.all():
+            total_price += (item.product.price * item.quantity)
+        return total_price
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='orders')
@@ -124,7 +130,7 @@ class Order(models.Model):
 class SelectedProduct(models.Model):
     product = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, blank=False)
     product_price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=True, default=0)
-    quantity = models.PositiveIntegerField(null=False, blank=True, default=0)
+    quantity = models.PositiveIntegerField(null=False, blank=True, default=1)
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True, blank=True, related_name='selected_products')
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True, related_name='selected_products')
     created_at = models.DateTimeField(auto_now_add=True)

@@ -6,38 +6,34 @@
     <div class="col-6 ">
         <div class="dropdown">
             <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-              Filter
+              Kategorie
             </button>
             <ul class="dropdown-menu">
-                  <li><a class="dropdown-item text-decoration-none" href="">kategorie</a></li>
-
-                {% comment %}
                 {% for category in categories %}
-                    <li><a class="dropdown-item text-decoration-none" href="{% url '' category.id %}">{{ category.name }}</a></li>
+                    <li><a class="dropdown-item text-decoration-none"
+                           href="{% url 'book_list' %}?category={{ category.id }}">
+                            {{ category.name }}</a>
+                    </li>
                 {% endfor %}
-                {% endcomment %}
             </ul>
       </div>
-    </div>
-    <div class="col-6">
-       <a href="{% url 'book_create' %}" class="btn btn-success">Zadat novou knihu</a>
     </div>
 </div>
 <div class="row my-3">
     {% for book in books %}
-    <div class="col-4 col-md-3 col-lg-2 p-3">
+    <div class="col-4 col-md-3 col-lg-2 p-2">
         <div class="card h-100">
                 <img class="card-img-top" src="{{ book.images.all.0.image.url }}" alt="{{ book.name }}">
             <div class="card-body">
-                <p class="card-title">
+                <h6 class="card-title">
                     <a href="{% url 'book_detail' book.id %}" class="text-decoration-none text-dark">{{ book.name }}</a>
-                </p>
+                </h6>
                 {% comment %}
-                <p class="card-text">
+                <div class="card-text">
                     Autor: <a href="{% url 'autor_detail' book.autor.id %}"></a>
-                </p>
+                </div>
                 {% endcomment %}
-                <p class="card-text font weight-bold">Cena: {{ book.price }} Kč</p>
+                <div class="card-text ">Cena: {{ book.price }} Kč</div>
             </div>
         </div>
     </div>

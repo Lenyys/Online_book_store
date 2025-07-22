@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Váš košík</h2>
+
+{% if items %}
+    <ul>
+        {% for item in items %}
+            <li>
+                {{ item.product.name }} — {{ item.quantity }} ks — {{ item.product.price }} Kč
+            </li>
+        {% endfor %}
+    </ul>
+    Celková cena: {{ total_price }} Kč
+{% else %}
+    <p>Košík je prázdný.</p>
+{% endif %}
+{% endblock %}

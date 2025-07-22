@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from eshop.models import Book, Category, Image
+from eshop.models import Book, Category, Image, Autor
 
 
 class BookForm(forms.ModelForm):
@@ -67,26 +67,44 @@ class BookForm(forms.ModelForm):
             raise forms.ValidationError("Cena musí být větší než 0 Kč.")
         return price
 
-    def clean(self):
-        cleaned_data = super().clean()
-        isbn = cleaned_data.get('isbn')
-        ean = cleaned_data.get('ean')
-
-        if not isbn and not ean:
-            raise forms.ValidationError("Musíte zadat alespoň ISBN nebo EAN.")
-
-        if isbn and len(isbn.replace('-', '').strip()) < 10:
-            self.add_error('isbn', "ISBN vypadá příliš krátce – zkontrolujte formát.")
-
-        return cleaned_data
 
 class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ['image', 'description']
 
+class AddOrCreateAuthorForm(forms.Form):
+    existing_author = forms.ModelChoiceField(
+        queryset=Autor.objects.all(),
+        required=False,
+        label='Autor'
+    )
+    new_author_name = forms.CharField(
+        required=False,
+        label='Jméno nového autora'
+    )
+    new_author_lastname = forms.CharField(
+        required=False,
+        label='Příjmení nového autora'
+    )
+    new_author_birthdate = forms.DateField(
+        required=False,
+        label='datum narození nového autora'
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not cleaned_data.get('existing_author') and \
+            not cleaned_data.get('new_author_name') and \
+                not cleaned_data.get('new_author_lastname'):
+            raise forms.ValidationError('Vyber autora nebo zadej nového')
+        return cleaned_data
 
 
+class AuthorForm(forms.ModelForm):
+    class Meta:
+        model = Autor
+        fields = '__all__'
 
 
 class CategoryForm(forms.ModelForm):

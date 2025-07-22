@@ -1,27 +1,46 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import receiver
 from django.shortcuts import render
-from .models import Category
-from django.views.decorators.http import require_http_methods
-from django.shortcuts import get_object_or_404, redirect
-from .forms import CategoryForm
-from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views import View
 
-from eshop.forms import BookForm, ImageForm, CategoryForm
-from eshop.models import Book, Category, Image
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, TemplateView
+
+from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm
+from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct
 
 # nezapomenout přepnout na strarou stranku home !!!!!!!
 def home(request):
     return render(request, 'home.html')
+
+def staff_page(request):
+    return render(request, 'eshop/staff/staff.html')
 
 
 class BookListView(ListView):
     model = Book
     template_name = 'eshop/book_list.html'
     context_object_name = 'books'
-
     paginate_by = 10
     ordering = ['-price']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        category_id = self.request.GET.get('category')
+        if category_id:
+            queryset = queryset.filter(category__id=category_id)
+        return queryset.distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categories = Category.objects.all()
+        context['categories'] = categories
+        category_id = self.request.GET.get('category')
+        if category_id:
+            context['selected_category'] = get_object_or_404(Category, id=category_id)
+        return context
 
 
 class BookDetailView(DetailView):
@@ -30,28 +49,59 @@ class BookDetailView(DetailView):
     context_object_name = 'book'
 
 
+class StaffBookListView(LoginRequiredMixin, ListView):
+    model = Book
+    template_name = 'eshop/staff/staff_book_list.html'
+    context_object_name = 'books'
+
+
+class StaffBookDetailView(DetailView):
+    model = Book
+    template_name = 'eshop/staff/staff_book_detail.html'
+    context_object_name = 'book'
+
+
 class BookCreateView(CreateView):
     model = Book
-    template_name = 'eshop/book_create.html'
+    template_name = 'eshop/staff/book_create.html'
     form_class = BookForm
-    success_url = reverse_lazy('book_list')
+    success_url = reverse_lazy('staff_book_list')
 
 
 class BookUpdateView(UpdateView):
     model = Book
-    template_name = 'eshop/book_update.html'
+    template_name = 'eshop/staff/book_update.html'
     form_class = BookForm
-    success_url = reverse_lazy('book_list')
+
+    # def get_success_url(self):
+    #     return reverse('staff_book_detail', kwargs={'pk': self.object.pk})
+    #
+    def get_success_url(self):
+        next_url = self.request.GET.get('next') or self.request.POST.get('next')
+        return next_url or reverse_lazy('staff_book_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next','/')
+        return context
 
 
 class BookDeleteView(DeleteView):
     model = Book
-    template_name = 'eshop/book_delete.html'
-    success_url = reverse_lazy('book_list')
+    template_name = 'eshop/staff/book_delete.html'
+    success_url = reverse_lazy('staff_book_list')
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next','/')
+        return context
+
+
 
 class ImageCreateView(CreateView):
     model = Image
-    template_name = 'eshop/image_create.html'
+    template_name = 'eshop/staff/image_create.html'
     form_class = ImageForm
 
     def dispatch(self, request, *args, **kwargs):
@@ -63,7 +113,138 @@ class ImageCreateView(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('book_detail', kwargs={'pk':self.book.pk})
+        return reverse('staff_book_detail', kwargs={'pk':self.book.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = self.book
+        return context
+
+
+class ImageUpdateView(UpdateView):
+    model = Image
+    template_name = 'eshop/staff/image_update.html'
+    form_class = ImageForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.book = get_object_or_404(Book, pk=kwargs.get('book_id'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.product = self.book
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next') or self.request.POST.get('next')
+        return next_url or reverse_lazy('staff_book_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next','/')
+        return context
+
+
+class ImageDeleteView(DeleteView):
+    model = Image
+    template_name = 'eshop/staff/image_delete.html'
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next') or self.request.POST.get('next')
+        return next_url or reverse_lazy('staff_book_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next','/')
+        return context
+
+
+
+class AddOrCreateAuthorView(FormView):
+    template_name = 'eshop/staff/add_or_create_author.html'
+    form_class = AddOrCreateAuthorForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.book = get_object_or_404(Book, pk=kwargs.get('pk'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        author = form.cleaned_data.get('existing_author')
+        if not author:
+            author = Autor.objects.create(
+                name=form.cleaned_data.get('new_author_name'),
+                lastname=form.cleaned_data.get('new_author_lastname'),
+                date_of_birth=form.cleaned_data.get('new_author_birthdate', None))
+
+        self.book.autor.add(author)
+        return redirect('staff_book_detail', pk=self.book.pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = self.book
+        return context
+
+
+class AuthorCreateView(CreateView):
+    model = Autor
+    template_name = 'eshop/staff/author_create.html'
+    form_class = AuthorForm
+    success_url = reverse_lazy('staff_author_list')
+
+class StaffAuthorDetailView(DetailView):
+    model = Autor
+    template_name = 'eshop/staff/staff_author_detail.html'
+    context_object_name = 'author'
+
+class AuthorUpdateView(UpdateView):
+    model = Autor
+    template_name = 'eshop/staff/author_update.html'
+    form_class = AuthorForm
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next') or self.request.POST.get('next')
+        return next_url or reverse_lazy('staff_author_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next','/')
+        return context
+
+class StaffAuthorListView(ListView):
+    model = Autor
+    template_name = 'eshop/staff/staff_author_list.html'
+    context_object_name = 'authors'
+
+
+class AuthorDeleteView(DeleteView):
+    model = Autor
+    template_name = 'eshop/staff/author_delete.html'
+    success_url = reverse_lazy('staff_author_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next','/')
+        return context
+
+
+class RemoveAuthorFromBook(View):
+    template_name = 'eshop/staff/remove_author_from_book.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.book = get_object_or_404(Book, pk=kwargs['book_id'])
+        self.author = get_object_or_404(Autor, pk=kwargs['author_id'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {
+            'book': self.book,
+            'author': self.author,
+            'next': request.GET.get('next', reverse('book_detail', kwargs={'pk': self.book.pk}))
+        })
+
+    def post(self, request, *args, **kwargs):
+        self.book.autor.remove(self.author)
+        next_url = request.POST.get('next') or reverse('book_detail', kwargs={'pk': self.book.pk})
+        return redirect(next_url)
 
 
 class CategoryListView(ListView):
@@ -71,11 +252,13 @@ class CategoryListView(ListView):
     template_name = 'eshop/category_list.html'
     context_object_name = 'categories'
 
+
 class CategoryCreateView(CreateView):
     model = Category
     form_class = CategoryForm
     template_name = 'eshop/category_form.html'
     success_url = reverse_lazy('category-list')
+
 
 class CategoryUpdateView(UpdateView):
     model = Category
@@ -83,12 +266,84 @@ class CategoryUpdateView(UpdateView):
     template_name = 'eshop/category_form.html'
     success_url = reverse_lazy('category-list')
 
+
 class CategoryDeleteView(DeleteView):
     model = Category
     template_name = 'eshop/category_confirm_delete.html'
     success_url = reverse_lazy('category-list')
 
 
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = 'eshop/category_detail.html'
+    context_object_name = 'category'
+
+
+class CartDetailView(TemplateView):
+    template_name = 'eshop/cart_detail.html'
+
+    def get_cart(self):
+        request = self.request
+        if request.user.is_authenticated:
+            cart = Cart.objects.filter(user=request.user).first()
+        else:
+            session_key = request.session.session_key
+            if not session_key:
+                request.session.create()
+                session_key = request.session.session_key
+            cart = Cart.objects.filter(session_key=session_key, user=None).first()
+        return cart
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = self.get_cart()
+        context['cart'] = cart
+        context['total_price'] = cart.get_total_cart_price()
+        context['items'] = cart.selected_products.all() if cart else []
+        return context
+
+
+class AddToCartView(View):
+    def post(self, request, *args, **kwargs):
+        book = get_object_or_404(Book, pk=kwargs['pk'])
+
+        session_key = request.session.session_key
+        if not session_key:
+            request.session.create()
+            session_key = request.session.session_key
+
+        if request.user.is_authenticated:
+            cart, created = Cart.objects.get_or_create(user=request.user)
+        else:
+            cart, created = Cart.objects.get_or_create(session_key=session_key, user=None)
+
+        cart_item, created = SelectedProduct.objects.get_or_create(cart=cart, product=book)
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+
+        return redirect('cart_detail')
 
 
 
+# @receiver(user_logged_in)
+# def merge_cart_on_login(sender, request, user, **kwargs):
+#     session_key = request.session.session_key
+#     if not session_key:
+#         return
+#
+#     try:
+#         session_cart = Cart.objects.get(session_key=session_key, user=None)
+#         user_cart, created = Cart.objects.get_or_create(user=user)
+#
+#         for item in session_cart.items.all():
+#             existing, created = user_cart.items.get_or_create(book=item.book)
+#             if not created:
+#                 existing.quantity += item.quantity
+#                 existing.save()
+#             else:
+#                 item.cart = user_cart
+#                 item.save()
+#         session_cart.delete()
+#     except Cart.DoesNotExist:
+#         pass

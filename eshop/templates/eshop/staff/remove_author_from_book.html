@@ -3,16 +3,16 @@
 {% block content %}
 <div class="row my-3">
     <div class="col-12 text-center">
-        <h4> Opravdu chcete odstranit knihu:</h4>
-        <h4>{{ object.name }}</h4>
+        <h4> Opravdu chcete odebrat autora {{ author.name }} z knihy: {{ book.name }}</h4>
     </div>
 </div>
 <div class="row my-3">
     <div class="col-12 text-center">
-        <form method="post" >
+        <form method="post"  >
             {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
             <button type="submit" class="btn btn-danger mr-3">Ano smazat</button>
-            <a href="{% url 'book_detail' object.id %}" class="btn btn-success">Zpět na detail knihy</a>
+            <a href="{{ next }}" class="btn btn-success">Zpět na detail knihy</a>
         </form>
 
     </div>
