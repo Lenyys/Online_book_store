@@ -5,7 +5,7 @@ from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdat
                          staff_page, StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
                          CategoryCreateView, CategoryDetailView)
-app_name = 'eshop'
+
 
 
 urlpatterns = [

@@ -21,7 +21,7 @@ urlpatterns = [
     path('', home, name='home'),
 
     # Eshop aplikace (napojení na další urls.py, pokud používáš)
-    path('eshop/', include(('eshop.urls', 'eshop'), namespace='eshop')),
+    path('eshop/', include('eshop.urls')),
 
 
         # Uživatelské účty
