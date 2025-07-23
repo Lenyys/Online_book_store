@@ -107,6 +107,18 @@
   padding: .75rem 2rem;
 }
 
+/* Ikona pro detail (lupička) */
+.author-actions .detail-btn {
+  font-size: 1.8rem;      /* stejné jako ostatní ikony */
+  color: var(--green);    /* nebo jakoukoli barvu chceš */
+  text-decoration: none;
+  transition: color .2s ease;
+}
+
+.author-actions .detail-btn:hover {
+  color: #1e7e34;         /* tmavší odstín zelené při hoveru */
+}
+
 
 .form-container {
     max-width: 600px;
