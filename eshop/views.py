@@ -17,10 +17,6 @@ from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Or
 def home(request):
     return render(request, 'home.html')
 
-def staff_page(request):
-    return render(request, 'eshop/staff/staff.html')
-
-
 class BookListView(ListView):
     model = Book
     template_name = 'eshop/book_list.html'

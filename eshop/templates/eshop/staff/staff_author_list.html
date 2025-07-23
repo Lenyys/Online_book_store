@@ -11,7 +11,7 @@
 <ul></ul>
     {% for author in authors %}
     <li>
-        <a class="text-decoration-none text-dark "
+        <a class=" text-dark "
            href="{% url 'staff_author_detail' author.id %}">{{ author.name }} {{ author.lastname }}</a>
         <a href="{% url 'author_delete' author.id %}?next={{ request.path }}">❌</a>
         <a href="{% url 'author_update' author.id %}?next={{ request.path }}">✏️</a>

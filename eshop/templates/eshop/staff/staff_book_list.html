@@ -11,7 +11,7 @@
 <ul></ul>
     {% for book in books %}
     <li>
-        <a class="text-decoration-none text-dark " href="{% url 'staff_book_detail' book.id %}">{{ book.name }}</a>
+        <a class="text-dark " href="{% url 'staff_book_detail' book.id %}">{{ book.name }}</a>
         <a href="{% url 'book_delete' book.id %}?next={{ request.path }}">❌</a>
         <a href="{% url 'book_update' book.id %}?next={{ request.path }}">✏️</a>
     </li>

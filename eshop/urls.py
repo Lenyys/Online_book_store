@@ -4,13 +4,12 @@ from django.urls import path
 from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView, ImageCreateView,
                          CategoryListView, CategoryUpdateView, CategoryDeleteView, ImageDeleteView,
                          ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
-                         staff_page, StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
+                         StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
                          CategoryCreateView, CategoryDetailView, UpdateCartView, RemoveFromCartView, OrderDetailView,
                          CreateOrderWithFormView, OrderConfirmationView, OrderSentView)
 
 urlpatterns = [
-    path('staff/', staff_page, name='staff'),
     path('book_list/', BookListView.as_view(), name='book_list'),
     path('book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
 
