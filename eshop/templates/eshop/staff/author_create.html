@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="form-container">
-    <h1 class="form-title">Přidání autora</h1>
+    <h1 class="form-title">Přidání autora:</h1>
     <form method="post" class="styled-form">
         {% csrf_token %}
         {{ form.as_p }}

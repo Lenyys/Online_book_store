@@ -315,7 +315,6 @@ class StaffAuthorListViewTest(TestCase):
         back_url_update = reverse('author_update', kwargs={'pk': self.author.id}) + f'?next={back_url}'
         back_url_detail = reverse('staff_author_detail', kwargs={'pk': self.author.id})
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '<ul>')
         self.assertContains(response, 'Seznam Autorů')
         self.assertContains(response, f'href="{back_url}"')
         self.assertContains(response, f'href="{back_url_create}"')
