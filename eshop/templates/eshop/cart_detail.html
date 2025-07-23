@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2 class="my-2">Váš košík</h2>
+<h2 class="my-2 border-bottom">Váš košík</h2>
 {% if messages %}
 {% for message in messages %}
 <div class="alert alert-{{ message.tags }}">
@@ -33,10 +33,12 @@
         </div>
     </div>
     {% endfor %}
-    <div class="row mt-5 justify-content-end">
+    <div class="row mt-3 mb-2 pt-4 justify-content-end border-top">
         <h5 class="mx-5 border-bottom border-dark border-3 pb-1">Celková cena: {{ total_price }} Kč</h5>
     </div>
+    <div class="text-center">
     <button type="submit" class="btn btn-primary">Aktualizovat košík</button>
+</div>
 </form>
 
 
@@ -44,8 +46,8 @@
 <div class="row">Košík je prázdný.</div>
 {% endif %}
 
-<div class="row my-1 justify-content-center">
-    <a href="{% url 'book_list' %}" class="btn btn-success"> Pokračovat v nákupu</a>
-    <a href="{% url 'create_order' %}" class="btn btn-danger">Přejít na objednávku</a>
+<div class="row my-4 justify-content-center">
+    <a href="{% url 'book_list' %}" class="btn btn-success mx-4"> Pokračovat v nákupu</a>
+    <a href="{% url 'create_order' %}" class="btn btn-danger mx-4">Přejít na objednávku</a>
 </div>
 {% endblock %}

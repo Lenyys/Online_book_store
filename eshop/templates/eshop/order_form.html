@@ -1,10 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>objednávka</h1>
+<h1>Objednávka</h1>
+<p>Počet produktů v košíku: {{ cart.selected_products.all|length }}</p>
+<h3 class="border-bottom">Shrnutí objednávky:</h3>
+{% for product in cart.selected_products.all %}
+{{ forloop.counter }}.
+<strong>{{ product.product.name }} </strong> -- počet kusů: {{ product.quantity }}
+{% empty %}
+        zadná pokožka
+    {% endfor %}
+<hr>
+<h3 class="border-bottom"><strong>Celková cena: {{ total_price }} Kč</strong></h3>
+<hr>
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit" class="btn btn-success">Odeslat objednávku</button>
+  <h2>Shrnutí objednávky</h2>
+  <div>
+    </div>
+
+  <button type="submit" class="btn btn-success">Závazně odeslat objednávku</button>
 </form>
 {% endblock %}
