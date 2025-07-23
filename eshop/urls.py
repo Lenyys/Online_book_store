@@ -1,10 +1,12 @@
 from django.urls import path
 from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView, ImageCreateView,
-                         CategoryListView, CategoryUpdateView, CategoryDeleteView, ImageDeleteView,
+                         CategoryListView, CategoryUpdateView, CategoryDeleteView, StaffCategoryListView, ImageDeleteView,
                          ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
                          staff_page, StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
                          CategoryCreateView, CategoryDetailView)
+app_name = 'eshop'
+
 
 urlpatterns = [
     path('staff/', staff_page, name='staff'),
@@ -39,6 +41,7 @@ urlpatterns = [
     path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
     path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
     path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
+    path('staff_category_list/', StaffCategoryListView.as_view(), name='staff_category_list'),
 
 
 

@@ -21,15 +21,10 @@ urlpatterns = [
     path('', home, name='home'),
 
     # Eshop aplikace (napojení na další urls.py, pokud používáš)
-    path('eshop/', include('eshop.urls')),
+    path('eshop/', include(('eshop.urls', 'eshop'), namespace='eshop')),
 
-    # Kategorie
-    path('categories/', CategoryListView.as_view(), name='category-list'),
-    path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
-    path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
-    path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
 
-    # Uživatelské účty
+        # Uživatelské účty
     path('accounts/login/', LoginView.as_view(template_name='form.html'), name='login'),
     path('accounts/logout/', user_logout, name='logout'),
     path('accounts/password_change/', PasswordChangeView.as_view(template_name='form.html'), name='password_change'),

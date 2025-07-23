@@ -257,26 +257,32 @@ class CategoryCreateView(CreateView):
     model = Category
     form_class = CategoryForm
     template_name = 'eshop/category_form.html'
-    success_url = reverse_lazy('category-list')
+    success_url = reverse_lazy('eshop:category-list')
 
 
 class CategoryUpdateView(UpdateView):
     model = Category
     form_class = CategoryForm
     template_name = 'eshop/category_form.html'
-    success_url = reverse_lazy('category-list')
+    success_url = reverse_lazy('eshop:category-list')
 
 
 class CategoryDeleteView(DeleteView):
     model = Category
     template_name = 'eshop/category_confirm_delete.html'
-    success_url = reverse_lazy('category-list')
+    success_url = reverse_lazy('eshop:category-list')
 
 
 class CategoryDetailView(DetailView):
     model = Category
     template_name = 'eshop/category_detail.html'
     context_object_name = 'category'
+
+
+class StaffCategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+    template_name = 'eshop/staff/staff_category_list.html'
+    context_object_name = 'categories'
 
 
 class CartDetailView(TemplateView):
