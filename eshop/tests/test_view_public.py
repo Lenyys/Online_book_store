@@ -39,5 +39,6 @@ class BookDetailViewTest(TestCase):
         self.assertContains(response, 'popis')
         self.assertContains(response, 'Test Autor')
         self.assertContains(response, 'Přidat do košíku')
+        self.assertNotContains(response, 'Produkt vyprodán')
 
 

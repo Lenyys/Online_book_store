@@ -1,6 +1,8 @@
+
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.signals import user_logged_in
-from django.dispatch import receiver
+from django.core.mail import  EmailMessage
+from django.db import transaction
 from django.shortcuts import render
 from django.views import View
 
@@ -8,16 +10,12 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, TemplateView
 
-from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm
-from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct
+from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm
+from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Order
 
 # nezapomenout přepnout na strarou stranku home !!!!!!!
 def home(request):
     return render(request, 'home.html')
-
-def staff_page(request):
-    return render(request, 'eshop/staff/staff.html')
-
 
 class BookListView(ListView):
     model = Book
@@ -73,9 +71,6 @@ class BookUpdateView(UpdateView):
     template_name = 'eshop/staff/book_update.html'
     form_class = BookForm
 
-    # def get_success_url(self):
-    #     return reverse('staff_book_detail', kwargs={'pk': self.object.pk})
-    #
     def get_success_url(self):
         next_url = self.request.GET.get('next') or self.request.POST.get('next')
         return next_url or reverse_lazy('staff_book_list')
@@ -235,15 +230,16 @@ class RemoveAuthorFromBook(View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        print(f"autor: self.author.name")
         return render(request, self.template_name, {
             'book': self.book,
             'author': self.author,
-            'next': request.GET.get('next', reverse('book_detail', kwargs={'pk': self.book.pk}))
+            'next': request.GET.get('next', reverse('staff_book_detail', kwargs={'pk': self.book.pk}))
         })
 
     def post(self, request, *args, **kwargs):
         self.book.autor.remove(self.author)
-        next_url = request.POST.get('next') or reverse('book_detail', kwargs={'pk': self.book.pk})
+        next_url = request.POST.get('next') or reverse('staff_book_detail', kwargs={'pk': self.book.pk})
         return redirect(next_url)
 
 
@@ -286,12 +282,16 @@ class CartDetailView(TemplateView):
         request = self.request
         if request.user.is_authenticated:
             cart = Cart.objects.filter(user=request.user).first()
+            if not cart:
+                cart = Cart.objects.create(user=request.user)
         else:
             session_key = request.session.session_key
             if not session_key:
                 request.session.create()
                 session_key = request.session.session_key
             cart = Cart.objects.filter(session_key=session_key, user=None).first()
+            if not cart:
+                cart = Cart.objects.create(session_key=session_key)
         return cart
 
     def get_context_data(self, **kwargs):
@@ -307,14 +307,13 @@ class AddToCartView(View):
     def post(self, request, *args, **kwargs):
         book = get_object_or_404(Book, pk=kwargs['pk'])
 
-        session_key = request.session.session_key
-        if not session_key:
-            request.session.create()
-            session_key = request.session.session_key
-
         if request.user.is_authenticated:
             cart, created = Cart.objects.get_or_create(user=request.user)
         else:
+            session_key = request.session.session_key
+            if not session_key:
+                request.session.create()
+                session_key = request.session.session_key
             cart, created = Cart.objects.get_or_create(session_key=session_key, user=None)
 
         cart_item, created = SelectedProduct.objects.get_or_create(cart=cart, product=book)
@@ -324,26 +323,137 @@ class AddToCartView(View):
 
         return redirect('cart_detail')
 
+class UpdateCartView(View):
+    def post(self, request, *args, **kwargs):
+        for key, value in request.POST.items():
+            if key.startswith('quantity-'):
+                try:
+                    item_id = int(key.split('-')[1])
+                    quantity = int(value)
+                    if quantity < 1:
+                        continue  # nebo item.delete() pokud chceš mazat
+                    item = SelectedProduct.objects.get(id=item_id)
+                    if item.product.stock_quantity < quantity:
+                        item.quantity = item.product.stock_quantity
+                        messages.info(request, f"Množství, které jste zadali u knihy {item.product.name} je větší než dostupné množství "
+                                               "- zadanou hodnotu jsme upravili na největší možnou")
+                    else:
+                        item.quantity = quantity
+                    item.save()
+                except (ValueError, SelectedProduct.DoesNotExist):
+                    continue
+        return redirect('cart_detail')
 
 
-# @receiver(user_logged_in)
-# def merge_cart_on_login(sender, request, user, **kwargs):
-#     session_key = request.session.session_key
-#     if not session_key:
-#         return
-#
-#     try:
-#         session_cart = Cart.objects.get(session_key=session_key, user=None)
-#         user_cart, created = Cart.objects.get_or_create(user=user)
-#
-#         for item in session_cart.items.all():
-#             existing, created = user_cart.items.get_or_create(book=item.book)
-#             if not created:
-#                 existing.quantity += item.quantity
-#                 existing.save()
-#             else:
-#                 item.cart = user_cart
-#                 item.save()
-#         session_cart.delete()
-#     except Cart.DoesNotExist:
-#         pass
+class RemoveFromCartView(View):
+    def get(self, request, item_id, *args, **kwargs):
+        try:
+            item = SelectedProduct.objects.get(id=item_id)
+            item.delete()
+            messages.success(request, "Položka byla odstraněna z košíku.")
+        except SelectedProduct.DoesNotExist:
+            messages.error(request, "Položka nebyla nalezena.")
+        return redirect('cart_detail')
+
+
+class CreateOrderWithFormView(FormView):
+    template_name = 'eshop/order_form.html'
+    form_class = OrderForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            cart = get_object_or_404(Cart, user=self.request.user, is_temporary=True)
+        else:
+            cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
+        for cart_item in cart.selected_products.all():
+            if cart_item.product.stock_quantity < cart_item.quantity:
+                messages.warning(request, f"Položka {cart_item.product.name} již není dostupná prosím aktualizujte si nákupní košík")
+                return redirect('cart_detail')
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        delivery_address = form.cleaned_data.get('delivery_address')
+        note = form.cleaned_data.get('note')
+        first_name = form.cleaned_data.get('first_name')
+        last_name = form.cleaned_data.get('last_name')
+        email = form.cleaned_data.get('email')
+        phone = form.cleaned_data.get('phone')
+        postal_code = form.cleaned_data.get('postal_code')
+
+        if self.request.user.is_authenticated:
+            cart = get_object_or_404(Cart, user=self.request.user, is_temporary=True)
+        else:
+            cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
+        with transaction.atomic():
+            if self.request.user.is_authenticated:
+                order = Order.objects.create(
+                    user=self.request.user,
+                    delivery_address=delivery_address,
+                    total_price=cart.get_total_cart_price(),
+                    paid=False,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    phone=phone,
+                    postal_code=postal_code,
+                    note=note
+                )
+            else:
+                order = Order.objects.create(
+                    user=None,
+                    delivery_address=delivery_address,
+                    total_price=cart.get_total_cart_price(),
+                    paid=False,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    phone=phone,
+                    postal_code=postal_code,
+                    note=note
+                )
+            for item in cart.selected_products.all():
+                # print (f"item.product.stock_quantity {item.product.stock_quantity}")
+                # print (f"item.quantity {item.quantity}")
+                item.product.stock_quantity -= item.quantity
+                item.product.save()
+                item.order = order
+                # item.cart = None
+                item.product_price = item.product.price
+                item.save()
+
+            cart.is_temporary = True
+            cart.save()
+
+        return redirect('order_detail', pk=order.id)
+
+
+class OrderDetailView(DetailView):
+    model = Order
+    template_name = 'eshop/order_detail.html'
+
+class OrderSentView(View):
+    def post(self, request, *args, **kwargs):
+        order_id = self.kwargs.get('pk')
+        order = get_object_or_404(Order, id=order_id)
+        email = EmailMessage(
+            subject='Potvrzení objednávky',
+            body=f'Děkujeme za objednávku... č. {order.id}',
+            from_email='eshop@example.com',
+            to=[order.email],
+        )
+        email.send()
+        for item in order.selected_products.all():
+            item.cart = None
+            item.save()
+        return redirect('order_confirmation', pk=order_id)
+
+class OrderConfirmationView(TemplateView):
+    template_name = 'eshop/order_confirmation.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order_id = self.kwargs.get('pk')
+        order = get_object_or_404(Order, id=order_id)
+        context['order'] = order
+        return context
+
