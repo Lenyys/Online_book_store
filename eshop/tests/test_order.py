@@ -19,7 +19,7 @@ class CreateOrderWithFormViewTest(TestCase):
         session.save()
         session_key = session.session_key
         cart = Cart.objects.create(session_key=session_key)
-        cart_item = SelectedProduct.objects.create(
+        SelectedProduct.objects.create(
             product=self.book,
             quantity=1,
             cart=cart
@@ -36,7 +36,7 @@ class CreateOrderWithFormViewTest(TestCase):
         session.save()
         session_key = session.session_key
         cart = Cart.objects.create(session_key=session_key)
-        cart_item = SelectedProduct.objects.create(
+        SelectedProduct.objects.create(
             product=self.book,
             quantity=1,
             cart=cart
@@ -63,7 +63,7 @@ class CreateOrderWithFormViewTest(TestCase):
         user = User.objects.create_user(username='testuser', password='heslo1234')
         self.client.login(username='testuser', password='heslo1234')
         cart = Cart.objects.create(user=user)
-        cart_item = SelectedProduct.objects.create(
+        SelectedProduct.objects.create(
             product=self.book,
             quantity=1,
             cart=cart
@@ -80,7 +80,7 @@ class CreateOrderWithFormViewTest(TestCase):
         self.client.login(username='testuser', password='heslo1234')
 
         cart = Cart.objects.create(user=user)
-        cart_item = SelectedProduct.objects.create(
+        SelectedProduct.objects.create(
             product=self.book,
             quantity=1,
             cart=cart
@@ -116,7 +116,7 @@ class CreateOrderWithFormViewTest(TestCase):
             phone = '697123456',
             postal_code='11001'
         )
-        order_item = SelectedProduct.objects.create(
+        SelectedProduct.objects.create(
             product=self.book,
             quantity=1,
             order=order
@@ -141,7 +141,7 @@ class CreateOrderWithFormViewTest(TestCase):
             phone='697123456',
             postal_code='11001'
         )
-        order_item = SelectedProduct.objects.create(
+        SelectedProduct.objects.create(
             product=self.book,
             quantity=1,
             order=order
@@ -166,15 +166,16 @@ class CreateOrderWithFormViewTest(TestCase):
             phone='697123456',
             postal_code='11001'
         )
-        order_item = SelectedProduct.objects.create(
+        SelectedProduct.objects.create(
             product=self.book,
             quantity=1,
             order=order
         )
 
-        response = self.client.get('order_confirmation', kwargs={'pk':order.id})
+        response = self.client.get(reverse('order_confirmation', kwargs={'pk':order.id}))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response,'Děkujeme za objednávku!')
         self.assertContains(response, order.id)
         self.assertContains(response, self.book.price)
+
