@@ -1,0 +1,143 @@
+[
+  {
+    "model": "eshop.category",
+    "pk": 1,
+    "fields": {
+      "name": "Beletrie"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 2,
+    "fields": {
+      "name": "Poezie"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 3,
+    "fields": {
+      "name": "Historická literatura"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 4,
+    "fields": {
+      "name": "Cizojazyčná literatura"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 5,
+    "fields": {
+      "name": "Literatura pro děti a mládež"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 6,
+    "fields": {
+      "name": "Odborná literatura"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 7,
+    "fields": {
+      "name": "Dějiny a historie"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 8,
+    "fields": {
+      "name": "Naučná literatura"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 9,
+    "fields": {
+      "name": "Kuchařky"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 10,
+    "fields": {
+      "name": "Cestování"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 11,
+    "fields": {
+      "name": "Rozvoj osobnosti"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 12,
+    "fields": {
+      "name": "Esoterika"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 13,
+    "fields": {
+      "name": "Zdraví a sport"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 14,
+    "fields": {
+      "name": "Učebnice"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 15,
+    "fields": {
+      "name": "Obrazové publikace"
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 1,
+    "fields": {
+      "name": "M. W.",
+      "lastname": "Craven",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 4,
+    "fields": {
+      "name": "Helen",
+      "lastname": "Exley",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 5,
+    "fields": {
+      "name": "Simon",
+      "lastname": "Reev",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 7,
+    "fields": {
+      "name": "Dan",
+      "lastname": "Brown",
+      "date_of_birth": null
+    }
+  }
+]
