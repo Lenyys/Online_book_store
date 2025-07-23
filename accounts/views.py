@@ -33,6 +33,6 @@ def custom_login_view(request):
         else:
             messages.error(request, 'Neplatné přihlašovací údaje')
             # formulář zůstane otevřený díky proměnné
-            return render(request, 'index.html', {'login_failed': True})
+            return render(request, 'home.html', {'login_failed': True})
 
-    return render(request, 'index.html')
+    return render(request, 'home.html')
