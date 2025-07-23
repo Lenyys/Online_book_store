@@ -1,0 +1,183 @@
+.book-list-container {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+}
+
+.book-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.book-list-header h1 {
+    font-size: 2.2rem;
+    color: #333;
+}
+
+.btn.btn-add {
+    background-color: #28a745;
+    color: white;
+    padding: 0.6rem 1.4rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn.btn-add:hover {
+    background-color: #218838;
+}
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.book-card {
+    background-color: white;
+    border: 1px solid #eee;
+    border-radius: 0.8rem;
+    padding: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.book-info{
+    font-size: 1.6rem;
+}
+
+.book-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #222;
+}
+
+.book-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    font-size: 1.2rem;
+}
+
+.book-actions a {
+    text-decoration: none;
+    transition: transform 0.2s;
+}
+
+.book-actions a:hover {
+    transform: scale(1.2);
+}
+
+.no-books {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #777;
+    margin-top: 2rem;
+}
+
+.book-detail-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.book-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.book-detail-header h1 {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.book-actions .btn {
+    margin-right: 0.5rem;
+}
+
+.book-info, .book-authors, .book-categories, .book-images {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+}
+
+.book-info div,
+.book-categories div,
+.author-item {
+    margin-bottom: 0.5rem;
+}
+
+.image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.image-card {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    border-radius: 8px;
+    max-width: 200px;
+}
+
+.book-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 5px;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-back {
+    background-color: #17a2b8;
+}
+
+.btn-back:hover {
+    background-color: #138496;
+}
+
+.btn-small {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+    margin-left: 0.5rem;
+    background-color: #6c757d;
+}
+
+.btn-small:hover {
+    background-color: #5a6268;
+}

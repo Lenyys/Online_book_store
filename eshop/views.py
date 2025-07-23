@@ -13,7 +13,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm
 from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Order
 
-
+# nezapomenout přepnout na strarou stranku home !!!!!!!
 def home(request):
     return render(request, 'home.html')
 

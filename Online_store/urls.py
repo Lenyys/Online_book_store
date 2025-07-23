@@ -3,6 +3,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.urls import path, include
+from accounts.views import custom_login_view, SignUpView,user_logout
+from eshop.views import home
 
 # Vlastní view funkce
 from accounts.views import user_logout, SignUpView
@@ -13,6 +15,8 @@ from eshop.views import (
     CategoryUpdateView,
     CategoryDeleteView
 )
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +34,8 @@ urlpatterns = [
     path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
 
     # Uživatelské účty
-    path('accounts/login/', LoginView.as_view(template_name='form.html'), name='login'),
+    #path('accounts/login/', LoginView.as_view(template_name='form.html'), name='login'),
+    path('accounts/', include('accounts.urls')),
     path('accounts/logout/', user_logout, name='logout'),
     path('accounts/password_change/', PasswordChangeView.as_view(template_name='form.html'), name='password_change'),
     path('accounts/signup/', SignUpView.as_view(), name='signup'),

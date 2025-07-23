@@ -1,7 +1,15 @@
-<nav class="navbar">
-    <a href="{% url 'book_list' %}">Knihy</a>
-    <a href="#home">E-knihy</a>
-    <a href="#home">Audioknihy</a>
-    <a href="#home">Hry</a>
-    <a href="{% url 'staff_book_list' %}">Page for staff</a>
-</nav>
+   <div class="header-2">
+       <nav class="navbar">
+           <a href="{% url 'home' %}">Home</a>
+           <a href="{% url 'book_list' %}">Knihy</a>
+
+
+           <a href="#" id="book-list-link" data-auth="{% if user.is_authenticated %}true{% else %}false{% endif %}" data-url="{% url 'staff_book_list' %}">Book List</a>
+           <a href="{% url 'staff_author_list' %}">List of Authors</a>
+           <a href="{% url 'category-list' %}">Category list</a>
+           <!--
+           <a href="#reviews">Recenze</a>
+           <a href="#blogs">Blogs</a>
+           -->
+       </nav>
+   </div>

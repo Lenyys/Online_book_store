@@ -1,0 +1,266 @@
+/* ========== Kontejner celé stránky ========== */
+.authors-page {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+/* ========== Nadpis ========== */
+.authors-title {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+}
+.authors-title::after {
+  content: '';
+  display: block;
+  width: 60%;
+  height: 4px;
+  background: var(--green);
+  margin: 0.5rem auto 0;
+}
+
+/* ========== Mřížka karet autorů ========== */
+.authors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+/* ========== Jednotlivá karta ========== */
+.author-card {
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,0.05);
+  padding: 1.5rem 1rem;
+  transition: transform .2s ease, box-shadow .2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Hover efekt */
+.author-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 1rem 1.5rem rgba(0,0,0,0.1);
+}
+
+/* ========== Avatar (ikonka nebo fotka) ========== */
+.author-avatar {
+  font-size: 4rem;
+  color: var(--green);
+  margin-bottom: 1rem;
+}
+.author-avatar img {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ========== Jméno autora ========== */
+.author-name {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: .75rem;
+  color: #222;
+}
+
+/* ========== Akční tlačítka ========== */
+.author-actions {
+  display: flex;
+  gap: .5rem;
+}
+.author-actions a {
+  font-size: 1.8rem;
+  text-decoration: none;
+  transition: color .2s ease;
+}
+.author-actions .edit-btn {
+  color: #f0ad4e;
+}
+.author-actions .edit-btn:hover {
+  color: #ec971f;
+}
+.author-actions .delete-btn {
+  color: #d9534f;
+}
+.author-actions .delete-btn:hover {
+  color: #c9302c;
+}
+
+/* ========== Zpráva, když není žádný autor ========== */
+.no-authors {
+  font-size: 1.4rem;
+  color: var(--light-color);
+}
+
+/* ========== Přidat autora (tlačítko dole) ========== */
+.add-author-wrap {
+  text-align: center;
+}
+.add-author-btn {
+  font-size: 1.6rem;
+  padding: .75rem 2rem;
+}
+
+
+.form-container {
+    max-width: 600px;
+    margin: 5rem auto;
+    background: #fff;
+    padding: 3rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.styled-form p {
+    margin-bottom: 1.5rem;
+}
+
+.styled-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #222;
+}
+
+.styled-form input,
+.styled-form select,
+.styled-form textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.form-buttons .btn {
+    padding: 0.8rem 2rem;
+    font-size: 1.6rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-buttons .btn-success {
+    background-color: #27ae60;
+    color: white;
+}
+
+.form-buttons .btn-secondary {
+    background-color: #ccc;
+    color: black;
+}
+
+
+
+
+
+form {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 2.5rem;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="date"],
+form input[type="password"],
+form textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    transition: border 0.3s;
+}
+
+form input:focus,
+form textarea:focus {
+    border-color: #28a745;
+    outline: none;
+}
+
+form button,
+form a.btn {
+    display: inline-block;
+    min-width: 100px;
+    margin: 1rem 0.5rem 0 0;
+    padding: 0.8rem 1.2rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form a.btn {
+    background-color: #6c757d;
+}
+
+form button:hover {
+    background-color: #218838;
+}
+
+form a.btn:hover {
+    background-color: #5a6268;
+}
+
+
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.form-value {
+      font-size: 1.6rem;
+    flex: 1;
+    text-align: left;
+    color: #000;
+}
+
+.form-label {
+    font-size: 1.6rem;
+    flex: 1;
+    text-align: left;
+    font-weight: bold;
+    color: #333;
+}
