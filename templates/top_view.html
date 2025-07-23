@@ -8,8 +8,10 @@
 
     <div class="icons">
         <div id="search-btn" class="fas fa-search"></div>
+        {% comment %}
         <a href="#" class="fas fa-heart"></a>
-        <a href="#" class="fas fa-shopping-cart"></a>
+        {% endcomment %}
+        <a href="{% url 'cart_detail' %}" class="fas fa-shopping-cart"></a>
             <div id="login-btn-wrapper">
                    <div id="login-btn"
                          class="fas fa-user"
