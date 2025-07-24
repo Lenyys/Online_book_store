@@ -8,8 +8,6 @@
 <div>
     {% for product in object.selected_products.all %}
      {{ product.name }}
-    {% empty %}
-
     {% endfor %}
     <form method="post" action="{% url 'order_sent' object.id %}">
         {% csrf_token %}

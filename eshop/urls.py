@@ -1,5 +1,3 @@
-
-
 from django.urls import path
 from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView, ImageCreateView,
                          CategoryListView, CategoryUpdateView, CategoryDeleteView, ImageDeleteView,
@@ -12,8 +10,6 @@ from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdat
 urlpatterns = [
     path('book_list/', BookListView.as_view(), name='book_list'),
     path('book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
-
-
 
     path('staff_book_list/', StaffBookListView.as_view(), name='staff_book_list'),
     path('staff_book_detail/<int:pk>/', StaffBookDetailView.as_view(), name='staff_book_detail'),
@@ -34,15 +30,11 @@ urlpatterns = [
     path('image_delete/<int:pk>/', ImageDeleteView.as_view(), name='image_delete'),
     path('book/<int:book_id>/image_update/<int:pk>/', ImageUpdateView.as_view(), name='image_update'),
 
-
-
     path('categories/', CategoryListView.as_view(), name='category-list'),
     path('categories/create/', CategoryCreateView.as_view(), name='category-create'),
     path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
     path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
     path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
-
-
 
     path('cart/add/<int:pk>/', AddToCartView.as_view(), name='add_to_cart'),
     path('cart_detail/', CartDetailView.as_view(), name='cart_detail'),
@@ -50,11 +42,6 @@ urlpatterns = [
     path('cart/remove/<int:item_id>/', RemoveFromCartView.as_view(), name='remove_from_cart'),
 
     path('create_order/', CreateOrderView.as_view(), name='create_order'),
-    # path('order_detail/<int:pk>/', OrderDetailView.as_view(), name='order_detail'),
     path('order_confirmation/<int:pk>/' ,OrderConfirmationView.as_view() , name='order_confirmation'),
-    # path('order_send/<int:pk>/', OrderSentView.as_view(), name='order_sent'),
-
-
-
 
 ]

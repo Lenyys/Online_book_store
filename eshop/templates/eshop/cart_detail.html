@@ -24,7 +24,8 @@
                    name="quantity-{{ item.id }}"
                    value="{{ item.quantity }}"
                    min="1"
-                   class="form-control"/>
+                   class="form-control"
+                   onchange="this.form.submit()"/>
         </div>
         <div class="col-1">
             <a href="{% url 'remove_from_cart' item.id %}">
@@ -36,11 +37,7 @@
     <div class="row mt-3 mb-2 pt-4 justify-content-end border-top">
         <h5 class="mx-5 border-bottom border-dark border-3 pb-1">Celková cena: {{ total_price }} Kč</h5>
     </div>
-    <div class="text-center">
-    <button type="submit" class="btn btn-primary">Aktualizovat košík</button>
-</div>
 </form>
-
 
 {% else %}
 <div class="row">Košík je prázdný.</div>
