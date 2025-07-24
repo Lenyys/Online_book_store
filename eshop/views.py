@@ -4,10 +4,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import  EmailMessage
 from django.db import transaction
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.views import View
 
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
+from django.views.decorators.cache import never_cache
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, TemplateView
 
 from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm
@@ -276,6 +278,7 @@ class CategoryDetailView(DetailView):
     context_object_name = 'category'
 
 
+@method_decorator(never_cache, name='dispatch')
 class CartDetailView(TemplateView):
     template_name = 'eshop/cart_detail.html'
 
@@ -358,6 +361,7 @@ class RemoveFromCartView(View):
         return redirect('cart_detail')
 
 
+@method_decorator(never_cache, name='dispatch')
 class CreateOrderView(View):
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
