@@ -2,18 +2,18 @@
 
 {% block content %}
 
-<div class="row my-3">
-    <div class="col-12 text-center ">
-        <h1>Upravení obrázku</h1>
-    </div>
-</div>
-<div>
-    <form method="post" enctype="multipart/form-data">
+<div class="form-container">
+    <h1 class="form-title">Upravení obrázku</h1>
+
+    <form method="post" class="styled-form" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="hidden" name="next" value="{{ back_url }}">
-        <button type="submit" class="btn btn-success mr-3 my-2">Uložit</button>
-        <a href="{{ back_url }}" class="btn btn-success">Zpět</a>
+
+          <div class="form-buttons">
+        <button type="submit" class="btn btn-success">Uložit</button>
+        <a href="{{ back_url }}" class="btn btn-secondary">Zpět</a>
+        </div>
     </form>
 
 </div>

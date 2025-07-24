@@ -1,7 +1,8 @@
 .book-list-container {
-    max-width: 1200px;
-    margin: 4rem auto;
-    padding: 0 2rem;
+    max-width: 1000px;
+    margin: 3rem auto;
+  padding: 0 1rem;
+  text-align: center;
 }
 
 .book-list-header {
@@ -12,8 +13,18 @@
 }
 
 .book-list-header h1 {
-    font-size: 2.2rem;
+    font-size: 3rem;
     color: #333;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+}
+
+.book-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
 }
 
 .btn.btn-add {
@@ -51,18 +62,14 @@
     font-size: 1.6rem;
 }
 
-.book-title {
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: #222;
-}
+
 
 .book-actions {
-    display: flex;
-    justify-content: flex-start;
-    gap: 1rem;
-    font-size: 1.2rem;
+  display: flex;              /* flexbox kontejner */
+  justify-content: center;    /* horizontálně uprostřed */
+  align-items: center;        /* vertikálně na střed řádku */
+  gap: 1.5rem;                /* mezera mezi ikonami */
+  margin-top: 1rem;           /* případná mezera nad akcemi */font-size: 1.8rem;
 }
 
 .book-actions a {
@@ -72,6 +79,13 @@
 
 .book-actions a:hover {
     transform: scale(1.2);
+}
+
+.book-actions .detail-btn {
+  font-size: 1.8rem;      /* stejné jako ostatní ikony */
+  color: var(--green);    /* nebo jakoukoli barvu chceš */
+  text-decoration: none;
+  transition: color .2s ease;
 }
 
 .no-books {
@@ -149,6 +163,7 @@
     text-decoration: none;
     font-weight: bold;
     cursor: pointer;
+      text-align: center;
 }
 
 .btn:hover {
@@ -181,3 +196,213 @@
 .btn-small:hover {
     background-color: #5a6268;
 }
+
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.form-buttons .btn {
+    padding: 0.8rem 2rem;
+    font-size: 1.6rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-buttons .btn-success {
+    background-color: #27ae60;
+    color: white;
+}
+
+.form-buttons .btn-secondary {
+    background-color: #ccc;
+    color: black;
+}
+
+.form-buttons .btn-danger {
+  background-color: #e74c3c;    /* tmavší červená */
+  border-color:    #c0392b;
+  color: white;
+}
+
+
+
+
+
+/* book_detail.css */
+
+/* Hlavní kontejner */
+.book-detail-container {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 .5rem 1.5rem rgba(0,0,0,0.1);
+  font-family: sans-serif;
+}
+
+/* Nadpis + akce */
+.book-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.book-detail-header h1 {
+  font-size: 2.5rem;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+/* Tlačítka v hlavičce */
+.book-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.book-actions .btn {
+  padding: .6rem 1.2rem;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: .5rem;
+  cursor: pointer;
+  transition: background-color .2s, transform .1s;
+}
+.book-actions .btn-edit {
+  background: #27ae60;
+  color: #fff;
+}
+.book-actions .btn-edit:hover { background: #1e8449; }
+.book-actions .btn-delete {
+  background: #e74c3c;
+  color: #fff;
+}
+.book-actions .btn-delete:hover { background: #c0392b; }
+.book-actions .btn-back {
+    background-color: #ccc;
+    color: black;
+}
+.book-actions .btn-back:hover {   background-color: #6c757d;; }
+
+/* Spodní sekce oddělené linkou */
+.book-info,
+.book-authors,
+.book-categories,
+.book-images {
+  border-top: 1px solid #eee;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Základní info o knize */
+.book-info > div {
+  margin-bottom: .8rem;
+  font-size: 1.3rem;
+}
+.book-info strong {
+  color: #333;
+}
+
+/* Sekce Autoři */
+.book-authors h3 {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  gap: .5rem;
+}
+.book-authors .btn-small {
+  padding: .4rem .8rem;
+  font-size: 1rem;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: .4rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+.book-authors .btn-small:hover { background: #1e8449; }
+.author-item {
+  font-size: 1.2rem;
+  margin-bottom: .5rem;
+}
+.author-item a {
+  margin-left: .8rem;
+  color: #e74c3c;
+  text-decoration: none;
+}
+.author-item a:hover { text-decoration: underline; }
+.author-item a:last-child {
+  color: #f39c12;
+  margin-left: .4rem;
+}
+
+/* Sekce Kategorie */
+.book-categories h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+.book-categories div {
+  font-size: 1.2rem;
+  margin-bottom: .5rem;
+}
+
+/* Sekce Obrázky */
+.book-images h3 {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  gap: .5rem;
+}
+.book-images .btn-small {
+  padding: .4rem .8rem;
+  font-size: 1rem;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: .4rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+.book-images .btn-small:hover { background: #1e8449; }
+
+/* Galerie obrázků */
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+}
+.image-card {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: .5rem;
+  padding: .5rem;
+  text-align: center;
+}
+.book-image {
+  max-width: 100%;
+  border-radius: .5rem;
+  margin-bottom: .5rem;
+}
+.image-card .btn-small {
+  display: inline-block;
+  margin: .2rem .1rem;
+  padding: .3rem .6rem;
+  font-size: .9rem;
+  background: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: .3rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+.image-card .btn-small:hover { background: #2980b9; }
