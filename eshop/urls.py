@@ -35,14 +35,12 @@ urlpatterns = [
     path('book/<int:book_id>/image_update/<int:pk>/', ImageUpdateView.as_view(), name='image_update'),
 
 
-
     path('categories/', CategoryListView.as_view(), name='category-list'),
+    path('staff_category_list/', StaffCategoryListView.as_view(), name='staff_category_list'),
     path('categories/create/', CategoryCreateView.as_view(), name='category-create'),
-    path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
     path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
     path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
-    path('staff_category_list/', StaffCategoryListView.as_view(), name='staff_category_list'),
-
+    path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
 
 
     path('cart/add/<int:pk>/', AddToCartView.as_view(), name='add_to_cart'),

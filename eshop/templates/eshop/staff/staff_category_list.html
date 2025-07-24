@@ -3,32 +3,31 @@
 {% block title %}Seznam kategorií - admin{% endblock %}
 
 {% block content %}
-<h1>Seznam kategorií (administrace)</h1>
+<div class="authors-page">
+  <h1 class="authors-title">Seznam kategorií</h1>
 
-<table>
-    <thead>
-        <tr>
-            <th>Název kategorie</th>
-            <th>Akce</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for category in categories %}
-            <tr>
-                <td>{{ category.name }}</td>
-                <td>
-                    <a href="{% url 'category-edit' category.pk %}">Upravit</a> |
-                    <a href="{% url 'category-delete' category.pk %}">Smazat</a> |
-                    <a href="{% url 'category-detail' category.pk %}">Detail</a>
-                </td>
-            </tr>
-        {% empty %}
-            <tr><td colspan="3">Žádné kategorie nenalezeny.</td></tr>
-        {% endfor %}
-    </tbody>
-</table>
+  <div class="authors-grid">
+    {% for category in categories %}
+      <div class="author-card">
+        <div class="author-avatar">
+          <i class="bi bi-bookmarks-fill"></i>
+        </div>
+        <h2 class="author-name">{{ category.name }}</h2>
+        <div class="author-actions">
+          <a href="{% url 'category-edit' category.pk %}?next={{ request.path }}" class="edit-btn" title="Upravit">✏️</a>
+          <a href="{% url 'category-delete' category.pk %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>
+          <a href="{% url 'category-detail' category.pk %}" class="detail-btn" title="Detail">🔍</a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="no-authors">Žádné kategorie k zobrazení.</p>
+    {% endfor %}
+  </div>
 
-<a href="{% url 'category-create' %}">Přidat novou kategorii</a>
-
+  <div class="add-author-wrap">
+    <a class="btn btn-success add-author-btn" href="{% url 'category-create' %}">
+      Přidat kategorii
+    </a>
+  </div>
+</div>
 {% endblock %}
-
