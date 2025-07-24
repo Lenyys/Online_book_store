@@ -1,18 +1,51 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Váš košík</h2>
-
-{% if items %}
-    <ul>
-        {% for item in items %}
-            <li>
-                {{ item.product.name }} — {{ item.quantity }} ks — {{ item.product.price }} Kč
-            </li>
-        {% endfor %}
-    </ul>
-    Celková cena: {{ total_price }} Kč
-{% else %}
-    <p>Košík je prázdný.</p>
+<h2 class="my-2">Váš košík</h2>
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">
+    {{ message }}
+</div>
+{% endfor %}
 {% endif %}
+{% if items %}
+<form method="post" action="{% url 'update_cart' %}">
+    {% csrf_token %}
+    {% for item in items %}
+    <div class="row mb-1 align-items-center">
+        <div class="col-6 col-md-7">{{ forloop.counter }}.
+            <a href="{% url 'book_detail' item.product.id %}"
+               class="text-dark">{{ item.product.name }}</a>
+        </div>
+        <div class="col-3 col-md-3">Cena za kus: {{ item.product.price }} Kč</div>
+        <div class="col-2 col-md-1">
+            <input type="number"
+                   name="quantity-{{ item.id }}"
+                   value="{{ item.quantity }}"
+                   min="1"
+                   class="form-control"/>
+        </div>
+        <div class="col-1">
+            <a href="{% url 'remove_from_cart' item.id %}">
+                ❌
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="row mt-5 justify-content-end">
+        <h5 class="mx-5 border-bottom border-dark border-3 pb-1">Celková cena: {{ total_price }} Kč</h5>
+    </div>
+    <button type="submit" class="btn btn-primary">Aktualizovat košík</button>
+</form>
+
+
+{% else %}
+<div class="row">Košík je prázdný.</div>
+{% endif %}
+
+<div class="row my-1 justify-content-center">
+    <a href="{% url 'book_list' %}" class="btn btn-success"> Pokračovat v nákupu</a>
+    <a href="{% url 'create_order' %}" class="btn btn-danger">Přejít na objednávku</a>
+</div>
 {% endblock %}

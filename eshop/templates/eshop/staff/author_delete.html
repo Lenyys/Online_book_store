@@ -1,18 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row my-3">
-    <div class="col-12 text-center">
-        <h4> Opravdu chcete odstranit autora: {{ object.name }} {{ object.lastname }}</h4>
-    </div>
-</div>
-<div class="row my-3">
-    <div class="col-12 text-center">
-        <form method="post" >
+<div class="form-container">
+        <h1 class="form-title">Opravdu chcete odstranit autora</h1>
+        <form method="post" class="styled-form">
+
+            <div class="form-row">
+                <span class="form-label">Jméno:</span>
+                <span class="form-value">{{ object.name }}</span>
+            </div>
+
+            <div class="form-row">
+                <span class="form-label">Příjmení:</span>
+                <span class="form-value">{{ object.lastname }}</span>
+            </div>
+
+            <div class="form-row">
+                <span class="form-label">Datum narození:</span>
+                <span class="form-value">{{ object.date_of_birth|date:"d. m. Y" }}</span>
+            </div>
+
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ back_url }}">
-            <button type="submit" class="btn btn-danger mr-3">Ano smazat</button>
-            <a href="{{ back_url }}" class="btn btn-success">Zpět</a>
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-danger">Ano Smazat</button>
+                <a href="{% url 'staff_author_list' %}" class="btn btn-secondary">Zpět</a>
+            </div>
         </form>
 
     </div>

@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Děkujeme za objednávku!</h1>
+<p>Číslo objednávky: {{ order.id }}</p>
+<p>Celková cena: {{ order.total_price }} Kč</p>
+{% endblock %}

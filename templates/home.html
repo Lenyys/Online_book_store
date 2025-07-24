@@ -5,6 +5,28 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Vítejte v knihkupectví Jirásek.</h1>
-    <a href="{% url 'staff' %}" class="btn border" >Page for staff</a>
+    {% include 'swiper_top.html' %}
+
+    {% include 'icons.html' %}
+
+    {% include 'featured.html' %}
+
+    {% comment %}
+    {% include 'newsletter.html' %}
+    {% endcomment %}
+
+    {% include 'arrivals.html' %}
+
+    {% comment %}
+    {% include 'deal.html' %}
+
+    {% include 'reviews.html' %}
+
+    {% include 'blogs.html' %}
+    {% endcomment %}
+
 {% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    {% load static %}
+    <script src="{% static 'js/script2.js' %}"></script>

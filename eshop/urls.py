@@ -2,14 +2,14 @@ from django.urls import path
 from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView, ImageCreateView,
                          CategoryListView, CategoryUpdateView, CategoryDeleteView, StaffCategoryListView, ImageDeleteView,
                          ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
-                         staff_page, StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
+                         StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
-                         CategoryCreateView, CategoryDetailView)
+                         CategoryCreateView, CategoryDetailView, UpdateCartView, RemoveFromCartView, OrderDetailView,
+                         CreateOrderWithFormView, OrderConfirmationView, OrderSentView)
 
 
 
 urlpatterns = [
-    path('staff/', staff_page, name='staff'),
     path('book_list/', BookListView.as_view(), name='book_list'),
     path('book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
 
@@ -46,8 +46,14 @@ urlpatterns = [
 
 
     path('cart/add/<int:pk>/', AddToCartView.as_view(), name='add_to_cart'),
-    path('cart_detail/', CartDetailView.as_view(), name='cart_detail')
+    path('cart_detail/', CartDetailView.as_view(), name='cart_detail'),
+    path('cart/update/', UpdateCartView.as_view(), name='update_cart'),
+    path('cart/remove/<int:item_id>/', RemoveFromCartView.as_view(), name='remove_from_cart'),
 
+    path('create_order/', CreateOrderWithFormView.as_view(), name='create_order'),
+    path('order_detail/<int:pk>/', OrderDetailView.as_view(), name='order_detail'),
+    path('order_confirmation/<int:pk>/' ,OrderConfirmationView.as_view() , name='order_confirmation'),
+    path('order_send/<int:pk>/', OrderSentView.as_view(), name='order_sent'),
 
 
 
