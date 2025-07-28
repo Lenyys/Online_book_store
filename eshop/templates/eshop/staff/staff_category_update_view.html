@@ -1,12 +1,22 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from django.views.generic import UpdateView
-from eshop.models import Category
-from eshop.forms import CategoryForm
+{% extends "base.html" %}
 
-class StaffCategoryUpdateView(LoginRequiredMixin, UpdateView):
-    model = Category
-    form_class = CategoryForm
-    template_name = 'eshop/staff/staff_category_form.html'
-    success_url = reverse_lazy('staff_category_list')
+{% block title %}Upravit kategorii{% endblock %}
 
+{% block content %}
+<div class="form-container">
+  <h1 class="form-title">Upravit kategorii</h1>
+
+  <form method="post" class="styled-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <!-- Skryté pole pro zpětný návrat (nepoužité, ale konzistentní se stylem) -->
+    <input type="hidden" name="next" value="{{ back_url }}">
+
+    <div class="form-buttons">
+      <button type="submit" class="btn btn-success">💾 Uložit</button>
+      <a href="{{ back_url }}" class="btn btn-secondary">↩ Zpět</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
