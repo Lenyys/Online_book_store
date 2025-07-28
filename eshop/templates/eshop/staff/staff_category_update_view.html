@@ -10,7 +10,6 @@
     {% csrf_token %}
     {{ form.as_p }}
 
-    <!-- Skryté pole pro zpětný návrat (nepoužité, ale konzistentní se stylem) -->
     <input type="hidden" name="next" value="{{ back_url }}">
 
     <div class="form-buttons">
