@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import  EmailMessage
 from django.db import transaction
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -10,6 +11,7 @@ from django.views import View
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.decorators.cache import never_cache
+from django.views.decorators.http import require_GET
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, TemplateView
 
 from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm
@@ -18,6 +20,29 @@ from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Or
 
 def home(request):
     return render(request, 'home.html')
+
+def search_view(request):
+    query = request.GET.get("q", "").strip()
+    results = []
+
+    if query:
+        results = Book.objects.filter(name__icontains=query)
+    return render(request, "eshop/search_results.html", {
+        "query": query,
+        "results": results
+    })
+
+
+@require_GET
+def autocomplete_search(request):
+    query = request.GET.get("q", "").strip()
+    results = []
+
+    if query:
+        results.extend(Book.objects.filter(name__icontains=query).values_list("name", flat=True)[:6])
+        # results.extend(Subcategory.objects.filter(name__icontains=query).values_list("name", flat=True)[:6])
+
+    return JsonResponse({"results": list(results)})
 
 
 class BookListView(ListView):

@@ -1,9 +1,10 @@
 <div class="header-1">
     <a href="{% url 'home' %}" class="logo"> <i class="fas fa-book"></i> Jirásek </a>
 
-    <form action="" class="search-form">
-        <input type="search" placeholder="search here..." id="search-box">
+    <form action="{% url 'search' %}" class="search-form" method="get">
+        <input type="search" placeholder="search here..." id="search-box" name="q" style="width: 350px; height: 40px;">
         <label for="search-box" class="fas fa-search"></i></label>
+        <ul id="suggestions" ></ul>
     </form>
 
     <div class="icons">
