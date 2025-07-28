@@ -1,28 +1,16 @@
-{% extends 'base.html' %}
-
-{% block title %}Úprava kategorie - administrace{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
-<div class="container my-4">
-  <h1 class="text-center mb-4">Úprava kategorie</h1>
-
-  <form method="post" class="p-4 shadow-sm rounded bg-light">
+<div class="form-container">
+  <h1 class="form-title">Upravit kategorii</h1>
+  <form method="post" class="styled-form">
     {% csrf_token %}
-    {{ form.non_field_errors }}
+    {{ form.as_p }}
+    <input type="hidden" name="next" value="{{ back_url }}">
 
-    {% for field in form %}
-      <div class="mb-3">
-        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-        {{ field }}
-        {% if field.errors %}
-          <div class="text-danger">{{ field.errors|striptags }}</div>
-        {% endif %}
-      </div>
-    {% endfor %}
-
-    <div class="d-flex justify-content-between">
-      <a href="{{ back_url }}" class="btn btn-secondary">Zpět</a>
-      <button type="submit" class="btn btn-success">Uložit změny</button>
+    <div class="form-buttons">
+      <button type="submit" class="btn btn-success">💾 Uložit</button>
+      <a href="{{ back_url }}" class="btn btn-secondary">↩ Zpět</a>
     </div>
   </form>
 </div>

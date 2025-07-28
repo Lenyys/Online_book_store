@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
+from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 from eshop.models import Category
 from eshop.forms import CategoryForm
@@ -8,12 +8,5 @@ class StaffCategoryUpdateView(LoginRequiredMixin, UpdateView):
     model = Category
     form_class = CategoryForm
     template_name = 'eshop/staff/staff_category_form.html'
-    
-    def get_success_url(self):
-        return reverse('staff_category_detail', kwargs={'pk': self.object.pk})
+    success_url = reverse_lazy('staff_category_list')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Přidáme zpětný odkaz, pokud je v GET parametrech (pro lepší UX)
-        context['back_url'] = self.request.GET.get('next', reverse('staff_category_list'))
-        return context
