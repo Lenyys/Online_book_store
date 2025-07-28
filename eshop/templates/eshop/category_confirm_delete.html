@@ -1,10 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+<div class="row my-4">
+  <div class="col-12 text-center">
+    <h1 class="mb-4 text-danger">Smazání kategorie</h1>
+    <p class="fs-5">Opravdu si přejete smazat kategorii <strong>{{ category.name }}</strong>?</p>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-12 col-md-6 col-lg-4">
+    <div class="card p-4 shadow-sm text-center">
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <button type="submit" class="btn btn-danger btn-lg me-2">Ano, smazat</button>
+          <a href="{{ back_url|default:request.META.HTTP_REFERER }}" class="btn btn-secondary btn-lg">Zpět</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

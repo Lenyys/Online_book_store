@@ -15,8 +15,8 @@
         <h2 class="author-name">{{ category.name }}</h2>
         <div class="author-actions">
           <a href="{% url 'category-edit' category.pk %}?next={{ request.path }}" class="edit-btn" title="Upravit">✏️</a>
-          <a href="{% url 'category-delete' category.pk %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>
-          <a href="{% url 'category-detail' category.pk %}" class="detail-btn" title="Detail">🔍</a>
+          <a href="{% url 'staff_category_delete' category.pk %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>
+          <a href="{% url 'staff_category_detail' category.pk %}" class="detail-btn" title="Detail (admin)">🔍</a>
         </div>
       </div>
     {% empty %}

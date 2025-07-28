@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Smazat kategorii - administrace{% endblock %}
+
+{% block content %}
+<div class="row my-3">
+  <div class="col-12 text-center">
+    <h1 class="mb-4">Smazat kategorii</h1>
+    <p>Opravdu chcete smazat kategorii <strong>{{ object.name }}</strong>?</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Smazat</button>
+      <a href="{% url 'staff_category_detail' object.pk %}" class="btn btn-secondary">Zrušit</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

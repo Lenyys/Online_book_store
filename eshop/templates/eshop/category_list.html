@@ -1,34 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row my-3">
-  <div class="col-12 text-center">
-    <h1 class="mb-4">Seznam kategorií</h1>
-  </div>
-</div>
+<div class="categories-page">
+  <h1 class="categories-title">Seznam kategorií</h1>
 
-<div class="col-12">
-  <div class="row g-3 justify-content-center">
+  <div class="categories-grid">
     {% for category in categories %}
-      <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-        <div class="card h-100 shadow-sm p-3 d-flex flex-column justify-content-between">
-          <h5 class="card-title text-center">{{ category.name }}</h5>
-          <div class="d-flex justify-content-center gap-2 mt-3">
-            <a href="{% url 'category-edit' category.pk %}" class="btn btn-sm btn-warning">Upravit</a>
-            <a href="{% url 'category-delete' category.pk %}" class="btn btn-sm btn-danger">Smazat</a>
-            <a href="{% url 'category-detail' category.pk %}" class="btn btn-sm btn-primary">Detail</a>
-          </div>
+      <div class="category-card">
+        <div class="category-icon">
+          <i class="bi bi-folder2-open text-success"></i>
+        </div>
+        <h2 class="category-name">{{ category.name }}</h2>
+        <div class="category-actions">
+          <a href="{% url 'category-edit' category.pk %}" class="edit-btn" title="Upravit">✏️</a>
+          <a href="{% url 'category-delete' category.pk %}" class="delete-btn" title="Smazat">❌</a>
+          <a href="{% url 'category-detail' category.pk %}" class="detail-btn" title="Detail">🔍</a>
         </div>
       </div>
     {% empty %}
-      <p class="text-center my-5 fs-4">Žádné kategorie k zobrazení.</p>
+      <p class="no-categories">Žádné kategorie k zobrazení.</p>
     {% endfor %}
   </div>
-</div>
 
-<div class="row mt-4">
-  <div class="col-12 text-center">
-    <a href="{% url 'category-create' %}" class="btn btn-success btn-lg">Přidat novou kategorii</a>
+  <div class="add-category-wrap">
+    <a class="btn btn-success add-category-btn" href="{% url 'category-create' %}">
+      Přidat novou kategorii
+    </a>
   </div>
 </div>
 {% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Detail kategorie - administrace{% endblock %}
+
+{% block content %}
+<div class="row my-3">
+  <div class="col-12 text-center">
+    <h1 class="mb-4">Detail kategorie (administrace)</h1>
+
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card shadow-sm p-4">
+      <h3 class="card-title text-center mb-3">{{ category.name }}</h3>
+
+      <div class="card-text text-center">
+        <p><strong>ID:</strong> {{ category.id }}</p>
+        {% if category.description %}
+        <p><strong>Popis:</strong> {{ category.description }}</p>
+        {% endif %}
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="{% url 'staff_category_edit' category.pk %}" class="btn btn-warning me-2">Upravit</a>
+        <a href="{% url 'category-delete' category.pk %}" class="btn btn-danger">Smazat</a>
+        <a href="{% url 'staff_category_list' %}" class="btn btn-secondary ms-2">Zpět na seznam</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
