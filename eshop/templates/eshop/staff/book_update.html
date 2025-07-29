@@ -2,9 +2,8 @@
 
 {% block content %}
 
-
-    <div class="form-container">
-       <h1 class="form-title">Editace knihy</h1>
+<div class="form-container">
+    <h1 class="form-title">Editace knihy</h1>
     <form method="post" class="styled-form">
         {% csrf_token %}
         {{ form.as_p }}

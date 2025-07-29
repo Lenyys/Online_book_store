@@ -1,0 +1,100 @@
+/* Nadpis košíku */
+.cart-title {
+  font-size: 2rem;
+  margin: 2rem auto 1rem;
+  max-width: 600px;
+  position: relative;
+}
+
+/* Kontejner karty košíku */
+.cart-card {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: .5rem;
+  box-shadow: 0 .3rem .6rem rgba(0,0,0,0.1);
+}
+
+/* Refresh tlačítko v rohu */
+.refresh-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #666;
+  cursor: pointer;
+}
+.refresh-btn:hover {
+  color: #333;
+}
+
+/* Jednotlivá položka */
+.cart-item {
+  padding: .5rem 0;
+  border-bottom: 1px solid #eee;
+}
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+/* Název položky */
+.item-name {
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+}
+.item-name:hover {
+  text-decoration: underline;
+}
+
+/* Autor pod názvem */
+.item-author {
+  font-size: .9rem;
+  color: #555;
+  margin-top: .2rem;
+}
+
+/* Odebrání položky */
+.remove-item {
+  color: #e74c3c;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+.remove-item:hover {
+  color: #c0392b;
+}
+
+/* Celková cena */
+.cart-total {
+  font-size: 1.1rem;
+  padding-top: .5rem;
+  border-top: 2px solid #333;
+}
+
+/* Tlačítka */
+.btn-sm {
+  padding: .4rem 1rem;
+  font-size: .9rem;
+}
+
+/* Šedivé tlačítko „Pokračovat“ */
+.btn-secondary {
+  background: #aaa;
+  color: #fff;
+}
+.btn-secondary:hover {
+  background: #888;
+}
+
+/* Zelené tlačítko „Objednávka“ */
+.btn-success {
+  background: #27ae60;
+  color: #fff;
+}
+.btn-success:hover {
+  background: #219150;
+}
