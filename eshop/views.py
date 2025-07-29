@@ -17,6 +17,7 @@ from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Or
 def home(request):
     return render(request, 'home.html')
 
+
 class BookListView(ListView):
     model = Book
     template_name = 'eshop/book_list.html'
@@ -26,6 +27,7 @@ class BookListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        queryset = queryset.filter(type='book')
         category_id = self.request.GET.get('category')
         if category_id:
             queryset = queryset.filter(category__id=category_id)
@@ -33,34 +35,51 @@ class BookListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        categories = Category.objects.all()
-        context['categories'] = categories
+        context['categories'] = Category.objects.all()
+#        context['page_title'] = 'Knihy'
+        return context
+
+
+class EBookListView(ListView):
+    model = Book
+    template_name = 'eshop/book_list.html'
+    context_object_name = 'books'
+    paginate_by = 10
+    ordering = ['-price']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(type='ebook')
         category_id = self.request.GET.get('category')
         if category_id:
-            context['selected_category'] = get_object_or_404(Category, id=category_id)
-        return context
-
-
-class EBookListView(BookListView):
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        # Přebírá filtraci z BookListView a přidává filtr formátu
-        return queryset.filter(type='ebook').distinct()
+            queryset = queryset.filter(category__id=category_id)
+        return queryset.distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'E-knihy'  # volitelně přidej název sekce
+        context['categories'] = Category.objects.all()
+        # Bez nadpisu: context['page_title'] = 'E-knihy'
         return context
 
 
-class AudioBookListView(BookListView):
+class AudioBookListView(ListView):
+    model = Book
+    template_name = 'eshop/book_list.html'
+    context_object_name = 'books'
+    paginate_by = 10
+    ordering = ['-price']
+
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(type='audiobook').distinct()
+        queryset = queryset.filter(type='audiobook')
+        category_id = self.request.GET.get('category')
+        if category_id:
+            queryset = queryset.filter(category__id=category_id)
+        return queryset.distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Audioknihy'
+        context['categories'] = Category.objects.all()
         return context
 
 
@@ -114,7 +133,6 @@ class BookDeleteView(DeleteView):
         context = super().get_context_data(**kwargs)
         context['back_url'] = self.request.GET.get('next','/')
         return context
-
 
 
 class ImageCreateView(CreateView):
