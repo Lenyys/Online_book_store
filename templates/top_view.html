@@ -1,10 +1,25 @@
 <div class="header-1">
     <a href="{% url 'home' %}" class="logo"> <i class="fas fa-book"></i> Jirásek </a>
+    <!-- Vyhledávání -->
+   <div id="search-wrapper" class="d-flex mx-auto"
+        style="max-width:700px;"
+ data-search-url="{% url 'search' %}"
+ data-autocomplete-url="{% url 'autocomplete_search' %}">
 
-    <form action="" class="search-form">
-        <input type="search" placeholder="search here..." id="search-box">
-        <label for="search-box" class="fas fa-search"></i></label>
-    </form>
+    <input
+      id="search-input"
+      class="form-control rounded-start"
+      type="search"
+      placeholder="Hledej zde…"
+      aria-label="Search"
+      autocomplete="off"/>
+
+    <button id="search-button" class="btn-outline-success rounded-end" type="button">
+      <i class="fas fa-search"></i>
+        </button>
+
+        <ul id="suggestions" class="list-group"></ul>
+    </div>
 
     <div class="icons">
         <div id="search-btn" class="fas fa-search"></div>

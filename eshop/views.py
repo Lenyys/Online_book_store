@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import  EmailMessage
 from django.db import transaction
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views import View
 
@@ -10,12 +11,47 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, TemplateView
 
+from django.views.decorators.http import require_GET
 from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm
 from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Order
 
 # nezapomenout přepnout na strarou stranku home !!!!!!!
 def home(request):
     return render(request, 'home.html')
+
+def search_view(request):
+    query = request.GET.get("q", "").strip()
+    results = []
+
+    if query:
+        results = Book.objects.filter(name__icontains=query)
+    return render(request, "eshop/search_results.html", {
+        "query": query,
+        "results": results
+    })
+
+
+# @require_GET
+# def autocomplete_search(request):
+#     query = request.GET.get("q", "").strip()
+#     data = []
+#     if query:
+#         qs = Book.objects.filter(name__icontains=query)[:6]
+#         for b in qs:
+#             data.append({"id": b.pk, "name": b.name})
+#     return JsonResponse({"results": data})
+
+@require_GET
+def autocomplete_search(request):
+    query = request.GET.get("q", "").strip()
+    results = []
+
+    if query:
+        results.extend(Book.objects.filter(name__icontains=query).values_list("name", flat=True)[:6])
+        # results.extend(Subcategory.objects.filter(name__icontains=query).values_list("name", flat=True)[:6])
+
+    return JsonResponse({"results": list(results)})
+
 
 class BookListView(ListView):
     model = Book
