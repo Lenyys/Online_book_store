@@ -17,7 +17,9 @@ from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Or
 
 
 def home(request):
-    return render(request, 'home.html')
+    books = Book.objects.all()
+    return render(request, 'home.html', {'books': books})
+
 
 
 class BookListView(ListView):
@@ -93,6 +95,40 @@ class BookDeleteView(DeleteView):
         context = super().get_context_data(**kwargs)
         context['back_url'] = self.request.GET.get('next','/')
         return context
+
+class FavoriteBooksListView(ListView):
+    model = Book
+    template_name = 'eshop/favorite_books.html'
+    context_object_name = 'favorite_books'
+
+    def get_queryset(self):
+        return self.request.user.favorite_books.all()
+
+class FavoriteBookView(View):
+    def post(self, request, book_id):
+        book = get_object_or_404(Book, id=book_id)
+        user = request.user
+
+        if user in book.favorite_book.all():
+            book.favorite_book.remove(user)
+        else:
+            book.favorite_book.add(user)
+
+        next_url = self.request.POST.get('next','/')
+        return redirect(next_url)
+
+    # def get(self, request, book_id):
+    #     book = get_object_or_404(Book, id=book_id)
+    #     user = request.user
+    #
+    #     if user in book.favorite_book.all():
+    #         book.favorite_book.remove(user)
+    #     else:
+    #         book.favorite_book.add(user)
+    #
+    #     next_url = self.request.GET.get('next', '/')
+    #     return redirect(next_url)
+
 
 
 class ImageCreateView(CreateView):

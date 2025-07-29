@@ -48,10 +48,16 @@ class Book(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='products_created')
     updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='products_updated')
-
+    favorite_book = models.ManyToManyField(User, blank=True, related_name='favorite_books')
+    discount = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False, default=0)
 
     class Meta:
         ordering = ['name']
+
+    def get_discount_price(self):
+        if self.discount:
+            return self.price * (1- self.discount / 100)
+        return self.price
 
     def __str__(self):
         return f"{self.name} ({self.price}Kč)"

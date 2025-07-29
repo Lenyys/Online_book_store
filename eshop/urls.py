@@ -5,7 +5,7 @@ from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdat
                          StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
                          CategoryCreateView, CategoryDetailView, UpdateCartView, RemoveFromCartView,
-                          OrderConfirmationView,  CreateOrderView)
+                         OrderConfirmationView, CreateOrderView, FavoriteBookView, FavoriteBooksListView)
 
 urlpatterns = [
     path('book_list/', BookListView.as_view(), name='book_list'),
@@ -43,5 +43,8 @@ urlpatterns = [
 
     path('create_order/', CreateOrderView.as_view(), name='create_order'),
     path('order_confirmation/<int:pk>/' ,OrderConfirmationView.as_view() , name='order_confirmation'),
+
+    path('book/favorite_book/<int:book_id>/', FavoriteBookView.as_view(), name='favorite_book'),
+    path('books/favorites/', FavoriteBooksListView.as_view(), name='user_favorite_books')
 
 ]
