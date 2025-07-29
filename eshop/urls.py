@@ -1,5 +1,5 @@
 from django.urls import path
-from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView, ImageCreateView,
+from eshop.views import (BookListView, EBookListView, AudioBookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView, ImageCreateView,
                          CategoryListView, CategoryUpdateView, CategoryDeleteView, StaffCategoryListView, StaffCategoryDetailView, StaffCategoryUpdateView, ImageDeleteView,
                          ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
                          StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
@@ -11,6 +11,8 @@ from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdat
 
 urlpatterns = [
     path('book_list/', BookListView.as_view(), name='book_list'),
+    path('ebooks/', EBookListView.as_view(), name='e_book_list'),
+    path('audiobooks/', AudioBookListView.as_view(), name='audio_book_list'),
     path('book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
 
 

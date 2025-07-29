@@ -41,6 +41,29 @@ class BookListView(ListView):
         return context
 
 
+class EBookListView(BookListView):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # Přebírá filtraci z BookListView a přidává filtr formátu
+        return queryset.filter(type='ebook').distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'E-knihy'  # volitelně přidej název sekce
+        return context
+
+
+class AudioBookListView(BookListView):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(type='audiobook').distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Audioknihy'
+        return context
+
+
 class BookDetailView(DetailView):
     model = Book
     template_name = 'eshop/book_detail.html'

@@ -2,6 +2,8 @@
        <nav class="navbar">
            <a href="{% url 'home' %}">Home</a>
            <a href="{% url 'book_list' %}">Knihy</a>
+           <a href="{% url 'e_book_list' %}">E-knihy</a>
+           <a href="{% url 'audio_book_list' %}">Audioknihy</a>
 
 
            <a href="#" id="book-list-link" data-auth="{% if user.is_authenticated %}true{% else %}false{% endif %}" data-url="{% url 'staff_book_list' %}">Book List</a>
