@@ -5,9 +5,15 @@ from mptt.admin import MPTTModelAdmin
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ['name', 'type', 'price', 'stock_quantity']
+    list_display = ('name', 'get_type_display', 'price', 'stock_quantity')
     list_filter = ['type', 'category']
     search_fields = ['name', 'isbn', 'ean']
+    fields = ('name', 'type', 'autor', 'isbn', 'ean', 'description', 'price', 'stock_quantity', 'category',
+              'created_by', 'updated_by')
+
+    def get_type_display(self, obj):
+        return obj.get_type_display()
+    get_type_display.short_description = 'Typ'
 
 
 @admin.register(Category)
