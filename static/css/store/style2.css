@@ -166,6 +166,7 @@ section{
 }
 
 
+
 /* kontejner kolem inputu + tlačítka */
 #search-wrapper {
   background: #fff;
@@ -210,7 +211,14 @@ section{
 /* nejprve wrapperu, aby jeho potomci s position:absolute
    počítali s jeho souřadnicemi */
 #search-wrapper {
-  position: relative;
+  position: relative;              /* pro absolutní pozici dropdownu */
+  background: #fff;
+  border-radius: .75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: .4rem;                  /* vnitřní odsazení */
+  width: 100%;                     /* zabere celé místo rodiče */
+  max-width: 600px;                /* nepřesáhne 600px */
+  margin: 0 auto;                  /* vystředění */
 }
 
 /* samotný seznam návrhů */

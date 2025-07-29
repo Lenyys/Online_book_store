@@ -30,28 +30,46 @@ def search_view(request):
         "results": results
     })
 
-
-# @require_GET
-# def autocomplete_search(request):
-#     query = request.GET.get("q", "").strip()
-#     data = []
-#     if query:
-#         qs = Book.objects.filter(name__icontains=query)[:6]
-#         for b in qs:
-#             data.append({"id": b.pk, "name": b.name})
-#     return JsonResponse({"results": data})
-
 @require_GET
 def autocomplete_search(request):
     query = request.GET.get("q", "").strip()
-    results = []
+    data = []
 
     if query:
-        results.extend(Book.objects.filter(name__icontains=query).values_list("name", flat=True)[:6])
-        # results.extend(Subcategory.objects.filter(name__icontains=query).values_list("name", flat=True)[:6])
+        # vezmeme maximálně 6 knih odpovídajících hledanému řetězci
+        qs = Book.objects.filter(name__icontains=query)[:6]
+        for book in qs:
+            data.append({
+                "id": book.pk,
+                "name": book.name,
+            })
 
-    return JsonResponse({"results": list(results)})
+    return JsonResponse({"results": data})
+#
+# @require_GET
+# def autocomplete_search(request):
+#     query = request.GET.get("q", "").strip()
+#     results = []
+#
+#     if query:
+#         results.extend(Book.objects.filter(name__icontains=query).values_list("name", flat=True)[:6])
+#         # results.extend(Subcategory.objects.filter(name__icontains=query).values_list("name", flat=True)[:6])
+#
+#     return JsonResponse({"results": list(results)})
 
+
+@require_GET
+def autocomplete_search(request):
+    q = request.GET.get("q", "").strip()
+    data = []
+    if q:
+        # vezmeme max. 6 knih
+        for b in Book.objects.filter(name__icontains=q)[:6]:
+            data.append({
+                "id": b.pk,
+                "name": b.name,
+            })
+    return JsonResponse({"results": data})
 
 class BookListView(ListView):
     model = Book

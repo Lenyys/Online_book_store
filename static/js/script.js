@@ -373,6 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 */
+/*
 document.addEventListener('DOMContentLoaded', () => {
   const wrapper    = document.getElementById('search-wrapper');
   const input      = document.getElementById('search-input');
@@ -421,6 +422,114 @@ document.addEventListener('DOMContentLoaded', () => {
             button.click();
           });
           suggestions.appendChild(li);
+        });
+      });
+  });
+});
+*//*
+document.addEventListener('DOMContentLoaded', () => {
+  const wrapper     = document.getElementById('search-wrapper');
+  const input       = document.getElementById('search-input');
+  const button      = document.getElementById('search-button');
+  const suggestions = document.getElementById('suggestions');
+ const searchUrl   = wrapper.dataset.searchUrl;          // např. "/eshop/search/"
+  const detailUrl   = wrapper.dataset.detailUrlTemplate;  // nově: "/eshop/book_detail/{id}/"
+  const autoUrl     = wrapper.dataset.autocompleteUrl;    // např. "/eshop/autocomplete-search/"
+ // URL pro detail, získaná s pomocí Django tagu:
+  const detailBase  = '{% url "book_detail" 0 %}'.replace(/0\/$/, '');
+
+  // klasické zadání do výsledků full‑textového vyhledávání
+  button.addEventListener('click', () => {
+    const q = input.value.trim();
+    if (q) window.location.href = `${wrapper.dataset.searchUrl}?q=${encodeURIComponent(q)}`;
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      button.click();
+    }
+  });
+
+ // autocomplete
+  input.addEventListener('input', () => {
+    const q = input.value.trim();
+    if (!q) {
+      suggestions.innerHTML = '';
+      return;
+    }
+    fetch(`${autoUrl}?q=${encodeURIComponent(q)}`)
+      .then(res => res.json())
+      .then(json => {
+        suggestions.innerHTML = '';
+        if (!json.results.length) {
+          suggestions.innerHTML = `
+            <li class="list-group-item disabled">Žádné výsledky</li>`;
+          return;
+        }
+        json.results.forEach(item => {
+          const li = document.createElement('li');
+          li.className = 'list-group-item list-group-item-action';
+          li.textContent = item.name;
+          // tady už nepřepisujeme input, ale rovnou jdeme na detail:
+          li.addEventListener('click', () => {
+            window.location.href = detailUrl.replace('{id}', item.id);
+          });
+          suggestions.appendChild(li);
+        });
+      });
+  });
+});*/
+document.addEventListener('DOMContentLoaded', () => {
+  const wrapper   = document.getElementById('search-wrapper');
+  const input     = document.getElementById('search-input');
+  const button    = document.getElementById('search-button');
+  const suggList  = document.getElementById('suggestions');
+
+  const searchUrl = wrapper.dataset.searchUrl;            // např. "/eshop/search/"
+  const autoUrl   = wrapper.dataset.autocompleteUrl;      // např. "/eshop/autocomplete-search/"
+  const detailTpl = wrapper.dataset.detailUrlTemplate;    // "/eshop/book_detail/0/"
+
+  // 1) full‑textové vyhledávání
+  button.addEventListener('click', () => {
+    const q = input.value.trim();
+    if (!q) return;
+    window.location.href = `${searchUrl}?q=${encodeURIComponent(q)}`;
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      button.click();
+    }
+  });
+
+  // 2) autocomplete
+  input.addEventListener('input', () => {
+    const q = input.value.trim();
+    if (!q) {
+      suggList.innerHTML = '';
+      return;
+    }
+
+    fetch(`${autoUrl}?q=${encodeURIComponent(q)}`)
+      .then(r => r.json())
+      .then(json => {
+        suggList.innerHTML = '';
+        if (!json.results.length) {
+          suggList.innerHTML = `<li class="list-group-item disabled">Žádné výsledky</li>`;
+          return;
+        }
+        json.results.forEach(item => {
+          const li = document.createElement('li');
+          li.className = 'list-group-item list-group-item-action';
+          li.textContent = item.name;
+          li.addEventListener('click', () => {
+            // nahradíme "0/" v šabloně za "<id>/"
+            const url = detailTpl.replace(/0\/$/, `${item.id}/`);
+            window.location.href = url;
+          });
+          suggList.appendChild(li);
         });
       });
   });

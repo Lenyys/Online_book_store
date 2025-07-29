@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.urls import path, include
 from accounts.views import custom_login_view, SignUpView,user_logout
-from eshop.views import home
+from eshop.views import home, BookDetailView, autocomplete_search, search_view
 
 # Vlastní view funkce
 from accounts.views import user_logout, SignUpView
@@ -26,6 +26,8 @@ urlpatterns = [
 
     # Eshop aplikace (napojení na další urls.py, pokud používáš)
     path('eshop/', include('eshop.urls')),
+
+    path('book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
 
     # Kategorie
     path('categories/', CategoryListView.as_view(), name='category-list'),
