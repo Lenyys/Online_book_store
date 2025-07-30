@@ -46,7 +46,7 @@ urlpatterns = [
     path('order_confirmation/<int:pk>/' ,OrderConfirmationView.as_view() , name='order_confirmation'),
 
     path('book/favorite_book/<int:book_id>/', FavoriteBookView.as_view(), name='favorite_book'),
-    path('books/favorites/', FavoriteBooksListView.as_view(), name='user_favorite_books')
+    path('books/favorites/', FavoriteBooksListView.as_view(), name='user_favorite_books'),
 
     path('autocomplete-search/', autocomplete_search, name="autocomplete_search"),
     path('search/',search_view ,name="search"),
