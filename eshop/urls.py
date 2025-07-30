@@ -3,11 +3,16 @@
 from django.urls import path
 from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView, ImageCreateView,
                          CategoryListView, CategoryUpdateView, CategoryDeleteView, ImageDeleteView,
+                         StaffCategoryDetailView, StaffCategoryUpdateView,
                          ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
                          StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
                          CategoryCreateView, CategoryDetailView, UpdateCartView, RemoveFromCartView, OrderDetailView,
                          CreateOrderWithFormView, OrderConfirmationView, OrderSentView, search_view, autocomplete_search)
+
+
+
+
 
 urlpatterns = [
     path('book_list/', BookListView.as_view(), name='book_list'),
@@ -41,7 +46,9 @@ urlpatterns = [
     path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
     path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
     path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
-
+    path('staff_category_detail/<int:pk>/', StaffCategoryDetailView.as_view(), name='staff_category_detail'),
+    path('staff_category_delete/<int:pk>/', CategoryDeleteView.as_view(), name='staff_category_delete'),
+    path('staff_category_edit/<int:pk>/', StaffCategoryUpdateView.as_view(), name='staff_category_edit'),
 
 
     path('cart/add/<int:pk>/', AddToCartView.as_view(), name='add_to_cart'),

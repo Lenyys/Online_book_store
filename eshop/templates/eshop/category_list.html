@@ -1,17 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Seznam kategorií</title>
-</head>
-<body>
-    <h1>Kategorie</h1>
-    <ul>
-        {% for category in categories %}
-            <li>{{ category.name }}</li>
-        {% empty %}
-            <li>Žádné kategorie nejsou k dispozici.</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="categories-page">
+  <h1 class="categories-title">Seznam kategorií</h1>
+
+  <div class="categories-grid">
+    {% for category in categories %}
+      <div class="category-card">
+        <div class="category-icon">
+          <i class="bi bi-folder2-open text-success"></i>
+        </div>
+        <h2 class="category-name">{{ category.name }}</h2>
+        <div class="category-actions">
+          <a href="{% url 'category-edit' category.pk %}" class="edit-btn" title="Upravit">✏️</a>
+          <a href="{% url 'category-delete' category.pk %}" class="delete-btn" title="Smazat">❌</a>
+          <a href="{% url 'category-detail' category.pk %}" class="detail-btn" title="Detail">🔍</a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="no-categories">Žádné kategorie k zobrazení.</p>
+    {% endfor %}
+  </div>
+
+  <div class="add-category-wrap">
+    <a class="btn btn-success add-category-btn" href="{% url 'category-create' %}">
+      Přidat novou kategorii
+    </a>
+  </div>
+</div>
+{% endblock %}

@@ -923,6 +923,13 @@ section{
     background-color: var(--dark-color);
 }
 
+.results_search{
+    font-size: 1.8rem;
+}
+
+.results_search ul{
+    margin-top: 0.5rem;
+}
 
 @media (max-width: 991px) {
     html {

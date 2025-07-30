@@ -1,7 +1,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.mail import  EmailMessage
+from django.core.mail import EmailMessage
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -70,7 +70,6 @@ def autocomplete_search(request):
                 "name": b.name,
             })
     return JsonResponse({"results": data})
-
 class BookListView(ListView):
     model = Book
     template_name = 'eshop/book_list.html'
@@ -329,6 +328,39 @@ class CategoryDetailView(DetailView):
     context_object_name = 'category'
 
 
+class StaffCategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+    template_name = 'eshop/staff/staff_category_list.html'
+    context_object_name = 'categories'
+
+
+class StaffCategoryDetailView(DetailView):
+    model = Category
+    template_name = 'eshop/staff/staff_category_detail.html'
+    context_object_name = 'category'
+
+
+class CategoryDeleteView(DeleteView):
+    model = Category
+    template_name = 'eshop/staff/staff_category_confirm_delete.html'  # ← upraveno
+    success_url = reverse_lazy('staff_category_list')  # ← možná bylo původně 'category-list'
+
+
+class StaffCategoryUpdateView(LoginRequiredMixin, UpdateView):
+    model = Category
+    template_name = 'eshop/staff/staff_category_form.html'
+    form_class = CategoryForm
+
+    def get_success_url(self):
+        return reverse('staff_category_detail', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next', reverse('staff_category_list'))
+        return context
+
+
+
 class CartDetailView(TemplateView):
     template_name = 'eshop/cart_detail.html'
 
@@ -511,3 +543,18 @@ class OrderConfirmationView(TemplateView):
         context['order'] = order
         return context
 
+
+from django.http import HttpResponseForbidden
+
+
+def delete_category_immediately(request, pk):
+    if request.method != 'GET':
+        return HttpResponseForbidden("Mazání je povoleno jen přes GET.")
+
+    category = get_object_or_404(Category, pk=pk)
+    category_name = category.name
+    category.delete()
+    messages.success(request, f'Kategorie „{category_name}“ byla úspěšně smazána.')
+
+    next_url = request.GET.get('next')
+    return redirect(next_url) if next_url else redirect('category-list')
