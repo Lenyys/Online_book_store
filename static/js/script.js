@@ -217,3 +217,57 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+
+// ##############################################################################
+document.addEventListener("DOMContentLoaded", function () {
+  const label = document.getElementById("id_search_label");
+  const input = document.getElementById("search-box");
+  const form = document.getElementById("search-form");
+
+  label.addEventListener("click", function () {
+    form.submit();
+  });
+  input.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+          event.preventDefault();
+          form.submit();
+      }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const input = document.getElementById("search-box");
+  const suggestions = document.getElementById("suggestions");
+
+  input.addEventListener("input", function () {
+    const query = input.value.trim();
+    if (query.length < 1) {
+      suggestions.innerHTML = "";
+      return;
+    }
+    fetch(`eshop/autocomplete-search/?q=${encodeURIComponent(query)}`)
+      .then(response => response.json())
+      .then(data => {
+        suggestions.innerHTML = "";
+        if (data.results.length === 0) {
+          const li = document.createElement("li");
+          li.textContent = "Žádné výsledky";
+          li.className = "list-group-item disabled";
+          suggestions.appendChild(li);
+          return;
+        }
+        data.results.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = item;
+          li.className = "list-group-item list-group-item-action";
+          li.addEventListener("click", () => {
+            input.value = item;
+            suggestions.innerHTML = "";
+          });
+          suggestions.appendChild(li);
+        });
+      });
+  });
+});

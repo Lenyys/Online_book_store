@@ -5,7 +5,8 @@ from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdat
                          StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
                          CategoryCreateView, CategoryDetailView, UpdateCartView, RemoveFromCartView,
-                         OrderConfirmationView, CreateOrderView, FavoriteBookView, FavoriteBooksListView)
+                         OrderConfirmationView, CreateOrderView, FavoriteBookView, FavoriteBooksListView,
+                         search_view, autocomplete_search)
 
 urlpatterns = [
     path('book_list/', BookListView.as_view(), name='book_list'),
@@ -46,5 +47,8 @@ urlpatterns = [
 
     path('book/favorite_book/<int:book_id>/', FavoriteBookView.as_view(), name='favorite_book'),
     path('books/favorites/', FavoriteBooksListView.as_view(), name='user_favorite_books')
+
+    path('autocomplete-search/', autocomplete_search, name="autocomplete_search"),
+    path('search/',search_view ,name="search"),
 
 ]
