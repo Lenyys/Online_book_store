@@ -3,14 +3,14 @@
 {% block title %}Smazat kategorii - administrace{% endblock %}
 
 {% block content %}
-<div class="row my-3">
-  <div class="col-12 text-center">
-    <h1 class="mb-4">Smazat kategorii</h1>
-    <p>Opravdu chcete smazat kategorii <strong>{{ object.name }}</strong>?</p>
     <form method="post">
+       <h1 class="form-title">Opravdu chcete smazat kategorii <strong>{{ object.name }}</strong>?</h1>
+
       {% csrf_token %}
+        <div class="form-buttons">
       <button type="submit" class="btn btn-danger">Smazat</button>
-      <a href="{% url 'staff_category_detail' object.pk %}" class="btn btn-secondary">Zrušit</a>
+      <a href="{% url 'staff_category_detail' object.pk %}" class="btn btn-secondary">Zpět</a>
+     </div>
     </form>
   </div>
 </div>

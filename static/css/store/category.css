@@ -1,0 +1,85 @@
+.categories-page {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+.categories-title {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+}
+.categories-title::after {
+  content: '';
+  display: block;
+  width: 60%;
+  height: 4px;
+  background: var(--green);
+  margin: 0.5rem auto 0;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.category-card {
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,0.05);
+  padding: 1.5rem 1rem;
+  transition: transform .2s ease, box-shadow .2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 1rem 1.5rem rgba(0,0,0,0.1);
+}
+
+.category-icon {
+  font-size: 4rem;
+  color: var(--green);
+  margin-bottom: 1rem;
+}
+.category-icon img {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.category-name {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: .75rem;
+  color: #222;
+}
+
+/* ========== Akční tlačítka ========== */
+.category-actions {
+  display: flex;
+  gap: .5rem;
+}
+.category-actions a {
+  font-size: 1.8rem;
+  text-decoration: none;
+  transition: color .2s ease;
+}
+.category-actions .edit-btn {
+  color: #f0ad4e;
+}
+.category-actions .edit-btn:hover {
+  color: #ec971f;
+}
+.category-actions .delete-btn {
+  color: #d9534f;
+}
+.category-actions .delete-btn:hover {
+  color: #c9302c;
+}

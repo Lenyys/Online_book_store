@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2 class="cart-title">Váš košík</h2>
 
 {% if items %}
   <div class="cart-card">
+    <h1 class="form-title">Váš košík</h1>
+
     <!-- Refresh ikona v rohu karty -->
     <button class="refresh-btn" title="Aktualizovat košík">
       <i class="fas fa-sync-alt"></i>
@@ -24,6 +25,7 @@
         <div class="col-3 text-sm-right">
           {{ item.product.price }} Kč
         </div>
+
         <div class="col-2">
           <input type="number"
                  name="quantity-{{ item.id }}"
@@ -31,9 +33,11 @@
                  min="1"
                  class="form-control form-control-sm"/>
         </div>
+
         <div class="col-1 text-center">
-          <a href="{% url 'remove_from_cart' item.id %}" class="remove-item" title="Odstranit položku">✖️</a>
+          <a href="{% url 'remove_from_cart' item.id %}" class="remove-item" title="Odstranit položku">❌ </a>
         </div>
+
       </div>
       {% endfor %}
 
@@ -43,19 +47,17 @@
         </div>
       </div>
 
-      <div class="row mt-3 justify-content-end">
-        <button type="submit" class="btn btn-sm btn-primary mr-2">Aktualizovat košík</button>
-      </div>
     </form>
 
-    <div class="row mt-4 justify-content-center">
-      <a href="{% url 'book_list' %}" class="btn btn-sm btn-secondary mr-2">
+     <div class="form-buttons">
+      <a href="{% url 'book_list' %}" class="btn btn-secondary">
         Pokračovat v nákupu
       </a>
-      <a href="{% url 'create_order' %}" class="btn btn-sm btn-success">
+      <a href="{% url 'create_order' %}" class="btn btn-success">
         Přejít na objednávku
       </a>
     </div>
+
   </div>
 {% else %}
   <p>Košík je prázdný.</p>

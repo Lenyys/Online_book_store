@@ -23,8 +23,10 @@
       <p class="book-price">{{ book.price }} Kč</p>
 
       {% if book.stock_quantity > 0 %}
+      <form action="{% url 'add_to_cart' book.pk %}" method="post" class="add-to-cart-form">
         {% csrf_token %}
-        <button type="submit" class="add-to-cart-btn">Přidat do košíku</button>
+        <button class="add-to-cart-btn" type="submit">Přidat do košíku</button>
+      </form>
       {% else %}
         <p class="out-of-stock">Produkt je vyprodán</p>
       {% endif %}

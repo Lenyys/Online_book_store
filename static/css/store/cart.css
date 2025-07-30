@@ -1,13 +1,7 @@
-/* Nadpis košíku */
-.cart-title {
-  font-size: 2rem;
-  margin: 2rem auto 1rem;
-  max-width: 600px;
-  position: relative;
-}
 
 /* Kontejner karty košíku */
 .cart-card {
+  font-size: 1.8rem;
   position: relative;
   max-width: 600px;
   margin: 0 auto 2rem;
@@ -97,4 +91,15 @@
 }
 .btn-success:hover {
   background: #219150;
+}
+
+/* zvětší velikost textu u řádku „Celková cena“ */
+.cart-total .col {
+  font-size: 1.8rem;    /* uprav dle potřeby, např. 2rem, 1.6rem… */
+}
+
+/* aby i tučný text v <strong> byl ve stejné velikosti */
+.cart-total .col strong {
+  font-size: inherit;
+  font-weight: bold;    /* popřípadě zvol jinou váhu */
 }

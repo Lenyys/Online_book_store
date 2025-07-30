@@ -550,6 +550,10 @@
     transition: background-color .3s;
 }
 
+.add-to-cart-form {
+  display: contents;
+}
+
 .add-to-cart-btn:hover {
   background-color: #219150;
 }
