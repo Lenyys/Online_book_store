@@ -1,20 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row my-3">
-    <div class="col-12 text-center">
-        <h4> Opravdu chcete odebrat autora {{ author.name }} {{ author.lastname }} z knihy: {{ book.name }}</h4>
-    </div>
-</div>
-<div class="row my-3">
-    <div class="col-12 text-center">
-        <form method="post"  >
+
+<div class="form-container">
+        <h1 class="form-title">Opravdu chcete odebrat autora {{ author.name }} {{ author.lastname }} z knihy: {{ book.name }}</h1>
+        <form method="post">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ next }}">
-            <button type="submit" class="btn btn-danger mr-3">Ano smazat</button>
-            <a href="{{ next }}" class="btn btn-success">Zpět na detail knihy</a>
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-danger mr-3">Ano smazat</button>
+                <a href="{{ next }}" class="btn btn-success">Zpět na detail knihy</a>
+            </div>
         </form>
-
-    </div>
 </div>
 {% endblock %}

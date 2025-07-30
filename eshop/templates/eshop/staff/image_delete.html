@@ -1,20 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row my-3">
-    <div class="col-12 text-center">
-        <h4> Opravdu chcete odstranit obrázek</h4>
-    </div>
-</div>
-<div class="row my-3">
-    <div class="col-12 text-center">
-        <form method="post" >
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ back_url }}">
-            <button type="submit" class="btn btn-danger mr-3">Ano smazat</button>
-            <a href="{{ back_url }}" class="btn btn-success">Zpět na detail knihy</a>
-        </form>
 
+<div class="form-container">
+     <h1 class="form-title">Opravdu chcete odstranit obrázek</h1>
+        <form method="post" class="styled-form">
+              <div class="form-row">
+                <span class="form-label">Název obrázku:</span>
+                <span class="form-value">{{ object.image }}</span>
+            </div>
+
+            {% csrf_token %}
+
+            <input type="hidden" name="next" value="{{ back_url }}">
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-danger mr-3">Ano smazat</button>
+                <a href="{{ back_url }}" class="btn btn-secondary">Zpět na detail knihy</a>
+           </div>
+        </form>
     </div>
 </div>
 {% endblock %}

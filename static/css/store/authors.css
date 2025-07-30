@@ -107,6 +107,18 @@
   padding: .75rem 2rem;
 }
 
+/* Ikona pro detail (lupička) */
+.author-actions .detail-btn {
+  font-size: 1.8rem;      /* stejné jako ostatní ikony */
+  color: var(--green);    /* nebo jakoukoli barvu chceš */
+  text-decoration: none;
+  transition: color .2s ease;
+}
+
+.author-actions .detail-btn:hover {
+  color: #1e7e34;         /* tmavší odstín zelené při hoveru */
+}
+
 
 .form-container {
     max-width: 600px;
@@ -122,6 +134,13 @@
     margin-bottom: 2rem;
     font-size: 2.5rem;
     color: #333;
+    /* Podtržení zelenou čárou */
+    text-decoration-line: underline;
+    text-decoration-color: var(--green);
+    /* tloušťka a odsazení podtržení */
+    text-decoration-thickness: 0.3rem;
+    text-underline-offset: 0.5rem;
+
 }
 
 .styled-form p {
@@ -171,8 +190,11 @@
     color: black;
 }
 
-
-
+.form-buttons .btn-danger {
+  background-color: #e74c3c;    /* tmavší červená */
+  border-color:    #c0392b;
+  color: white;
+}
 
 
 form {
@@ -251,7 +273,7 @@ form a.btn:hover {
 }
 
 .form-value {
-      font-size: 1.6rem;
+    font-size: 1.6rem;
     flex: 1;
     text-align: left;
     color: #000;
@@ -264,3 +286,68 @@ form a.btn:hover {
     font-weight: bold;
     color: #333;
 }
+
+
+
+/* Zvětšené popisky (label) */
+.styled-form label,
+.form-label {
+  font-size: 1.8rem;       /* místo 1.5rem nyní 1.8rem */
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #222;
+}
+
+/* Zvětšené vstupní pole a textarea */
+.styled-form input[type="text"],
+.styled-form input[type="email"],
+.styled-form input[type="date"],
+.styled-form input[type="password"],
+.styled-form textarea,
+.form-box input[type="text"],
+.form-box input[type="email"],
+.form-box input[type="date"],
+.form-box input[type="password"],
+.form-box textarea {
+  font-size: 1.6rem;       /* místo 1.5rem nyní 1.6rem */
+  padding: 1rem 1.2rem;    /* mírně zvětšené vnitřní odsazení */
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+}
+
+/* Pokud používáte .form-row/.form-value/.form-label */
+.form-row .form-label {
+  font-size: 1.8rem;
+}
+.form-row .form-value {
+  font-size: 1.6rem;
+}
+
+
+/* Sekce s detaily autora */
+/* Každý řádek detailů jako flex kontejner */
+.info > div {
+  display: flex;
+  align-items: center;       /* vertikální vyrovnání na střed */
+  margin-bottom: 1.5rem;     /* mezera mezi řádky */
+}
+
+/* Popisek (label) dostane pevnou šířku a tučné písmo */
+.info h4,
+.info h5 {
+  flex: 0 0 180px;           /* pevná šířka 180px */
+  margin: 0;                 /* zrušíme výchozí margin */
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Hodnota (p) zabírá zbytek prostoru */
+.info p {
+  flex: 1;                   /* roztáhne se na zbytek řádku */
+  margin: 0;                 /* zrušíme výchozí margin */
+  font-size: 1.5rem;
+  color: #555;
+  line-height: 1.4;
+}
+

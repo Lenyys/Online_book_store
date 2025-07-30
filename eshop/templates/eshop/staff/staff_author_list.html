@@ -7,7 +7,6 @@
   <div class="authors-grid">
     {% for author in authors %}
       <div class="author-card">
-        <!-- Pokud máš profilovou fotku, dej sem <img src="{{ author.photo.url }}"> -->
         <div class="author-avatar">
           <i class="bi bi-person-circle"></i>
         </div>
@@ -15,6 +14,7 @@
         <div class="author-actions">
           <a href="{% url 'author_update' author.id %}?next={{ request.path }}" class="edit-btn" title="Upravit">✏️</a>
           <a href="{% url 'author_delete' author.id %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>
+          <a href="{% url 'staff_author_detail' author.id %}?next={{ request.path }}" class="detail-btn" title="Detail autora"><i class="bi bi-search"></i></a>
         </div>
       </div>
     {% empty %}

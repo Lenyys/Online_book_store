@@ -1,27 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="book-list-container">
-    <div class="book-list-header">
-        <h1>📚 Seznam knih</h1>
-        <a href="{% url 'book_create' %}" class="btn btn-add">+ Přidat knihu</a>
-    </div>
+<div class="authors-page">  <!-- použijeme stejný wrapper jako u autorů -->
+  <h1 class="authors-title">Seznam Knih</h1>
 
-    {% if books %}
-        <div class="book-grid">
-            {% for book in books %}
-                <div class="book-card">
-                    <div class="book-title">{{ book.name }}</div>
-                    <div class="book-actions">
-                        <a href="{% url 'book_update' book.id %}?next={{ request.path }}" class="edit-btn" title="Upravit">✏️</a>
-                        <a href="{% url 'book_delete' book.id %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>
-                        <a href="{% url 'staff_book_detail' book.id %}" class="detail-btn" title="Detail">🔍</a>
-                    </div>
-                </div>
-            {% endfor %}
+  <div class="authors-grid"> <!-- znovu použijeme authors-grid -->
+    {% for book in books %}
+      <div class="author-card"> <!-- použijeme stejné stylování jako autor -->
+        <div class="author-avatar">
+          📘
         </div>
-    {% else %}
-        <p class="no-books">Žádné knihy v databázi.</p>
-    {% endif %}
+        <h2 class="author-name">{{ book.name }}</h2>
+        <div class="author-actions">
+          <a href="{% url 'book_update' book.id %}?next={{ request.path }}" class="edit-btn" title="Upravit">✏️</a>
+          <a href="{% url 'book_delete' book.id %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>
+          <a href="{% url 'staff_book_detail' book.id %}?next={{ request.path }}" class="detail-btn" title="Detail knihy">
+            <i class="bi bi-search"></i>
+          </a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="no-authors">Žádné knihy k zobrazení.</p>
+    {% endfor %}
+  </div>
+
+  <div class="add-author-wrap">
+    <a class="btn btn-success add-author-btn" href="{% url 'book_create' %}">
+      Přidat knihu
+    </a>
+  </div>
 </div>
 {% endblock %}

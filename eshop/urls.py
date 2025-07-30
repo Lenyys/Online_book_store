@@ -1,6 +1,9 @@
+
+
 from django.urls import path
 from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView, ImageCreateView,
                          CategoryListView, CategoryUpdateView, CategoryDeleteView, ImageDeleteView,
+                         StaffCategoryDetailView, StaffCategoryUpdateView,
                          ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
                          StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
@@ -11,6 +14,8 @@ from eshop.views import (BookListView, BookDetailView, BookCreateView, BookUpdat
 urlpatterns = [
     path('book_list/', BookListView.as_view(), name='book_list'),
     path('book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
+
+
 
     path('staff_book_list/', StaffBookListView.as_view(), name='staff_book_list'),
     path('staff_book_detail/<int:pk>/', StaffBookDetailView.as_view(), name='staff_book_detail'),
@@ -31,11 +36,17 @@ urlpatterns = [
     path('image_delete/<int:pk>/', ImageDeleteView.as_view(), name='image_delete'),
     path('book/<int:book_id>/image_update/<int:pk>/', ImageUpdateView.as_view(), name='image_update'),
 
+
+
     path('categories/', CategoryListView.as_view(), name='category-list'),
     path('categories/create/', CategoryCreateView.as_view(), name='category-create'),
     path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
     path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
     path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
+    path('staff_category_detail/<int:pk>/', StaffCategoryDetailView.as_view(), name='staff_category_detail'),
+    path('staff_category_delete/<int:pk>/', CategoryDeleteView.as_view(), name='staff_category_delete'),
+    path('staff_category_edit/<int:pk>/', StaffCategoryUpdateView.as_view(), name='staff_category_edit'),
+
 
     path('cart/add/<int:pk>/', AddToCartView.as_view(), name='add_to_cart'),
     path('cart_detail/', CartDetailView.as_view(), name='cart_detail'),

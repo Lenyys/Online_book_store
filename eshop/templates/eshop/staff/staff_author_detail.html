@@ -1,29 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Detail autora</h1>
-<div>
-    <a class="btn btn-success" href="{% url 'author_update' author.id %}?next={{ request.path }}">Upravit autora</a>
-    <a class="btn btn-danger" href="{% url 'author_delete' author.id %}?next={{ request.path }}">Smazat autora</a>
-    <a class="btn btn-success" href="{% url 'staff_author_list'%}">Zpět na seznam autorů</a>
-</div>
-<div class="mt-3 pt-3 border-top">
-    <div>
-        <h4>Jméno autora: </h4>
-        <p>{{ author.name }}</p>
-    </div>
-    <div>
-        <h4>Příjmení autora: </h4>
-        <p>{{ author.lastname }}</p>
-    </div>
-    <div>
-        <h5>Datum narození:</h5>
-        {% if author.date_of_birth %}
-            <p>{{ author.date_of_birth }}</p>
-        {% else %}
-            Nezadáno
-        {% endif %}
-    </div>
-</div>
+<div class="form-container">
+  <h1 class="form-title">Detail autora</h1>
 
+  <div class="info">
+    <div>
+      <h4>Jméno autora:</h4>
+      <p>{{ author.name }}</p>
+    </div>
+    <div>
+      <h4>Příjmení autora:</h4>
+      <p>{{ author.lastname }}</p>
+    </div>
+    <div>
+      <h5>Datum narození:</h5>
+      {% if author.date_of_birth %}
+        <p>{{ author.date_of_birth }}</p>
+      {% else %}
+        <p>Nezadáno</p>
+      {% endif %}
+    </div>
+  </div>
+
+    <div class="form-buttons">
+        <a class="btn btn-success" href="{% url 'author_update' author.id %}?next={{ request.path }}">Upravit </a>
+        <a class="btn btn-danger"  href="{% url 'author_delete' author.id %}?next={{ request.path }}">Smazat </a>
+        <a class="btn btn-secondary" href="{% url 'staff_author_list' %}">Zpět na seznam</a>
+    </div>
+
+</div>
 {% endblock %}

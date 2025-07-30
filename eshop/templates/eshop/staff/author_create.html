@@ -7,10 +7,12 @@
     <form method="post" class="styled-form">
         {% csrf_token %}
         {{ form.as_p }}
+
         <div class="form-buttons">
             <button type="submit" class="btn btn-success">Uložit</button>
             <a href="{% url 'staff_author_list' %}" class="btn btn-secondary">Zpět</a>
         </div>
+
     </form>
 </div>
 {% endblock %}

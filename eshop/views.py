@@ -1,7 +1,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.mail import  EmailMessage
+from django.core.mail import EmailMessage
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -34,18 +34,34 @@ def search_view(request):
         "results": results
     })
 
-
 @require_GET
 def autocomplete_search(request):
     query = request.GET.get("q", "").strip()
-    results = []
+    data = []
 
     if query:
-        results.extend(Book.objects.filter(name__icontains=query).values_list("name", flat=True)[:6])
-        # results.extend(Subcategory.objects.filter(name__icontains=query).values_list("name", flat=True)[:6])
+        # vezmeme maximálně 6 knih odpovídajících hledanému řetězci
+        qs = Book.objects.filter(name__icontains=query)[:6]
+        for book in qs:
+            data.append({
+                "id": book.pk,
+                "name": book.name,
+            })
 
-    return JsonResponse({"results": list(results)})
+    return JsonResponse({"results": data})
 
+# @require_GET
+# def autocomplete_search(request):
+#     q = request.GET.get("q", "").strip()
+#     data = []
+#     if q:
+#         # vezmeme max. 6 knih
+#         for b in Book.objects.filter(name__icontains=q)[:6]:
+#             data.append({
+#                 "id": b.pk,
+#                 "name": b.name,
+#             })
+#     return JsonResponse({"results": data})
 
 class BookListView(ListView):
     model = Book
@@ -115,6 +131,7 @@ class BookDeleteView(DeleteView):
     model = Book
     template_name = 'eshop/staff/book_delete.html'
     success_url = reverse_lazy('staff_book_list')
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -339,6 +356,38 @@ class CategoryDetailView(DetailView):
     context_object_name = 'category'
 
 
+class StaffCategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+    template_name = 'eshop/staff/staff_category_list.html'
+    context_object_name = 'categories'
+
+
+class StaffCategoryDetailView(DetailView):
+    model = Category
+    template_name = 'eshop/staff/staff_category_detail.html'
+    context_object_name = 'category'
+
+
+class CategoryDeleteView(DeleteView):
+    model = Category
+    template_name = 'eshop/staff/staff_category_confirm_delete.html'  # ← upraveno
+    success_url = reverse_lazy('staff_category_list')  # ← možná bylo původně 'category-list'
+
+
+class StaffCategoryUpdateView(LoginRequiredMixin, UpdateView):
+    model = Category
+    template_name = 'eshop/staff/staff_category_form.html'
+    form_class = CategoryForm
+
+    def get_success_url(self):
+        return reverse('staff_category_detail', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next', reverse('staff_category_list'))
+        return context
+
+
 @method_decorator(never_cache, name='dispatch')
 class CartDetailView(TemplateView):
     template_name = 'eshop/cart_detail.html'
@@ -521,3 +570,17 @@ class OrderConfirmationView(TemplateView):
         return context
 
 
+from django.http import HttpResponseForbidden
+
+
+def delete_category_immediately(request, pk):
+    if request.method != 'GET':
+        return HttpResponseForbidden("Mazání je povoleno jen přes GET.")
+
+    category = get_object_or_404(Category, pk=pk)
+    category_name = category.name
+    category.delete()
+    messages.success(request, f'Kategorie „{category_name}“ byla úspěšně smazána.')
+
+    next_url = request.GET.get('next')
+    return redirect(next_url) if next_url else redirect('category-list')
