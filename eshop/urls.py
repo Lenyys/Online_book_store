@@ -1,15 +1,16 @@
 
 
 from django.urls import path
-from eshop.views import (BookListView,EBookListView, AudioBookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView, ImageCreateView,
+from eshop.views import (BookListView, EBookListView, AudioBookListView, BookDetailView, BookCreateView, BookUpdateView,
+                         BookDeleteView, ImageCreateView,
                          CategoryListView, CategoryUpdateView, CategoryDeleteView, ImageDeleteView,
-                         StaffCategoryDetailView, StaffCategoryUpdateView,  StaffCategoryListView,
+                         StaffCategoryDetailView, StaffCategoryUpdateView, StaffCategoryListView,
                          ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
                          StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
                          CategoryCreateView, CategoryDetailView, UpdateCartView, RemoveFromCartView,
                          OrderConfirmationView, CreateOrderView, FavoriteBookView, FavoriteBooksListView,
-                         search_view, autocomplete_search)
+                         search_view, autocomplete_search, FavoriteBookRemoveFromFavoritesList)
 
 
 
@@ -66,6 +67,7 @@ urlpatterns = [
 
     path('book/favorite_book/<int:book_id>/', FavoriteBookView.as_view(), name='favorite_book'),
     path('books/favorites/', FavoriteBooksListView.as_view(), name='user_favorite_books'),
+    path('book/favorite_remove/<int:book_id>/', FavoriteBookRemoveFromFavoritesList.as_view(), name='favorite_remove'),
 
     path('autocomplete-search/', autocomplete_search, name="autocomplete_search"),
     path('search/',search_view ,name="search"),

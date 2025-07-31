@@ -5,6 +5,7 @@
         {% for book in favorite_books %}
             <div>
                 {{ book.name }}
+                <a href="{% url 'favorite_remove' book.id %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>
             </div>
         {% empty %}
             Nemáte žádné oblíbené knihy

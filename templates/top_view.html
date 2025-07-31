@@ -27,7 +27,9 @@
 
     <div class="icons">
         <div id="search-btn" class="fas fa-search"></div>
+        {% if user.is_authenticated %}
         <a href="{% url 'user_favorite_books' %}" class="fas fa-heart"></a>
+        {% endif %}
         <a href="{% url 'cart_detail' %}" class="fas fa-shopping-cart"></a>
             <div id="login-btn-wrapper">
                    <div id="login-btn"

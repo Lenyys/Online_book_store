@@ -12,9 +12,15 @@
         </div>
         <h2 class="author-name">{{ author.name }} {{ author.lastname }}</h2>
         <div class="author-actions">
+          {% if perms.eshop.change_autor %}
           <a href="{% url 'author_update' author.id %}?next={{ request.path }}" class="edit-btn" title="Upravit">✏️</a>
+          {% endif %}
+          {% if perms.eshop.delete_autor %}
           <a href="{% url 'author_delete' author.id %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>
+          {% endif %}
+          {% if user.is_authenticated and user.is_superuser or user.is_staff %}
           <a href="{% url 'staff_author_detail' author.id %}?next={{ request.path }}" class="detail-btn" title="Detail autora"><i class="bi bi-search"></i></a>
+          {% endif %}
         </div>
       </div>
     {% empty %}
@@ -23,9 +29,11 @@
   </div>
 
   <div class="add-author-wrap">
+    {% if perms.eshop.add_autor %}
     <a class="btn btn-success add-author-btn" href="{% url 'author_create' %}">
       Přidat autora
     </a>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

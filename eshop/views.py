@@ -1,7 +1,8 @@
 from datetime import timedelta
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.core.mail import EmailMessage
 from django.db import transaction
 from django.http import JsonResponse
@@ -95,6 +96,7 @@ class BookListView(ListView):
         #     context['selected_category'] = get_object_or_404(Category, id=category_id)
         return context
 
+
 class EBookListView(ListView):
     model = Book
     template_name = 'eshop/book_list.html'
@@ -137,35 +139,53 @@ class AudioBookListView(ListView):
         context['categories'] = Category.objects.all()
         return context
 
+
 class BookDetailView(DetailView):
     model = Book
     template_name = 'eshop/book_detail.html'
     context_object_name = 'book'
 
 
-class StaffBookListView(LoginRequiredMixin, ListView):
+class StaffBookListView(UserPassesTestMixin, ListView):
     model = Book
     template_name = 'eshop/staff/staff_book_list.html'
     context_object_name = 'books'
 
+    def test_func(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return False
+        if user.is_superuser or user.is_staff:
+            return True
+        raise PermissionDenied   #403 chyba
 
-class StaffBookDetailView(DetailView):
+
+class StaffBookDetailView(UserPassesTestMixin, DetailView):
     model = Book
     template_name = 'eshop/staff/staff_book_detail.html'
     context_object_name = 'book'
 
+    def test_func(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return False
+        if user.is_superuser or user.is_staff:
+            return True
+        raise PermissionDenied   #403 chyba
 
-class BookCreateView(CreateView):
+class BookCreateView(PermissionRequiredMixin, CreateView):
     model = Book
     template_name = 'eshop/staff/book_create.html'
     form_class = BookForm
     success_url = reverse_lazy('staff_book_list')
+    permission_required = 'eshop.add_book'
 
 
-class BookUpdateView(UpdateView):
+class BookUpdateView(PermissionRequiredMixin, UpdateView):
     model = Book
     template_name = 'eshop/staff/book_update.html'
     form_class = BookForm
+    permission_required = 'eshop.change_book'
 
     def get_success_url(self):
         next_url = self.request.GET.get('next') or self.request.POST.get('next')
@@ -177,18 +197,18 @@ class BookUpdateView(UpdateView):
         return context
 
 
-class BookDeleteView(DeleteView):
+class BookDeleteView(PermissionRequiredMixin, DeleteView):
     model = Book
     template_name = 'eshop/staff/book_delete.html'
     success_url = reverse_lazy('staff_book_list')
-
+    permission_required = 'eshop.delete_book'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['back_url'] = self.request.GET.get('next','/')
         return context
 
-class FavoriteBooksListView(ListView):
+class FavoriteBooksListView(LoginRequiredMixin, ListView):
     model = Book
     template_name = 'eshop/favorite_books.html'
     context_object_name = 'favorite_books'
@@ -196,7 +216,27 @@ class FavoriteBooksListView(ListView):
     def get_queryset(self):
         return self.request.user.favorite_books.all()
 
-class FavoriteBookView(View):
+class FavoriteBookRemoveFromFavoritesList(LoginRequiredMixin, View):
+    template_name = 'eshop/remove_favorite.html'
+
+    def get(self, request,book_id):
+        book = get_object_or_404(Book, id=book_id)
+        user = request.user
+        return render(request, self.template_name, {
+            'book': book,
+            # 'next': request.GET.get('next', reverse('user_favorite_books')),
+        })
+
+    def post(self, request, book_id):
+        book = get_object_or_404(Book, id=book_id)
+        user = request.user
+        if user in book.favorite_book.all():
+                book.favorite_book.remove(user)
+        # next_url = request.POST.get('next') or reverse('user_favorite_books', kwargs={'pk': self.book.pk})
+        # return redirect(next_url)
+        return redirect(reverse('user_favorite_books'))
+
+class FavoriteBookView(LoginRequiredMixin, View):
     def post(self, request, book_id):
         book = get_object_or_404(Book, id=book_id)
         user = request.user
@@ -223,10 +263,11 @@ class FavoriteBookView(View):
 
 
 
-class ImageCreateView(CreateView):
+class ImageCreateView(PermissionRequiredMixin, CreateView):
     model = Image
     template_name = 'eshop/staff/image_create.html'
     form_class = ImageForm
+    permission_required = 'eshop.add_image'
 
     def dispatch(self, request, *args, **kwargs):
         self.book = get_object_or_404(Book, pk=kwargs.get('pk'))
@@ -245,10 +286,11 @@ class ImageCreateView(CreateView):
         return context
 
 
-class ImageUpdateView(UpdateView):
+class ImageUpdateView(PermissionRequiredMixin, UpdateView):
     model = Image
     template_name = 'eshop/staff/image_update.html'
     form_class = ImageForm
+    permission_required = 'eshop.change_image'
 
     def dispatch(self, request, *args, **kwargs):
         self.book = get_object_or_404(Book, pk=kwargs.get('book_id'))
@@ -268,9 +310,10 @@ class ImageUpdateView(UpdateView):
         return context
 
 
-class ImageDeleteView(DeleteView):
+class ImageDeleteView(PermissionRequiredMixin, DeleteView):
     model = Image
     template_name = 'eshop/staff/image_delete.html'
+    permission_required = 'eshop.delete_image'
 
     def get_success_url(self):
         next_url = self.request.GET.get('next') or self.request.POST.get('next')
@@ -282,9 +325,10 @@ class ImageDeleteView(DeleteView):
         return context
 
 
-class AddOrCreateAuthorView(FormView):
+class AddOrCreateAuthorView(PermissionRequiredMixin, FormView):
     template_name = 'eshop/staff/add_or_create_author.html'
     form_class = AddOrCreateAuthorForm
+    permission_required = ['eshop.add_autor', 'eshop.change_book']
 
     def dispatch(self, request, *args, **kwargs):
         self.book = get_object_or_404(Book, pk=kwargs.get('pk'))
@@ -307,23 +351,32 @@ class AddOrCreateAuthorView(FormView):
         return context
 
 
-class AuthorCreateView(CreateView):
+class AuthorCreateView(PermissionRequiredMixin, CreateView):
     model = Autor
     template_name = 'eshop/staff/author_create.html'
     form_class = AuthorForm
     success_url = reverse_lazy('staff_author_list')
+    permission_required = 'eshop.add_autor'
 
 
-class StaffAuthorDetailView(DetailView):
+class StaffAuthorDetailView(UserPassesTestMixin, DetailView):
     model = Autor
     template_name = 'eshop/staff/staff_author_detail.html'
     context_object_name = 'author'
 
+    def test_func(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return False
+        if user.is_superuser or user.is_staff:
+            return True
+        raise PermissionDenied
 
-class AuthorUpdateView(UpdateView):
+class AuthorUpdateView(PermissionRequiredMixin, UpdateView):
     model = Autor
     template_name = 'eshop/staff/author_update.html'
     form_class = AuthorForm
+    permission_required = 'eshop.change_autor'
 
     def get_success_url(self):
         next_url = self.request.GET.get('next') or self.request.POST.get('next')
@@ -335,16 +388,25 @@ class AuthorUpdateView(UpdateView):
         return context
 
 
-class StaffAuthorListView(ListView):
+class StaffAuthorListView(UserPassesTestMixin, ListView):
     model = Autor
     template_name = 'eshop/staff/staff_author_list.html'
     context_object_name = 'authors'
 
+    def test_func(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return False
+        if user.is_superuser or user.is_staff:
+            return True
+        raise PermissionDenied
 
-class AuthorDeleteView(DeleteView):
+
+class AuthorDeleteView(PermissionRequiredMixin, DeleteView):
     model = Autor
     template_name = 'eshop/staff/author_delete.html'
     success_url = reverse_lazy('staff_author_list')
+    permission_required = 'eshop.delete_autor'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -352,8 +414,9 @@ class AuthorDeleteView(DeleteView):
         return context
 
 
-class RemoveAuthorFromBook(View):
+class RemoveAuthorFromBook(PermissionRequiredMixin, View):
     template_name = 'eshop/staff/remove_author_from_book.html'
+    permission_required = 'eshop.change_book'
 
     def dispatch(self, request, *args, **kwargs):
         self.book = get_object_or_404(Book, pk=kwargs['book_id'])

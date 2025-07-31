@@ -24,9 +24,15 @@
   </div>
 
     <div class="form-buttons">
+      {% if perms.eshop.change_autor %}
         <a class="btn btn-success" href="{% url 'author_update' author.id %}?next={{ request.path }}">Upravit </a>
+      {% endif %}
+      {% if perms.eshop.delete_autor %}
         <a class="btn btn-danger"  href="{% url 'author_delete' author.id %}?next={{ request.path }}">Smazat </a>
-        <a class="btn btn-secondary" href="{% url 'staff_author_list' %}">Zpět na seznam</a>
+      {% endif %}
+      {% if user.is_authenticated and user.is_superuser or user.is_staff %}
+      <a class="btn btn-secondary" href="{% url 'staff_author_list' %}">Zpět na seznam</a>
+      {% endif %}
     </div>
 
 </div>

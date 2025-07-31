@@ -5,9 +5,15 @@
     <div class="book-detail-header">
         <h1>📘 Detail knihy</h1>
         <div class="book-actions">
+            {% if perms.eshop.change_book %}
             <a class="btn btn-edit" href="{% url 'book_update' book.id %}?next={{ request.path }}">Upravit</a>
+            {% endif %}
+            {% if perms.eshop.delete_book %}
             <a class="btn btn-delete" href="{% url 'book_delete' book.id %}?next={{ request.path }}">Smazat</a>
+            {% endif %}
+            {% if user.is_authenticated and user.is_superuser or user.is_staff %}
             <a class="btn btn-back" href="{% url 'staff_book_list' %}">Zpět</a>
+            {% endif %}
         </div>
     </div>
 
@@ -22,13 +28,19 @@
 
     <div class="book-authors">
         <h3>Autoři knihy
+            {% if perms.eshop.add_autor and perms.eshop.change_book %}
             <a class="btn btn-small" href="{% url 'add_or_create_author' book.id %}">+ Autor</a>
+            {% endif %}
         </h3>
         {% for author in book.autor.all %}
         <div class="author-item">
             {{ author.name }} {{ author.lastname }}
+            {% if perms.eshop.change_book %}
             <a href="{% url 'remove_author' book.id author.id %}?next={{ request.path }}">Odebrat ❌</a>
+            {% endif %}
+            {% if perms.eshop.change_autor %}
             <a href="{% url 'author_update' author.id %}?next={{ request.path }}">Upravit ✏️</a>
+            {% endif %}
         </div>
         {% empty %}
             <p>Žádný autor u této knihy</p>
@@ -46,15 +58,21 @@
 
     <div class="book-images">
         <h3>Obrázky
+            {% if perms.eshop.add_image %}
             <a class="btn btn-small" href="{% url 'add_image' book.id %}">+ Obrázek</a>
+            {% endif %}
         </h3>
         <div class="image-gallery">
         {% for image in book.images.all %}
             <div class="image-card">
                 <img src="{{ image.image.url }}" alt="" class="book-image">
                 <div>
+                    {% if perms.eshop.delete_image %}
                     <a class="btn btn-small" href="{% url 'image_delete' image.id %}?next={{ request.path }}">Smazat ❌</a>
+                    {% endif %}
+                    {% if perms.eshop.change_image %}
                     <a class="btn btn-small" href="{% url 'image_update' book.id image.id %}?next={{ request.path }}">Upravit ✏️</a>
+                    {% endif %}
                 </div>
             </div>
         {% empty %}
