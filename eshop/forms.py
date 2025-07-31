@@ -10,10 +10,11 @@ from eshop.models import Book, Category, Image, Autor
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['name','autor','price', 'description', 'stock_quantity',
+        fields = ['name', 'type', 'autor','price', 'description', 'stock_quantity',
             'category', 'isbn', 'ean']
         labels = {
             'name': 'Název knihy',
+            'type': 'Typ knihy',
             'autor': 'Autor',
             'price': 'Cena',
             'description': 'Popis',

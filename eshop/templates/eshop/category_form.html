@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}Úprava kategorie{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h1 class="form-title">
+    {% if form.instance.pk %}Upravit kategorii{% else %}Přidat novou kategorii{% endif %}
+  </h1>
+
+  <form method="post" class="styled-form">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    
+    {% for field in form %}
+      <div class="form-row">
+        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        <div class="form-value">
+          {{ field }}
+          {% if field.errors %}
+            <div class="error" style="color: red;">{{ field.errors|striptags }}</div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+
+    <div class="form-buttons">
+      <button type="submit" class="btn btn-success">Uložit</button>
+      <a href="{{ request.GET.next|default:'/' }}" class="btn btn-secondary">Zpět</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

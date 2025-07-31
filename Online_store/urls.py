@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.urls import path, include
-from accounts.views import custom_login_view, SignUpView,user_logout
+#from accounts.views import custom_login_view, SignUpView,user_logout
 from eshop.views import home
 
 # Vlastní view funkce

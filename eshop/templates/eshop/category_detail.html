@@ -1,16 +1,28 @@
-<!-- eshop/templates/eshop/category_detail.html -->
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <title>Kategorie: {{ category.name }}</title>
-</head>
-<body>
-    <h1>{{ category.name }}</h1>
+{% extends 'base.html' %}
 
+{% block content %}
+<div class="row my-3">
+  <div class="col-12 text-center">
+    <h1 class="mb-4">Detail kategorie</h1>
+  </div>
+</div>
 
-    <a href="{% url 'category-edit' category.pk %}">Upravit kategorii</a><br>
-    <a href="{% url 'category-delete' category.pk %}">Smazat kategorii</a><br>
-    <a href="{% url 'category-list' %}">Zpět na seznam</a>
-</body>
-</html>
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card shadow-sm p-4">
+      <h3 class="card-title text-center mb-3">{{ category.name }}</h3>
+
+      <div class="text-center mt-4">
+        <a href="{% url 'category-edit' category.pk %}" class="btn btn-warning me-2">Upravit</a>
+        <a href="{% url 'category-delete' category.pk %}" class="btn btn-danger">Smazat</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-12 text-center">
+    <a href="{% url 'category-list' %}" class="btn btn-secondary">Zpět na seznam kategorií</a>
+  </div>
+</div>
+{% endblock %}
