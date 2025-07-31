@@ -1,3 +1,4 @@
+from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -5,6 +6,7 @@ from django.core.mail import EmailMessage
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 
@@ -20,7 +22,12 @@ from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Or
 
 def home(request):
     books = Book.objects.all()
-    return render(request, 'home.html', {'books': books})
+    time_delta = timezone.now() - timedelta(days=30)
+    new_books = books.filter(created_at__gte=time_delta)
+    return render(request, 'home.html', {
+        'books': books,
+        'new_books': new_books,
+    })
 
 
 def search_view(request):
