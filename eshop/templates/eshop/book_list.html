@@ -2,63 +2,69 @@
 {% load static %}
 
 {% block head %}
-  <link rel="stylesheet" href="{% static 'css/book_list.css' %}">
+<link rel="stylesheet" href="{% static 'css/book_list.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="container py-4">
 
-  <!-- filtrací kategorie -->
-  <div class="d-flex mb-4 justify-content-center">
-    <div class="dropdown">
-      <button class="btn btn-success dropdown-toggle"
-              type="button" id="catDropdown"
-              data-bs-toggle="dropdown" aria-expanded="false">
-        Kategorie
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="catDropdown">
-        {% for category in categories %}
-          <li>
-            <a class="dropdown-item"
-               href="{% url 'book_list' %}?category={{ category.id }}">
-              {{ category.name }}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
-
-  <!-- samotné karty knih -->
-  <div class="row g-4">
-    {% for book in books %}
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-        <div class="card book-card h-100">
-          <div class="card-image-wrapper">
-            <img src="{{ book.images.all.0.image.url }}"
-                 alt="{{ book.name }}"
-                 class="card-img-top">
-          </div>
-          <div class="card-body d-flex flex-column">
-            <h6 class="card-title mb-2">
-              <a href="{% url 'book_detail' book.id %}"
-                 class="text-decoration-none text-dark">
-                {{ book.name }}
-              </a>
-            </h6>
-            <p class="card-text mb-3 text-muted small">Cena: <strong>{{ book.price }} Kč</strong></p>
-            <a href="{% url 'book_detail' book.id %}"
-               class="mt-auto btn btn-outline-success btn-sm">
-              Více…
-            </a>
-          </div>
+    <!-- filtrací kategorie -->
+    <div class="d-flex mb-4 justify-content-center">
+        <div class="dropdown">
+            <button class="btn btn-success dropdown-toggle"
+                    type="button" id="catDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                Kategorie
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="catDropdown">
+                <li>
+                    <a class="dropdown-item"
+                       href="{% url 'book_list' %}">
+                        Všechny kategorie
+                    </a>
+                </li>
+                {% for category in categories %}
+                <li>
+                    <a class="dropdown-item"
+                       href="{% url 'book_list' %}?category={{ category.id }}">
+                        {{ category.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
-      </div>
-    {% empty %}
-      <div class="col-12">
-        <div class="alert alert-info text-center">Žádné knihy k zobrazení.</div>
-      </div>
-    {% endfor %}
-  </div>
+    </div>
+
+    <!-- samotné karty knih -->
+    <div class="row g-4">
+        {% for book in books %}
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+            <div class="card book-card h-100">
+                <div class="card-image-wrapper">
+                    <img src="{{ book.images.all.0.image.url }}"
+                         alt="{{ book.name }}"
+                         class="card-img-top">
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h6 class="card-title mb-2">
+                        <a href="{% url 'book_detail' book.id %}"
+                           class="text-decoration-none text-dark">
+                            {{ book.name }}
+                        </a>
+                    </h6>
+                    <p class="card-text mb-3 text-muted small">Cena: <strong>{{ book.price }} Kč</strong></p>
+                    <a href="{% url 'book_detail' book.id %}"
+                       class="mt-auto btn btn-outline-success btn-sm">
+                        Více…
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">Žádné knihy k zobrazení.</div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
