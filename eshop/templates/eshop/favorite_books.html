@@ -27,11 +27,16 @@
             </div>
           </div>
         </div>
-      {% endfor %}
+{% comment %}
+<!--<a href="{% url 'favorite_remove' book.id %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>-->
+{% endcomment %}
+   {% endfor %}
     </div>
   {% else %}
     <p class="text-muted text-center">Nemáte žádné oblíbené knihy.</p>
   {% endif %}
 </div>
+{% comment %}
 <!--<a href="{% url 'favorite_remove' book.id %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>-->
+{% endcomment %}
 {% endblock %}
