@@ -534,3 +534,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   });
 });
+
+
+  window.addEventListener('load', function() {
+    // Po 1 s skryjeme preloader, zobrazíme poděkování
+    setTimeout(function() {
+      document.getElementById('preloader').style.display = 'none';
+      document.getElementById('order-thanks').style.display = 'block';
+    }, 1000);
+  });

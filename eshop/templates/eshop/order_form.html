@@ -1,25 +1,64 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Objednávka</h1>
-<p>Počet produktů v košíku: {{ cart.selected_products.all|length }}</p>
-<h3 class="border-bottom">Shrnutí objednávky:</h3>
-{% for product in cart.selected_products.all %}
-{{ forloop.counter }}.
-<strong>{{ product.product.name }} </strong> -- počet kusů: {{ product.quantity }}
-{% empty %}
-        zadná pokožka
-    {% endfor %}
-<hr>
-<h3 class="border-bottom"><strong>Celková cena: {{ total_price }} Kč</strong></h3>
-<hr>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <h2>Shrnutí objednávky</h2>
-  <div>
-    </div>
+<div class="container py-4">
+  <!-- Vystředěný hlavní nadpis -->
+  <h1 class="text-center mb-4">Objednávka</h1>
 
-  <button type="submit" class="btn btn-success">Závazně odeslat objednávku</button>
-</form>
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <!-- Zvýšená velikost písma -->
+      <div class="fs-4">
+
+        <!-- Shrnutí nákupu -->
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-success text-white">
+            <h4 class="mb-0 text-center">Shrnutí nákupu</h4>
+          </div>
+          <div class="card-body">
+            <p class="mb-2 text-decoration-underline">
+              Počet produktů v košíku:
+              <strong>{{ cart.selected_products.all|length }}</strong>
+            </p>
+
+            <ul class="list-group list-group-flush mb-3">
+              {% for item in cart.selected_products.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  {{ forloop.counter }}. {{ item.product.name }}
+                  <span class="badge bg-primary rounded-pill">{{ item.quantity }}×</span>
+                </li>
+              {% empty %}
+                <li class="list-group-item">Košík je prázdný.</li>
+              {% endfor %}
+            </ul>
+
+            <h5>
+              Celková cena:
+              <span class="text-success">{{ total_price }} Kč</span>
+            </h5>
+          </div>
+        </div>
+
+        <!-- Formulář objednávky -->
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <h5 class="mb-0">Vaše údaje a doručení</h5>
+          </div>
+          <div class="card-body">
+            <form method="post" novalidate>
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit" class="btn btn-success mt-3">
+                Závazně odeslat objednávku
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div><!-- /.fs-4 -->
+
+    </div><!-- /.col-lg-8 -->
+  </div><!-- /.row.justify-content-center -->
+</div><!-- /.container -->
 {% endblock %}
