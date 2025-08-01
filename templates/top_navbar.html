@@ -5,10 +5,27 @@
            <a href="{% url 'e_book_list' %}">E-knihy</a>
            <a href="{% url 'audio_book_list' %}">Audioknihy</a>
 
+                <a href="#"
+                   class="staff-link"
+                   data-auth="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+                   data-url="{% url 'staff_book_list' %}">
+                  Book List
+                </a>
 
-           <a href="#" id="book-list-link" data-auth="{% if user.is_authenticated %}true{% else %}false{% endif %}" data-url="{% url 'staff_book_list' %}">Book List</a>
-           <a href="{% url 'staff_author_list' %}">List of Authors</a>
-           <a href="{% url 'staff_category_list' %}">Category list</a>
+                <a href="#"
+                   class="staff-link"
+                   data-auth="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+                   data-url="{% url 'staff_author_list' %}">
+                  Author List
+                </a>
+
+                <a href="#"
+                   class="staff-link"
+                   data-auth="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+                   data-url="{% url 'staff_category_list' %}">
+                  Category List
+                </a>
+
            <!--
            <a href="#reviews">Recenze</a>
            <a href="#blogs">Blogs</a>
