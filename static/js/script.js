@@ -202,20 +202,25 @@ var swiper2 = new Swiper(".blogs-slider", {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    const bookListLink = document.getElementById('book-list-link');
-    let loginForm = document.querySelector('.login-form-container');
+  // vybereme všechny odkazy s třídou .staff-link
+  const staffLinks = document.querySelectorAll('.staff-link');
+  const loginForm = document.querySelector('.login-form-container');
 
-    bookListLink.addEventListener('click', function (event) {
-        const isAuthenticated = bookListLink.getAttribute('data-auth') === 'true';
-        const redirectUrl = bookListLink.getAttribute('data-url');
+  staffLinks.forEach(link => {
+    link.addEventListener('click', function (event) {
+      const isAuthenticated = link.dataset.auth === 'true';
+      const redirectUrl     = link.dataset.url;
 
-        if (isAuthenticated) {
-            window.location.href = redirectUrl;
-        } else {
-            event.preventDefault();
-            loginForm.classList.add('active');
-        }
+      if (isAuthenticated) {
+        // uživatel je přihlášený → klidně přejdeme
+        window.location.href = redirectUrl;
+      } else {
+        // není přihlášený → zamezíme navigaci a zobrazíme přihlašovací formulář
+        event.preventDefault();
+        loginForm.classList.add('active');
+      }
     });
+  });
 });
 
 
@@ -534,3 +539,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   });
 });
+
+
+  window.addEventListener('load', function() {
+    // Po 1 s skryjeme preloader, zobrazíme poděkování
+    setTimeout(function() {
+      document.getElementById('preloader').style.display = 'none';
+      document.getElementById('order-thanks').style.display = 'block';
+    }, 1000);
+  });

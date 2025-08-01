@@ -1,7 +1,75 @@
 {% extends 'base.html' %}
 
+{% block extra_css %}
+<style>
+  /* Preloader na celou obrazovku */
+  #preloader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+  }
+
+  /* Ikonka knížky a její animace */
+  #preloader .fa-book-open {
+    font-size: 4rem;
+    color: #28a745; /* bootstrap-success */
+    animation: flipPage 1s infinite ease-in-out;
+    transform-origin: center center;
+  }
+
+  @keyframes flipPage {
+    0%   { transform: perspective(400px) rotateY(0deg); }
+    25%  { transform: perspective(400px) rotateY(15deg); }
+    50%  { transform: perspective(400px) rotateY(0deg); }
+    75%  { transform: perspective(400px) rotateY(-15deg); }
+    100% { transform: perspective(400px) rotateY(0deg); }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<h1>Děkujeme za objednávku!</h1>
-<p>Číslo objednávky: {{ order.id }}</p>
-<p>Celková cena: {{ order.total_price }} Kč</p>
+  {# PRELOADER #}
+  <div id="preloader">
+    <i class="fas fa-book-open"></i>
+  </div>
+
+  {# SKRYTÝ OBSAH, který se objeví až po preloaderu #}
+  <div id="order-thanks" class="container py-5" style="display: none;">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+          <div class="card-body text-center">
+            <h1 class="card-title display-5 mb-3">Děkujeme za objednávku!</h1>
+            <p class="lead mb-4">
+              Vaše objednávka <strong>#{{ order.id }}</strong> byla úspěšně přijata.
+            </p>
+            <p class="h5 mb-4">
+              Celková cena:
+              <span class="text-success">{{ order.total_price }} Kč</span>
+            </p>
+            <a href="{% url 'home' %}" class="btn btn-success btn-lg">
+              Pokračovat v nákupu
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  window.addEventListener('load', function() {
+    // Po 1 s skryjeme preloader a ukážeme obsah
+    setTimeout(function() {
+      document.getElementById('preloader').style.display = 'none';
+      document.getElementById('order-thanks').style.display = 'block';
+    }, 1000);
+  });
+</script>
 {% endblock %}
