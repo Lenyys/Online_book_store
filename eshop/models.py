@@ -130,8 +130,8 @@ class Order(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=True, default=0)
 
     delivery_address = models.TextField(null=False, blank=False)
-    first_name = models.CharField(max_length=150, null=True, blank=True)
-    last_name = models.CharField(max_length=150, null=True, blank=True)
+    first_name = models.CharField(max_length=150, null=False, blank=False)
+    last_name = models.CharField(max_length=150, null=False, blank=False)
     email = models.EmailField(default='')
     phone = models.CharField(max_length=20, null=True, blank=True)
     postal_code = models.CharField(max_length=10, default="")

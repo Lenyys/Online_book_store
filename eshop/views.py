@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.mail import EmailMessage
 from django.db import transaction
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404, redirect, render
@@ -526,7 +526,7 @@ class UpdateCartView(View):
                     continue
         return redirect('cart_detail')
 
-
+# post a <form>????????????????????????????????????????????????????????????????????
 class RemoveFromCartView(View):
     def get(self, request, item_id, *args, **kwargs):   # mělo by být post?
         try:
@@ -562,50 +562,25 @@ class CreateOrderView(View):
         else:
             cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
         total_price = cart.get_total_cart_price()
-        return render(request, 'eshop/order_form.html', {'form': form, 'cart': cart, 'total_price': total_price})
+        return render(request, 'eshop/order_form.html', {
+            'form': form, 'cart': cart, 'total_price': total_price})
 
     def post(self, request, *args, **kwargs):
         form = OrderForm(request.POST)
         if form.is_valid():
-            delivery_address = form.cleaned_data.get('delivery_address')
-            note = form.cleaned_data.get('note')
-            first_name = form.cleaned_data.get('first_name')
-            last_name = form.cleaned_data.get('last_name')
-            email = form.cleaned_data.get('email')
-            phone = form.cleaned_data.get('phone')
-            postal_code = form.cleaned_data.get('postal_code')
-
             if self.request.user.is_authenticated:
                 cart = get_object_or_404(Cart, user=self.request.user, is_temporary=True)
             else:
                 cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
             with transaction.atomic():
+                order = form.save(commit=False)
                 if self.request.user.is_authenticated:
-                    order = Order.objects.create(
-                        user=self.request.user,
-                        delivery_address=delivery_address,
-                        total_price=cart.get_total_cart_price(),
-                        paid=False,
-                        first_name=first_name,
-                        last_name=last_name,
-                        email=email,
-                        phone=phone,
-                        postal_code=postal_code,
-                        note=note
-                    )
+                    order.user = self.request.user
                 else:
-                    order = Order.objects.create(
-                        user=None,
-                        delivery_address=delivery_address,
-                        total_price=cart.get_total_cart_price(),
-                        paid=False,
-                        first_name=first_name,
-                        last_name=last_name,
-                        email=email,
-                        phone=phone,
-                        postal_code=postal_code,
-                        note=note
-                    )
+                    order.user = None
+                order.total_price = cart.get_total_cart_price()
+                order.paid = False
+                order.save()
                 for item in cart.selected_products.all():
                     item.product.stock_quantity -= item.quantity
                     item.product.save()
@@ -626,6 +601,68 @@ class CreateOrderView(View):
             return redirect('order_confirmation', pk=order.id)
         return render(request, 'eshop/order_form.html', {'form': form})
 
+    # def post(self, request, *args, **kwargs):
+    #     form = OrderForm(request.POST)
+    #     if form.is_valid():
+    #         delivery_address = form.cleaned_data.get('delivery_address')
+    #         note = form.cleaned_data.get('note')
+    #         first_name = form.cleaned_data.get('first_name')
+    #         last_name = form.cleaned_data.get('last_name')
+    #         email = form.cleaned_data.get('email')
+    #         phone = form.cleaned_data.get('phone')
+    #         postal_code = form.cleaned_data.get('postal_code')
+    #
+    #         if self.request.user.is_authenticated:
+    #             cart = get_object_or_404(Cart, user=self.request.user, is_temporary=True)
+    #         else:
+    #             cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
+    #         with transaction.atomic():
+    #             if self.request.user.is_authenticated:
+    #                 order = Order.objects.create(
+    #                     user=self.request.user,
+    #                     delivery_address=delivery_address,
+    #                     total_price=cart.get_total_cart_price(),
+    #                     paid=False,
+    #                     first_name=first_name,
+    #                     last_name=last_name,
+    #                     email=email,
+    #                     phone=phone,
+    #                     postal_code=postal_code,
+    #                     note=note
+    #                 )
+    #             else:
+    #                 order = Order.objects.create(
+    #                     user=None,
+    #                     delivery_address=delivery_address,
+    #                     total_price=cart.get_total_cart_price(),
+    #                     paid=False,
+    #                     first_name=first_name,
+    #                     last_name=last_name,
+    #                     email=email,
+    #                     phone=phone,
+    #                     postal_code=postal_code,
+    #                     note=note
+    #                 )
+    #             for item in cart.selected_products.all():
+    #                 item.product.stock_quantity -= item.quantity
+    #                 item.product.save()
+    #                 item.order = order
+    #                 item.cart = None
+    #                 item.product_price = item.product.price
+    #                 item.save()
+    #
+    #             cart.is_temporary = True
+    #             cart.save()
+    #             email = EmailMessage(
+    #                 subject='Potvrzení objednávky',
+    #                 body=f'Děkujeme za objednávku... č. {order.id}',
+    #                 from_email='eshop@example.com',
+    #                 to=[order.email],
+    #             )
+    #             email.send()
+    #         return redirect('order_confirmation', pk=order.id)
+    #     return render(request, 'eshop/order_form.html', {'form': form})
+
 
 class OrderConfirmationView(TemplateView):
     template_name = 'eshop/order_confirmation.html'
@@ -636,9 +673,6 @@ class OrderConfirmationView(TemplateView):
         order = get_object_or_404(Order, id=order_id)
         context['order'] = order
         return context
-
-
-from django.http import HttpResponseForbidden
 
 
 def delete_category_immediately(request, pk):
