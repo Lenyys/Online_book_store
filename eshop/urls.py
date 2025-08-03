@@ -1,17 +1,18 @@
 
-
 from django.urls import path
 from eshop.views import (BookListView, EBookListView, AudioBookListView, BookDetailView, BookCreateView, BookUpdateView,
                          BookDeleteView, ImageCreateView,
-                         CategoryListView, CategoryUpdateView, CategoryDeleteView, ImageDeleteView,
-                         StaffCategoryDetailView, StaffCategoryUpdateView, StaffCategoryListView,
+
+                         CategoryListView, StaffCategoryListView, StaffCategoryDeleteView, StaffCategoryDetailView,
+                         StaffCategoryUpdateView, StaffCategoryCreateView,
+
+                         ImageDeleteView,
                          ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
                          StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
-                         CategoryCreateView, CategoryDetailView, UpdateCartView, RemoveFromCartView,
+                         UpdateCartView, RemoveFromCartView,
                          OrderConfirmationView, CreateOrderView, FavoriteBookView, FavoriteBooksListView,
                          search_view, autocomplete_search, FavoriteBookRemoveFromFavoritesList)
-
 
 
 urlpatterns = [
@@ -19,7 +20,6 @@ urlpatterns = [
     path('ebooks/', EBookListView.as_view(), name='e_book_list'),
     path('audiobooks/', AudioBookListView.as_view(), name='audio_book_list'),
     path('book_detail/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
-
 
 
     path('staff_book_list/', StaffBookListView.as_view(), name='staff_book_list'),
@@ -41,20 +41,15 @@ urlpatterns = [
     path('image_delete/<int:pk>/', ImageDeleteView.as_view(), name='image_delete'),
     path('book/<int:book_id>/image_update/<int:pk>/', ImageUpdateView.as_view(), name='image_update'),
 
-
-
+    # Veřejné pouze na čtení (list a detail)
     path('categories/', CategoryListView.as_view(), name='category-list'),
+
+    # Správa kategorií ve staff rozhraní (pouze staff users)
     path('staff_category_list/', StaffCategoryListView.as_view(), name='staff_category_list'),
     path('staff_category_detail/<int:pk>/', StaffCategoryDetailView.as_view(), name='staff_category_detail'),
-    path('staff_category_delete/<int:pk>/', CategoryDeleteView.as_view(), name='staff_category_delete'),
     path('staff_category_edit/<int:pk>/', StaffCategoryUpdateView.as_view(), name='staff_category_edit'),
-
-
-    path('categories/create/', CategoryCreateView.as_view(), name='category-create'),
-    path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
-    path('categories/<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-edit'),
-    path('categories/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
-
+    path('staff_category_delete/<int:pk>/', StaffCategoryDeleteView.as_view(), name='staff_category_delete'),
+    path('staff_category_create/', StaffCategoryCreateView.as_view(), name='staff_category_create'),
 
 
     path('cart/add/<int:pk>/', AddToCartView.as_view(), name='add_to_cart'),

@@ -15,8 +15,8 @@
         <h2 class="author-name">{{ category.name }}</h2>
         <div class="author-actions">
           <a href="{% url 'staff_category_edit' pk=category.pk %}?next={% url 'staff_category_list' %}" class="edit-btn" title="Upravit">✏️</a>
-          <a href="{% url 'staff_category_delete' category.pk %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>
-          <a href="{% url 'staff_category_detail' category.pk %}" class="detail-btn" title="Detail (admin)">🔍</a>
+          <a href="{% url 'staff_category_delete' pk=category.pk %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>
+          <a href="{% url 'staff_category_detail' pk=category.pk %}" class="detail-btn" title="Detail (admin)">🔍</a>
         </div>
       </div>
     {% empty %}
@@ -25,7 +25,7 @@
   </div>
 
   <div class="add-author-wrap">
-    <a class="btn btn-success add-author-btn" href="{% url 'category-create' %}">
+    <a class="btn btn-success add-author-btn" href="{% url 'staff_category_create' %}">
       Přidat kategorii
     </a>
   </div>
