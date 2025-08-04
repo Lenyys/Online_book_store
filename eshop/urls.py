@@ -6,7 +6,7 @@ from eshop.views import (BookListView, EBookListView, AudioBookListView, BookDet
                          ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
                          StaffBookListView, StaffBookDetailView, AddOrCreateAuthorView, StaffAuthorListView,
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
-                         CategoryCreateView, CategoryDetailView, UpdateCartView, RemoveFromCartView,
+                         UpdateCartView, RemoveFromCartView,
                          OrderConfirmationView, CreateOrderView, FavoriteBookView, FavoriteBooksListView,
                          search_view, autocomplete_search, FavoriteBookRemoveFromFavoritesList)
 

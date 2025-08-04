@@ -67,16 +67,17 @@ class CategoryListView(ListView):
     context_object_name = 'categories'
 
 
-class StaffCategoryListView(LoginRequiredMixin, ListView):
+class StaffCategoryListView(StaffRequiredMixin, ListView):
     model = Category
     template_name = 'eshop/staff/staff_category_list.html'
     context_object_name = 'categories'
 
 
-class StaffCategoryCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class StaffCategoryCreateView(PermissionRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
     template_name = 'eshop/staff/staff_category_form.html'
+    permission_required = 'eshop.add_category'
 
     def test_func(self):
         return self.request.user.is_staff
@@ -91,10 +92,11 @@ class StaffCategoryCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateVie
         return context
 
 
-class StaffCategoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class StaffCategoryUpdateView(PermissionRequiredMixin, UpdateView):
     model = Category
     form_class = CategoryForm
     template_name = 'eshop/staff/staff_category_form.html'
+    permission_required = 'eshop.change_category'
 
     def test_func(self):
         return self.request.user.is_staff
@@ -115,9 +117,10 @@ class StaffCategoryDetailView(DetailView):
     context_object_name = 'category'
 
 
-class StaffCategoryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class StaffCategoryDeleteView(PermissionRequiredMixin, DeleteView):
     model = Category
     template_name = 'eshop/staff/staff_category_confirm_delete.html'
+    permission_required = 'eshop.delete_category'
 
     def test_func(self):
         return self.request.user.is_staff
