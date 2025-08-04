@@ -30,6 +30,7 @@
       {% else %}
         <p class="out-of-stock">Produkt je vyprodán</p>
       {% endif %}
+
     </div>
   </div>
 
@@ -41,4 +42,20 @@
   </div>
   {% endif %}
 </div>
+
 {% endblock %}
+
+
+<!--      {% comment %}-->
+<!--      <form action="{% url 'favorite_book' book.id %}" method="post" style="display: inline;">-->
+<!--                        {% csrf_token %}-->
+<!--                        <input type="hidden" name="next" value="{{ request.path }}">-->
+<!--                        <button type="submit" class="fas fa-heart">-->
+<!--                            {% if user in book.favorite_book.all %}-->
+<!--                                Odebrat z oblíbených-->
+<!--                            {% else %}-->
+<!--                                Přidat do oblíbených-->
+<!--                            {% endif %}-->
+<!--                        </button>-->
+<!--                    </form>-->
+<!--      {% endcomment %}-->

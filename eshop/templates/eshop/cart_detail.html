@@ -1,18 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-<!--<h2 class="my-2">Váš košík</h2>-->
-<!--{% if messages %}-->
-<!--{% for message in messages %}-->
-<!--<div class="alert alert-{{ message.tags }}">-->
-<!--    {{ message }}-->
-<!--</div>-->
-<!--{% endfor %}-->
-<!--{% endif %}-->
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
 {% if items %}
   <div class="cart-card">
     <h1 class="form-title">Váš košík</h1>
-
-    <!-- Refresh ikona v rohu karty -->
     <button class="refresh-btn" title="Aktualizovat košík">
       <i class="fas fa-sync-alt"></i>
     </button>
@@ -43,6 +40,12 @@
         </div>
 
         <div class="col-1 text-center">
+          {% comment %}
+          <form method="post" action="{% url 'remove_from_cart' item.id %}" style="display: inline;">
+              {% csrf_token %}
+              <button type="submit" class="remove-item" title="Odstranit položku">❌</button>
+          </form>
+          {% endcomment %}
           <a href="{% url 'remove_from_cart' item.id %}" class="remove-item" title="Odstranit položku">❌ </a>
         </div>
 

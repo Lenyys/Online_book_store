@@ -20,11 +20,7 @@ from eshop.views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    # Homepage
     path('', home, name='home'),
-
-    # Eshop aplikace (napojení na další urls.py, pokud používáš)
     path('eshop/', include('eshop.urls')),
 
     # Kategorie

@@ -3,6 +3,7 @@ from eshop.models import Category, Book, SelectedProduct, Image, Order, Cart, Au
 from .models import Book
 from mptt.admin import MPTTModelAdmin
 
+
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('name', 'get_type_display', 'price', 'stock_quantity')
@@ -13,6 +14,7 @@ class BookAdmin(admin.ModelAdmin):
 
     def get_type_display(self, obj):
         return obj.get_type_display()
+
     get_type_display.short_description = 'Typ'
 
 

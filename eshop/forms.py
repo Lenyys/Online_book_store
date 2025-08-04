@@ -3,15 +3,16 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.forms import inlineformset_factory, BaseInlineFormSet
 
-from eshop.models import Book, Category, Image, Autor
+from eshop.models import Book, Category, Image, Autor, Order
 
 
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['name', 'type', 'autor','price', 'description', 'stock_quantity',
-            'category', 'isbn', 'ean']
+        fields = ['name', 'type', 'autor', 'price', 'description', 'stock_quantity',
+                  'category', 'isbn', 'ean']
         labels = {
             'name': 'Název knihy',
             'type': 'Typ knihy',
@@ -25,8 +26,8 @@ class BookForm(forms.ModelForm):
         }
         widgets = {
             'name': forms.TextInput(attrs={
-                'class':'form-control',
-                'placeholder':'Nazev knihy'
+                'class': 'form-control',
+                'placeholder': 'Nazev knihy'
             }),
             'autor': forms.SelectMultiple(attrs={
                 'class': 'form-control'
@@ -73,7 +74,7 @@ class BookForm(forms.ModelForm):
         isbn = self.cleaned_data.get('isbn')
         if not isbn:
             return isbn
-        isbn = isbn.replace('-','').strip()
+        isbn = isbn.replace('-', '').strip()
         if len(isbn) != 13:
             raise forms.ValidationError("ISBN musí obsahovat 13 číslic")
         if not (isbn.startswith('978') or isbn.startswith('979')):
@@ -81,7 +82,7 @@ class BookForm(forms.ModelForm):
 
         def checksum(isbn_str):
             total = 0
-            for i,digit in enumerate(isbn_str[:12]):
+            for i, digit in enumerate(isbn_str[:12]):
                 num = int(digit)
                 total += num if i % 2 == 0 else num * 3
             div_remainder = total % 10
@@ -109,6 +110,27 @@ class ImageForm(forms.ModelForm):
         model = Image
         fields = ['image', 'description']
 
+        labels = {
+            'image': 'obrázek',
+            'description': 'Popis k obrázku'
+        }
+
+class CustomImageFormSet(BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for form in self.forms:
+            if 'DELETE' in form.fields:
+                form.fields['DELETE'].label = 'Odstranit obrázek'
+
+
+ImageFormSet = inlineformset_factory(
+    Book, Image,
+    form=ImageForm,
+    formset=CustomImageFormSet,
+    fields=['image', 'description'],
+    extra=1,
+    can_delete=True
+)
 
 class AddOrCreateAuthorForm(forms.Form):
     existing_author = forms.ModelChoiceField(
@@ -161,8 +183,8 @@ class AddOrCreateAuthorForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         if not cleaned_data.get('existing_author') and \
-            not (cleaned_data.get('new_author_name') and
-                 cleaned_data.get('new_author_lastname')):
+                not (cleaned_data.get('new_author_name') and
+                     cleaned_data.get('new_author_lastname')):
             raise forms.ValidationError('Vyber autora nebo zadej nového')
         return cleaned_data
 
@@ -220,7 +242,6 @@ class AuthorForm(forms.ModelForm):
             raise forms.ValidationError("Neplatné datum")
         return dob
 
-
     def clean(self):
         cleaned_data = super().clean()
         if not (cleaned_data.get('name') and cleaned_data.get('lastname')):
@@ -233,27 +254,41 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = '__all__'
 
+#
+# class OrderForm(forms.Form):
+#     first_name = forms.CharField(label='Jméno', max_length=50,
+#                                  widget=forms.TextInput(attrs={'class': 'form-control', }))
+#     last_name = forms.CharField(label='Příjmení', max_length=50,
+#                                 widget=forms.TextInput(attrs={'class': 'form-control', }))
+#     email = forms.EmailField(label='E-mail', widget=forms.EmailInput(attrs={'class': 'form-control', }))
+#     phone = forms.CharField(label='Telefon', max_length=20, required=False,
+#                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '607123456'}))
+#     delivery_address = forms.CharField(
+#         label='Dodací adresa',
+#         widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control', }),
+#     )
+#     # city = forms.CharField(label='Město', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control',}))
+#     postal_code = forms.CharField(label='PSČ', max_length=10, widget=forms.TextInput(attrs={'class': 'form-control', }))
+#     note = forms.CharField(
+#         label='Poznámka k objednávce',
+#         widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control', }),
+#         required=False,
+#
+#     )
 
-class OrderForm(forms.Form):
-    first_name = forms.CharField(label='Jméno', max_length=50, widget=forms.TextInput(attrs={'class': 'form-control',}))
-    last_name = forms.CharField(label='Příjmení', max_length=50, widget=forms.TextInput(attrs={'class': 'form-control',}))
-    email = forms.EmailField(label='E-mail', widget=forms.EmailInput(attrs={'class': 'form-control',}))
-    phone = forms.CharField(label='Telefon', max_length=20, required=False,
-                            widget=forms.TextInput(attrs={'class': 'form-control','placeholder': '607123456'}))
-    delivery_address = forms.CharField(
-        label='Dodací adresa',
-        widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control',}),
-    )
-    city = forms.CharField(label='Město', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control',}))
-    postal_code = forms.CharField(label='PSČ', max_length=10, widget=forms.TextInput(attrs={'class': 'form-control',}))
-    note = forms.CharField(
-        label='Poznámka k objednávce',
-        widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control',}),
-        required=False,
-
-    )
-
-
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['first_name', 'last_name', 'email', 'phone', 'delivery_address', 'postal_code', 'note']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control' }),
+            'last_name': forms.TextInput(attrs={'class': 'form-control' }),
+            'email': forms.EmailInput(attrs={'class': 'form-control' }),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '607123456'}),
+            'delivery_address': forms.Textarea(attrs={'rows': 3, 'class': 'form-control', }),
+            'postal_code': forms.TextInput(attrs={'class': 'form-control', }),
+            'note': forms.Textarea(attrs={'rows': 3, 'class': 'form-control', }),
+        }
 
     def clean_first_name(self):
         name = self.cleaned_data.get('first_name')
@@ -273,14 +308,14 @@ class OrderForm(forms.Form):
         phone = self.cleaned_data.get('phone')
         if not phone:
             return phone
-        phone_clean = phone.replace(" ","")
+        phone_clean = phone.replace(" ", "")
         if not re.match(r'^(\+420)?[0-9]{9}$', phone_clean):
             raise forms.ValidationError("neplatné telefoní číslo")
         return phone_clean
 
     def clean_postal_code(self):
         postal_code = self.cleaned_data.get('postal_code')
-        if  not re.match(r'^\d{3}\s?\d{2}$', postal_code):
+        if not re.match(r'^\d{3}\s?\d{2}$', postal_code):
             raise forms.ValidationError("psč obsahuje 5 číslic")
 
         psc = postal_code.replace(" ", "")

@@ -1,32 +1,34 @@
 from datetime import timedelta
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
-from django.core.exceptions import PermissionDenied
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.mail import EmailMessage
 from django.db import transaction
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponseForbidden
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views import View
-
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, TemplateView
 
-from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm
+from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm, ImageFormSet
+from eshop.mixins import StaffRequiredMixin
 from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Order
 
 
 def home(request):
     books = Book.objects.all()
+    ebooks = books.filter(type='ebook')
+    books = books.filter(type='book')
     time_delta = timezone.now() - timedelta(days=30)
     new_books = books.filter(created_at__gte=time_delta)
+    new_ebooks = ebooks.filter(created_at__lte=time_delta)
     return render(request, 'home.html', {
         'books': books,
+        'new_ebooks': new_ebooks,
         'new_books': new_books,
     })
 
@@ -41,6 +43,7 @@ def search_view(request):
         "query": query,
         "results": results
     })
+
 
 @require_GET
 def autocomplete_search(request):
@@ -57,19 +60,6 @@ def autocomplete_search(request):
             })
 
     return JsonResponse({"results": data})
-
-# @require_GET
-# def autocomplete_search(request):
-#     q = request.GET.get("q", "").strip()
-#     data = []
-#     if q:
-#         # vezmeme max. 6 knih
-#         for b in Book.objects.filter(name__icontains=q)[:6]:
-#             data.append({
-#                 "id": b.pk,
-#                 "name": b.name,
-#             })
-#     return JsonResponse({"results": data})
 
 
 class BookListView(ListView):
@@ -146,32 +136,17 @@ class BookDetailView(DetailView):
     context_object_name = 'book'
 
 
-class StaffBookListView(UserPassesTestMixin, ListView):
+class StaffBookListView(StaffRequiredMixin, ListView):
     model = Book
     template_name = 'eshop/staff/staff_book_list.html'
     context_object_name = 'books'
 
-    def test_func(self):
-        user = self.request.user
-        if not user.is_authenticated:
-            return False
-        if user.is_superuser or user.is_staff:
-            return True
-        raise PermissionDenied   #403 chyba
 
-
-class StaffBookDetailView(UserPassesTestMixin, DetailView):
+class StaffBookDetailView(StaffRequiredMixin, DetailView):
     model = Book
     template_name = 'eshop/staff/staff_book_detail.html'
     context_object_name = 'book'
 
-    def test_func(self):
-        user = self.request.user
-        if not user.is_authenticated:
-            return False
-        if user.is_superuser or user.is_staff:
-            return True
-        raise PermissionDenied   #403 chyba
 
 class BookCreateView(PermissionRequiredMixin, CreateView):
     model = Book
@@ -180,6 +155,24 @@ class BookCreateView(PermissionRequiredMixin, CreateView):
     success_url = reverse_lazy('staff_book_list')
     permission_required = 'eshop.add_book'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = ImageFormSet(self.request.POST, self.request.FILES)
+        else:
+            context['formset'] = ImageFormSet()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if form.is_valid() and formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            return redirect(self.get_success_url())
+        else:
+            return self.form_invalid(form)
 
 class BookUpdateView(PermissionRequiredMixin, UpdateView):
     model = Book
@@ -188,14 +181,28 @@ class BookUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = 'eshop.change_book'
 
     def get_success_url(self):
-        next_url = self.request.GET.get('next') or self.request.POST.get('next')
+        next_url = self.request.POST.get('next')
         return next_url or reverse_lazy('staff_book_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['back_url'] = self.request.GET.get('next','/')
+        context['back_url'] = self.request.GET.get('next', '/')
+        if self.request.POST:
+            context['formset'] = ImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        else:
+            context['formset'] = ImageFormSet(instance=self.object)
         return context
 
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if form.is_valid() and formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            return redirect(self.get_success_url())
+        else:
+            return self.form_invalid(form)
 
 class BookDeleteView(PermissionRequiredMixin, DeleteView):
     model = Book
@@ -205,8 +212,9 @@ class BookDeleteView(PermissionRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['back_url'] = self.request.GET.get('next','/')
+        context['back_url'] = self.request.GET.get('next', '/')
         return context
+
 
 class FavoriteBooksListView(LoginRequiredMixin, ListView):
     model = Book
@@ -216,25 +224,23 @@ class FavoriteBooksListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return self.request.user.favorite_books.all()
 
+# ????????????????????????????????????????????????
 class FavoriteBookRemoveFromFavoritesList(LoginRequiredMixin, View):
-    template_name = 'eshop/remove_favorite.html'
 
-    def get(self, request,book_id):
+    def get(self, request, book_id):
         book = get_object_or_404(Book, id=book_id)
-        user = request.user
-        return render(request, self.template_name, {
+        return render(request, 'eshop/remove_favorite.html', {
             'book': book,
-            # 'next': request.GET.get('next', reverse('user_favorite_books')),
         })
 
     def post(self, request, book_id):
         book = get_object_or_404(Book, id=book_id)
         user = request.user
         if user in book.favorite_book.all():
-                book.favorite_book.remove(user)
-        # next_url = request.POST.get('next') or reverse('user_favorite_books', kwargs={'pk': self.book.pk})
-        # return redirect(next_url)
+            book.favorite_book.remove(user)
+
         return redirect(reverse('user_favorite_books'))
+
 
 class FavoriteBookView(LoginRequiredMixin, View):
     def post(self, request, book_id):
@@ -246,7 +252,7 @@ class FavoriteBookView(LoginRequiredMixin, View):
         else:
             book.favorite_book.add(user)
 
-        next_url = self.request.POST.get('next','/')
+        next_url = self.request.POST.get('next', '/')
         return redirect(next_url)
 
     # def get(self, request, book_id):
@@ -260,7 +266,6 @@ class FavoriteBookView(LoginRequiredMixin, View):
     #
     #     next_url = self.request.GET.get('next', '/')
     #     return redirect(next_url)
-
 
 
 class ImageCreateView(PermissionRequiredMixin, CreateView):
@@ -278,7 +283,7 @@ class ImageCreateView(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('staff_book_detail', kwargs={'pk':self.book.pk})
+        return reverse('staff_book_detail', kwargs={'pk': self.book.pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -306,7 +311,7 @@ class ImageUpdateView(PermissionRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['back_url'] = self.request.GET.get('next','/')
+        context['back_url'] = self.request.GET.get('next', '/')
         return context
 
 
@@ -316,12 +321,12 @@ class ImageDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'eshop.delete_image'
 
     def get_success_url(self):
-        next_url = self.request.GET.get('next') or self.request.POST.get('next')
+        next_url = self.request.POST.get('next')
         return next_url or reverse_lazy('staff_book_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['back_url'] = self.request.GET.get('next','/')
+        context['back_url'] = self.request.GET.get('next', '/')
         return context
 
 
@@ -359,18 +364,11 @@ class AuthorCreateView(PermissionRequiredMixin, CreateView):
     permission_required = 'eshop.add_autor'
 
 
-class StaffAuthorDetailView(UserPassesTestMixin, DetailView):
+class StaffAuthorDetailView(StaffRequiredMixin, DetailView):
     model = Autor
     template_name = 'eshop/staff/staff_author_detail.html'
     context_object_name = 'author'
 
-    def test_func(self):
-        user = self.request.user
-        if not user.is_authenticated:
-            return False
-        if user.is_superuser or user.is_staff:
-            return True
-        raise PermissionDenied
 
 class AuthorUpdateView(PermissionRequiredMixin, UpdateView):
     model = Autor
@@ -379,27 +377,19 @@ class AuthorUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = 'eshop.change_autor'
 
     def get_success_url(self):
-        next_url = self.request.GET.get('next') or self.request.POST.get('next')
+        next_url = self.request.POST.get('next') # or self.request.GET.get('next')
         return next_url or reverse_lazy('staff_author_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['back_url'] = self.request.GET.get('next','/')
+        context['back_url'] = self.request.GET.get('next', '/')
         return context
 
 
-class StaffAuthorListView(UserPassesTestMixin, ListView):
+class StaffAuthorListView(StaffRequiredMixin, ListView):
     model = Autor
     template_name = 'eshop/staff/staff_author_list.html'
     context_object_name = 'authors'
-
-    def test_func(self):
-        user = self.request.user
-        if not user.is_authenticated:
-            return False
-        if user.is_superuser or user.is_staff:
-            return True
-        raise PermissionDenied
 
 
 class AuthorDeleteView(PermissionRequiredMixin, DeleteView):
@@ -410,7 +400,7 @@ class AuthorDeleteView(PermissionRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['back_url'] = self.request.GET.get('next','/')
+        context['back_url'] = self.request.GET.get('next', '/')
         return context
 
 
@@ -424,7 +414,6 @@ class RemoveAuthorFromBook(PermissionRequiredMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        print(f"autor: self.author.name")
         return render(request, self.template_name, {
             'book': self.book,
             'author': self.author,
@@ -559,12 +548,13 @@ class UpdateCartView(View):
                     item_id = int(key.split('-')[1])
                     quantity = int(value)
                     if quantity < 1:
-                        continue  # nebo item.delete() pokud chceš mazat
+                        continue
                     item = SelectedProduct.objects.get(id=item_id)
                     if item.product.stock_quantity < quantity:
                         item.quantity = item.product.stock_quantity
-                        messages.info(request, f"Množství, které jste zadali u knihy {item.product.name} je větší než dostupné množství "
-                                               "- zadanou hodnotu jsme upravili na největší možnou")
+                        messages.info(request,
+                                      f"Množství, které jste zadali u knihy {item.product.name} není dostupné "
+                                      "- množství bylo upraveno")
                     else:
                         item.quantity = quantity
                     item.save()
@@ -572,9 +562,9 @@ class UpdateCartView(View):
                     continue
         return redirect('cart_detail')
 
-
+# post a <form>????????????????????????????????????????????????????????????????????
 class RemoveFromCartView(View):
-    def get(self, request, item_id, *args, **kwargs):
+    def get(self, request, item_id, *args, **kwargs):   # mělo by být post?
         try:
             item = SelectedProduct.objects.get(id=item_id)
             item.delete()
@@ -595,7 +585,14 @@ class CreateOrderView(View):
             return redirect('cart_detail')
         for cart_item in cart.selected_products.all():
             if cart_item.product.stock_quantity < cart_item.quantity:
-                messages.warning(request, f"Položka {cart_item.product.name} již není dostupná prosím aktualizujte si nákupní košík")
+                cart_item.quantity = cart_item.product.stock_quantity
+                cart_item.save()
+                messages.warning(request,
+                                 f"Položka {cart_item.product.name} již není "
+                                 f"dostupná v požadovaném množství - došlo k aktualizaci nákupního košíku")
+                if not cart_item.quantity:
+                    return redirect(reverse('remove_from_cart', kwargs={'item_id': cart_item.id}))
+
                 return redirect('cart_detail')
 
         return super().dispatch(request, *args, **kwargs)
@@ -607,50 +604,26 @@ class CreateOrderView(View):
         else:
             cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
         total_price = cart.get_total_cart_price()
-        return render(request, 'eshop/order_form.html', {'form': form, 'cart':cart, 'total_price':total_price})
+        return render(request, 'eshop/order_form.html', {
+            'form': form, 'cart': cart, 'total_price': total_price})
 
-    def post(self,request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         form = OrderForm(request.POST)
+        if self.request.user.is_authenticated:
+            cart = get_object_or_404(Cart, user=self.request.user, is_temporary=True)
+        else:
+            cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
+        total_price = cart.get_total_cart_price()
         if form.is_valid():
-            delivery_address = form.cleaned_data.get('delivery_address')
-            note = form.cleaned_data.get('note')
-            first_name = form.cleaned_data.get('first_name')
-            last_name = form.cleaned_data.get('last_name')
-            email = form.cleaned_data.get('email')
-            phone = form.cleaned_data.get('phone')
-            postal_code = form.cleaned_data.get('postal_code')
-
-            if self.request.user.is_authenticated:
-                cart = get_object_or_404(Cart, user=self.request.user, is_temporary=True)
-            else:
-                cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
-            with transaction.atomic():
+             with transaction.atomic():
+                order = form.save(commit=False)
                 if self.request.user.is_authenticated:
-                    order = Order.objects.create(
-                        user=self.request.user,
-                        delivery_address=delivery_address,
-                        total_price=cart.get_total_cart_price(),
-                        paid=False,
-                        first_name=first_name,
-                        last_name=last_name,
-                        email=email,
-                        phone=phone,
-                        postal_code=postal_code,
-                        note=note
-                    )
+                    order.user = self.request.user
                 else:
-                    order = Order.objects.create(
-                        user=None,
-                        delivery_address=delivery_address,
-                        total_price=cart.get_total_cart_price(),
-                        paid=False,
-                        first_name=first_name,
-                        last_name=last_name,
-                        email=email,
-                        phone=phone,
-                        postal_code=postal_code,
-                        note=note
-                    )
+                    order.user = None
+                order.total_price = cart.get_total_cart_price()
+                order.paid = False
+                order.save()
                 for item in cart.selected_products.all():
                     item.product.stock_quantity -= item.quantity
                     item.product.save()
@@ -668,8 +641,71 @@ class CreateOrderView(View):
                     to=[order.email],
                 )
                 email.send()
-            return redirect('order_confirmation', pk=order.id)
-        return render(request, 'eshop/order_form.html', {'form': form})
+             return redirect('order_confirmation', pk=order.id)
+        return render(request, 'eshop/order_form.html', {
+            'form': form, 'cart': cart, 'total_price': total_price })
+
+    # def post(self, request, *args, **kwargs):
+    #     form = OrderForm(request.POST)
+    #     if form.is_valid():
+    #         delivery_address = form.cleaned_data.get('delivery_address')
+    #         note = form.cleaned_data.get('note')
+    #         first_name = form.cleaned_data.get('first_name')
+    #         last_name = form.cleaned_data.get('last_name')
+    #         email = form.cleaned_data.get('email')
+    #         phone = form.cleaned_data.get('phone')
+    #         postal_code = form.cleaned_data.get('postal_code')
+    #
+    #         if self.request.user.is_authenticated:
+    #             cart = get_object_or_404(Cart, user=self.request.user, is_temporary=True)
+    #         else:
+    #             cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
+    #         with transaction.atomic():
+    #             if self.request.user.is_authenticated:
+    #                 order = Order.objects.create(
+    #                     user=self.request.user,
+    #                     delivery_address=delivery_address,
+    #                     total_price=cart.get_total_cart_price(),
+    #                     paid=False,
+    #                     first_name=first_name,
+    #                     last_name=last_name,
+    #                     email=email,
+    #                     phone=phone,
+    #                     postal_code=postal_code,
+    #                     note=note
+    #                 )
+    #             else:
+    #                 order = Order.objects.create(
+    #                     user=None,
+    #                     delivery_address=delivery_address,
+    #                     total_price=cart.get_total_cart_price(),
+    #                     paid=False,
+    #                     first_name=first_name,
+    #                     last_name=last_name,
+    #                     email=email,
+    #                     phone=phone,
+    #                     postal_code=postal_code,
+    #                     note=note
+    #                 )
+    #             for item in cart.selected_products.all():
+    #                 item.product.stock_quantity -= item.quantity
+    #                 item.product.save()
+    #                 item.order = order
+    #                 item.cart = None
+    #                 item.product_price = item.product.price
+    #                 item.save()
+    #
+    #             cart.is_temporary = True
+    #             cart.save()
+    #             email = EmailMessage(
+    #                 subject='Potvrzení objednávky',
+    #                 body=f'Děkujeme za objednávku... č. {order.id}',
+    #                 from_email='eshop@example.com',
+    #                 to=[order.email],
+    #             )
+    #             email.send()
+    #         return redirect('order_confirmation', pk=order.id)
+    #     return render(request, 'eshop/order_form.html', {'form': form})
 
 
 class OrderConfirmationView(TemplateView):
@@ -681,9 +717,6 @@ class OrderConfirmationView(TemplateView):
         order = get_object_or_404(Order, id=order_id)
         context['order'] = order
         return context
-
-
-from django.http import HttpResponseForbidden
 
 
 def delete_category_immediately(request, pk):

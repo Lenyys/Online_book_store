@@ -7,6 +7,12 @@
     <form method="post" class="styled-form">
         {% csrf_token %}
         {{ form.as_p }}
+        {{ formset.management_form }}
+        {% for subform in formset %}
+            <div class="image-form">
+                {{ subform.as_p }}
+            </div>
+        {% endfor %}
         <input type="hidden" name="next" value="{{ back_url }}">
         <div class="form-buttons">
             <button type="submit" class="btn btn-success ">Uložit</button>
