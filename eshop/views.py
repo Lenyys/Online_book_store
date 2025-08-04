@@ -549,8 +549,14 @@ class CreateOrderView(View):
             return redirect('cart_detail')
         for cart_item in cart.selected_products.all():
             if cart_item.product.stock_quantity < cart_item.quantity:
+                cart_item.quantity = cart_item.product.stock_quantity
+                cart_item.save()
                 messages.warning(request,
-                                 f"Položka {cart_item.product.name} již není dostupná prosím aktualizujte si nákupní košík")
+                                 f"Položka {cart_item.product.name} již není "
+                                 f"dostupná v požadovaném množství - došlo k aktualizaci nákupního košíku")
+                if not cart_item.quantity:
+                    return redirect(reverse('remove_from_cart', kwargs={'item_id': cart_item.id}))
+
                 return redirect('cart_detail')
 
         return super().dispatch(request, *args, **kwargs)
@@ -567,12 +573,13 @@ class CreateOrderView(View):
 
     def post(self, request, *args, **kwargs):
         form = OrderForm(request.POST)
+        if self.request.user.is_authenticated:
+            cart = get_object_or_404(Cart, user=self.request.user, is_temporary=True)
+        else:
+            cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
+        total_price = cart.get_total_cart_price()
         if form.is_valid():
-            if self.request.user.is_authenticated:
-                cart = get_object_or_404(Cart, user=self.request.user, is_temporary=True)
-            else:
-                cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
-            with transaction.atomic():
+             with transaction.atomic():
                 order = form.save(commit=False)
                 if self.request.user.is_authenticated:
                     order.user = self.request.user
@@ -598,8 +605,9 @@ class CreateOrderView(View):
                     to=[order.email],
                 )
                 email.send()
-            return redirect('order_confirmation', pk=order.id)
-        return render(request, 'eshop/order_form.html', {'form': form})
+             return redirect('order_confirmation', pk=order.id)
+        return render(request, 'eshop/order_form.html', {
+            'form': form, 'cart': cart, 'total_price': total_price })
 
     # def post(self, request, *args, **kwargs):
     #     form = OrderForm(request.POST)
