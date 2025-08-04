@@ -2,7 +2,7 @@ from PIL import Image as PILImage, UnidentifiedImageError
 from django.contrib.auth.models import User
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
-from django.db import models
+
 
 
 class Category(MPTTModel):
