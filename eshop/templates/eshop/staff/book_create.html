@@ -7,7 +7,12 @@
     <form method="post" class="styled-form">
         {% csrf_token %}
         {{ form.as_p }}
-
+        {{ formset.management_form }}
+        {% for subform in formset %}
+            <div class="image-form">
+                {{ subform.as_p }}
+            </div>
+        {% endfor %}
         <div class="form-buttons">
             <button type="submit" class="btn btn-success ">Uložit</button>
             <a href="{% url 'staff_book_list' %}" class="btn btn-secondary">Zpět na seznam knih</a>

@@ -3,6 +3,7 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.forms import inlineformset_factory, BaseInlineFormSet
 
 from eshop.models import Book, Category, Image, Autor, Order
 
@@ -109,6 +110,27 @@ class ImageForm(forms.ModelForm):
         model = Image
         fields = ['image', 'description']
 
+        labels = {
+            'image': 'obrázek',
+            'description': 'Popis k obrázku'
+        }
+
+class CustomImageFormSet(BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for form in self.forms:
+            if 'DELETE' in form.fields:
+                form.fields['DELETE'].label = 'Odstranit obrázek'
+
+
+ImageFormSet = inlineformset_factory(
+    Book, Image,
+    form=ImageForm,
+    formset=CustomImageFormSet,
+    fields=['image', 'description'],
+    extra=1,
+    can_delete=True
+)
 
 class AddOrCreateAuthorForm(forms.Form):
     existing_author = forms.ModelChoiceField(

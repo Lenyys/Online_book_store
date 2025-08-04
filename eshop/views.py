@@ -14,17 +14,21 @@ from django.views.decorators.http import require_GET
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, TemplateView
 
-from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm
+from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm, ImageFormSet
 from eshop.mixins import StaffRequiredMixin
 from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Order
 
 
 def home(request):
     books = Book.objects.all()
+    ebooks = books.filter(type='ebook')
+    books = books.filter(type='book')
     time_delta = timezone.now() - timedelta(days=30)
     new_books = books.filter(created_at__gte=time_delta)
+    new_ebooks = ebooks.filter(created_at__lte=time_delta)
     return render(request, 'home.html', {
         'books': books,
+        'new_ebooks': new_ebooks,
         'new_books': new_books,
     })
 
@@ -151,6 +155,24 @@ class BookCreateView(PermissionRequiredMixin, CreateView):
     success_url = reverse_lazy('staff_book_list')
     permission_required = 'eshop.add_book'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = ImageFormSet(self.request.POST, self.request.FILES)
+        else:
+            context['formset'] = ImageFormSet()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if form.is_valid() and formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            return redirect(self.get_success_url())
+        else:
+            return self.form_invalid(form)
 
 class BookUpdateView(PermissionRequiredMixin, UpdateView):
     model = Book
@@ -165,8 +187,22 @@ class BookUpdateView(PermissionRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['back_url'] = self.request.GET.get('next', '/')
+        if self.request.POST:
+            context['formset'] = ImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        else:
+            context['formset'] = ImageFormSet(instance=self.object)
         return context
 
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if form.is_valid() and formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            return redirect(self.get_success_url())
+        else:
+            return self.form_invalid(form)
 
 class BookDeleteView(PermissionRequiredMixin, DeleteView):
     model = Book
