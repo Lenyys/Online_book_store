@@ -1,8 +1,13 @@
 <nav class="bottom-navbar">
     <a href="#home" class="fas fa-home"></a>
     <a href="{% url 'book_list' %}" class="fas fa-book"></a>
-    <a href="#featured" class="fas fa-list"></a>
-    <a href="#arrivals"class="fas fa-tags"></a>
-    <a href="#reviews" class="fas fa-comment"></a>
-    <a href="{% url 'staff_book_list' %}" class="fas fa-music"></a>
+    <a href="{% url 'e_book_list' %}" class="fa-solid fa-desktop"></a>
+    <a href="{% url 'audio_book_list' %}" class="fas fa-headphones"></a>
+
+    {% if user.is_authenticated and user.is_superuser or user.is_staff %}
+        <a href="{% url 'staff_book_list' %}" class="fas fa-list"></a>
+        <a href="{% url 'staff_author_list' %}" class="fa-solid fa-user-pen"></a>
+        <a href="{% url 'staff_category_list' %}" class="fa-solid fa-icons"></a>
+    {% endif %}
+
 </nav>
