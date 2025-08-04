@@ -32,7 +32,6 @@ def home(request):
         'new_books': new_books,
     })
 
-
 def search_view(request):
     query = request.GET.get("q", "").strip()
     results = []
@@ -60,6 +59,76 @@ def autocomplete_search(request):
             })
 
     return JsonResponse({"results": data})
+
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = 'eshop/category_list.html'
+    context_object_name = 'categories'
+
+
+class StaffCategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+    template_name = 'eshop/staff/staff_category_list.html'
+    context_object_name = 'categories'
+
+
+class StaffCategoryCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'eshop/staff/staff_category_form.html'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_success_url(self):
+        return reverse('staff_category_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next', reverse('staff_category_list'))
+        context['page_title'] = 'Vytvořit kategorii'
+        return context
+
+
+class StaffCategoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'eshop/staff/staff_category_form.html'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_success_url(self):
+        return reverse('staff_category_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next', reverse('staff_category_list'))
+        context['page_title'] = 'Upravit kategorii'
+        return context
+
+
+class StaffCategoryDetailView(DetailView):
+    model = Category
+    template_name = 'eshop/staff/staff_category_detail.html'
+    context_object_name = 'category'
+
+
+class StaffCategoryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Category
+    template_name = 'eshop/staff/staff_category_confirm_delete.html'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_success_url(self):
+        return reverse('staff_category_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next', reverse('staff_category_list'))
+        return context
 
 
 class BookListView(ListView):
@@ -425,69 +494,6 @@ class RemoveAuthorFromBook(PermissionRequiredMixin, View):
         next_url = request.POST.get('next') or reverse('staff_book_detail', kwargs={'pk': self.book.pk})
         return redirect(next_url)
 
-
-class CategoryListView(ListView):
-    model = Category
-    template_name = 'eshop/category_list.html'
-    context_object_name = 'categories'
-
-
-class CategoryCreateView(CreateView):
-    model = Category
-    form_class = CategoryForm
-    template_name = 'eshop/category_form.html'
-    success_url = reverse_lazy('category-list')
-
-
-class CategoryUpdateView(UpdateView):
-    model = Category
-    form_class = CategoryForm
-    template_name = 'eshop/category_form.html'
-    success_url = reverse_lazy('category-list')
-
-
-class CategoryDeleteView(DeleteView):
-    model = Category
-    template_name = 'eshop/category_confirm_delete.html'
-    success_url = reverse_lazy('category-list')
-
-
-class CategoryDetailView(DetailView):
-    model = Category
-    template_name = 'eshop/category_detail.html'
-    context_object_name = 'category'
-
-
-class StaffCategoryListView(LoginRequiredMixin, ListView):
-    model = Category
-    template_name = 'eshop/staff/staff_category_list.html'
-    context_object_name = 'categories'
-
-
-class StaffCategoryDetailView(DetailView):
-    model = Category
-    template_name = 'eshop/staff/staff_category_detail.html'
-    context_object_name = 'category'
-
-
-class CategoryDeleteView(DeleteView):
-    model = Category
-    template_name = 'eshop/staff/staff_category_confirm_delete.html'  # ← upraveno
-    success_url = reverse_lazy('staff_category_list')  # ← možná bylo původně 'category-list'
-
-
-class StaffCategoryUpdateView(LoginRequiredMixin, UpdateView):
-    model = Category
-    template_name = 'eshop/staff/staff_category_form.html'
-    form_class = CategoryForm
-
-    def get_success_url(self):
-        return reverse('staff_category_list')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['back_url'] = self.request.GET.get('next', reverse('staff_category_list'))
-        return context
 
 
 @method_decorator(never_cache, name='dispatch')

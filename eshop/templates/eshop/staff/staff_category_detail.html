@@ -24,7 +24,7 @@
 
       <div class="text-center mt-4">
         <a href="{% url 'staff_category_edit' category.pk %}" class="btn btn-warning me-2">Upravit</a>
-        <a href="{% url 'category-delete' category.pk %}" class="btn btn-danger">Smazat</a>
+        <a href="{% url 'staff_category_delete' category.pk %}?next={% url 'staff_category_list' %}" class="btn btn-danger">Smazat</a>
         <a href="{% url 'staff_category_list' %}" class="btn btn-secondary ms-2">Zpět na seznam</a>
       </div>
     </div>

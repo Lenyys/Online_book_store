@@ -8,35 +8,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
 
-
     <!-- Swiper -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
-     <!-- Bootstrap -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons (volitelné) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-
-    <!–– Bootstrap CSS ––>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!–– Bootstrap Icons (volitelné) ––>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
     <!-- Vlastní CSS -->
     <link rel="stylesheet" href="{% static 'css/store/book.css' %}">
-
     <link rel="stylesheet" href="{% static 'css/store/cart.css' %}">
-
     <link rel="stylesheet" href="{% static 'css/store/authors.css' %}">
-
     <link rel="stylesheet" href="{% static 'css/store/category.css' %}">
-
     <link rel="stylesheet" href="{% static 'css/store/style2.css' %}">
 </head>
 
@@ -44,22 +32,23 @@
 
     <header class="header">
         {% include 'top_view.html' %}
-
         {% include 'top_navbar.html' %}
     </header>
 
     {% include 'bottom_navbar.html' %}
-
     {% include 'login_form.html' %}
 
-     {% block content %}{% endblock %}
+    {% block content %}{% endblock %}
 
     {% include 'footer.html' %}
 
-    <!-- Popper + Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <!-- Bootstrap Bundle JS (obsahuje i Popper pro dropdowny atd.) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Swiper -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    {% load static %}
+
+    <!-- Vlastní JS -->
     <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>
