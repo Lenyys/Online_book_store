@@ -40,13 +40,15 @@
         </div>
 
         <div class="col-1 text-center">
-          {% comment %}
+
           <form method="post" action="{% url 'remove_from_cart' item.id %}" style="display: inline;">
               {% csrf_token %}
               <button type="submit" class="remove-item" title="Odstranit položku">❌</button>
           </form>
-          {% endcomment %}
+
+          {% comment %}
           <a href="{% url 'remove_from_cart' item.id %}" class="remove-item" title="Odstranit položku">❌ </a>
+          {% endcomment %}
         </div>
 
       </div>

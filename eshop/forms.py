@@ -115,22 +115,22 @@ class ImageForm(forms.ModelForm):
             'description': 'Popis k obrázku'
         }
 
-class CustomImageFormSet(BaseInlineFormSet):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for form in self.forms:
-            if 'DELETE' in form.fields:
-                form.fields['DELETE'].label = 'Odstranit obrázek'
-
-
-ImageFormSet = inlineformset_factory(
-    Book, Image,
-    form=ImageForm,
-    formset=CustomImageFormSet,
-    fields=['image', 'description'],
-    extra=1,
-    can_delete=True
-)
+# class CustomImageFormSet(BaseInlineFormSet):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         for form in self.forms:
+#             if 'DELETE' in form.fields:
+#                 form.fields['DELETE'].label = 'Odstranit obrázek'
+#
+#
+# ImageFormSet = inlineformset_factory(
+#     Book, Image,
+#     form=ImageForm,
+#     formset=CustomImageFormSet,
+#     fields=['image', 'description'],
+#     extra=1,
+#     can_delete=True
+# )
 
 class AddOrCreateAuthorForm(forms.Form):
     existing_author = forms.ModelChoiceField(

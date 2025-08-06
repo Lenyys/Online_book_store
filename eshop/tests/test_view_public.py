@@ -7,7 +7,7 @@ from eshop.models import Category, Book, Autor
 class BookListViewTest(TestCase):
     def setUp(self):
         self.category = Category.objects.create(name='Sci-Fi')
-        book = Book.objects.create(name='Book A', price=100)
+        book = Book.objects.create(name='Book A', price=100, description="Popis")
         book.category.set([self.category])
         Book.objects.create(name='Book B', price=200)
 

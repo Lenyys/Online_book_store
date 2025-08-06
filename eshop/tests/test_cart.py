@@ -28,7 +28,7 @@ class AddProductToCartTest(TestCase):
     def test_no_stock_quantity_no_adding_button(self):
         response = self.client.get(reverse('book_detail', kwargs={'pk':self.book_2.id}))
 
-        self.assertContains(response, 'Produkt vyprodán')
+        self.assertContains(response, 'Produkt je vyprodán')
         self.assertNotContains(response, 'Přidat do košíku')
 
     def test_add_to_cart_user_authenticated(self):
@@ -75,15 +75,15 @@ class CartDetailViewTest(TestCase):
         self.assertContains(response, 100)
         self.assertContains(response, '<input type="number"')
         self.assertContains(response, total_price)
-        self.assertContains(response, '<button type="submit"')
+        self.assertContains(response, 'type="submit"')
         self.assertContains(response, "<form")
         self.assertContains(response, f'action="{update_cart_url}"')
-        self.assertContains(response, f'href="{remove_url}"')
         self.assertContains(response, f'href="{continue_url}"')
+        self.assertContains(response, f'action="{remove_url}"')
 
     def test_remove_item_from_cart(self):
         self.client.login(username='testuser', password='testpass123')
-        response = self.client.get(reverse('remove_from_cart', kwargs={'item_id':self.cart_item.id}))
+        response = self.client.post(reverse('remove_from_cart', kwargs={'item_id':self.cart_item.id}), {})
 
         self.assertEqual(response.status_code,302)
         self.assertRedirects(response, reverse('cart_detail'))

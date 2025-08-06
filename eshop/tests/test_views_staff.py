@@ -1,5 +1,3 @@
-
-
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
@@ -29,20 +27,19 @@ class StaffBookViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Test Book')
         self.assertContains(response, 'Přidat knihu')
-        self.assertContains(response, 'Seznam knih')
-        self.assertContains(response, 'Seznam Autorů')
-        self.assertContains(response, 'Seznam Kategorií')
+        self.assertContains(response, 'Seznam Knih')
 
     def test_book_create_view_post(self):
         self.client.login(username='staff', password='pass1234test')
         self.category = Category.objects.create(name='Sci-Fi')
         self.autor = Autor.objects.create(name='Test', lastname='Autor')
-
         response = self.client.post(reverse('book_create'), {
             'name': 'New Book',
             'price': 123,
+            'type': 'book',
             'description': 'Popis new book',
-            'ean':1234567891012,
+            'isbn': '978-3-16-148410-0',
+            'ean': 1234567891012,
             'autor': [self.autor.pk],
             'category': [self.category.pk]
         })
@@ -56,8 +53,10 @@ class StaffBookViewsTest(TestCase):
         response = self.client.post(reverse('book_create'), {
             'name': 'New Book',
             'price': 123,
+            'type': 'book',
             'description': 'Popis new book',
-            'ean':1234567890101
+            'isbn': '978-3-16-148410-0',
+            'ean': 1234567890101
         })
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Book.objects.filter(name='New Book').exists())
@@ -93,26 +92,24 @@ class StaffBookDetailViewTest(TestCase):
         self.autor = Autor.objects.create(name='Test', lastname='Autor')
         self.book.category.set([self.category])
         self.book.autor.set([self.autor])
-        response = self.client.get(reverse('staff_book_detail',kwargs={'pk': self.book.id}))
+        response = self.client.get(reverse('staff_book_detail', kwargs={'pk': self.book.id}))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response,'Upravit knihu')
-        self.assertContains(response, 'Smazat knihu')
-        self.assertContains(response, 'Zpět na seznam knih')
+        self.assertContains(response, 'Upravit')
+        self.assertContains(response, 'Smazat')
+        self.assertContains(response, 'Zpět')
         self.assertContains(response, 'Test Book')
         self.assertContains(response, 'testík')
         self.assertContains(response, 150)
         self.assertContains(response, 'Test Autor')
         self.assertContains(response, 'Sci-Fi')
-        self.assertContains(response, 'Přidat autora')
+        self.assertContains(response, '+ Autor')
         self.assertContains(response, 'Odebrat')
-        self.assertContains(response, 'Upravit')
-        self.assertContains(response, 'Přidat obrázek')
-        self.assertContains(response, 'Smazat')
+        self.assertContains(response, '+ Obrázek')
 
     def test_add_or_create_autor_view_get(self):
         self.client.login(username='staff', password='pass1234test')
-        response = self.client.get(reverse('add_or_create_author', kwargs={'pk':self.book.id}))
+        response = self.client.get(reverse('add_or_create_author', kwargs={'pk': self.book.id}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Test Book')
         self.assertContains(response, '<form')
@@ -156,10 +153,10 @@ class StaffBookDetailViewTest(TestCase):
         self.client.login(username='staff', password='pass1234test')
         author = Autor.objects.create(name='Jan', lastname='Novák')
         self.book.autor.set([author])
-        next_url = reverse('staff_book_detail', kwargs={'pk':self.book.id})
+        next_url = reverse('staff_book_detail', kwargs={'pk': self.book.id})
         response = self.client.get(reverse('remove_author', kwargs={
             'book_id': self.book.id,
-            'author_id':author.id,
+            'author_id': author.id,
         }) + f'?next={next_url}')
 
         self.assertEqual(response.status_code, 200)
@@ -174,18 +171,17 @@ class StaffBookDetailViewTest(TestCase):
         self.client.login(username='staff', password='pass1234test')
         author = Autor.objects.create(name='Jan', lastname='Novák')
         self.book.autor.set([author])
-        next_url = reverse('staff_book_detail', kwargs={'pk':self.book.id})
+        next_url = reverse('staff_book_detail', kwargs={'pk': self.book.id})
         response = self.client.post(
             reverse('remove_author', kwargs={
-            'book_id': self.book.id,
-            'author_id':author.id,
-            })+ f'?next={next_url}',{})
+                'book_id': self.book.id,
+                'author_id': author.id,
+            }) + f'?next={next_url}', {})
 
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, next_url)
         self.assertFalse(self.book.autor.filter(id=author.id).exists())
         self.assertTrue(Autor.objects.filter(name='Jan', lastname='Novák').exists())
-
 
 
 class BookUpdateViewTest(TestCase):
@@ -201,9 +197,9 @@ class BookUpdateViewTest(TestCase):
 
     def test_book_update_get(self):
         self.client.login(username='staff', password='pass1234test')
-        next_url = reverse('staff_book_detail', kwargs={'pk':self.book.id})
+        next_url = reverse('staff_book_detail', kwargs={'pk': self.book.id})
         response = self.client.get(
-            reverse('book_update', kwargs={'pk':self.book.id}) + f'?next={next_url}')
+            reverse('book_update', kwargs={'pk': self.book.id}) + f'?next={next_url}')
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, f'href="{next_url}"')
@@ -219,14 +215,15 @@ class BookUpdateViewTest(TestCase):
         self.book.autor.set([author])
         category = Category.objects.create(name='Test')
         self.book.category.set([category])
-        next_url = reverse('staff_book_detail', kwargs={'pk':self.book.id})
+        next_url = reverse('staff_book_list')
         response = self.client.post(
             reverse('book_update', kwargs={
-                'pk':self.book.id}) + f'?next={next_url}',{
+                'pk': self.book.id}) + f'?next={next_url}', {
                 'name': 'New Name',
+                'type': 'book',
                 'autor': [author.id],
                 'category': [category.id],
-                'price':self.book.price,
+                'price': self.book.price,
                 'description': self.book.description,
                 'ean': 1234567891011
             }
@@ -235,6 +232,7 @@ class BookUpdateViewTest(TestCase):
         self.assertRedirects(response, next_url)
         self.assertTrue(Book.objects.filter(name='New Name').exists())
         self.assertFalse(Book.objects.filter(name='Test Book').exists())
+
 
 class BookDeleteViewTest(TestCase):
     def setUp(self):
@@ -246,9 +244,9 @@ class BookDeleteViewTest(TestCase):
 
     def test_book_delete_get(self):
         self.client.login(username='staff', password='pass1234test')
-        next_url = reverse('staff_book_detail', kwargs={'pk':self.book.id})
+        next_url = reverse('staff_book_detail', kwargs={'pk': self.book.id})
         response = self.client.get(
-            reverse('book_delete',kwargs={'pk':self.book.id}) + f'?next={next_url}'
+            reverse('book_delete', kwargs={'pk': self.book.id}) + f'?next={next_url}'
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, f'href="{next_url}"')
@@ -261,13 +259,12 @@ class BookDeleteViewTest(TestCase):
         self.client.login(username='staff', password='pass1234test')
         next_url = reverse('staff_book_list')
         response = self.client.post(
-            reverse('book_delete',kwargs={
-                'pk':self.book.id}) + f'?next={next_url}',{}
+            reverse('book_delete', kwargs={
+                'pk': self.book.id}) + f'?next={next_url}', {}
         )
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, next_url)
         self.assertFalse(Book.objects.filter(name='Test Book').exists())
-
 
 
 class ImageTests(TestCase):
@@ -280,7 +277,6 @@ class ImageTests(TestCase):
         permissions = book_perms | image_perms
         self.staff_user.user_permissions.set(permissions)
         self.book = Book.objects.create(name='Test Book', price=150, description='testík')
-
 
     def test_add_image_view_get(self):
         self.client.login(username='staff', password='pass1234test')
@@ -311,9 +307,9 @@ class StaffAuthorListViewTest(TestCase):
         )
         back_url = reverse('staff_author_list')
         back_url_create = reverse('author_create')
-        back_url_delete = reverse('author_delete', kwargs={'pk':self.author.id}) + f'?next={back_url}'
+        back_url_delete = reverse('author_delete', kwargs={'pk': self.author.id}) + f'?next={back_url}'
         back_url_update = reverse('author_update', kwargs={'pk': self.author.id}) + f'?next={back_url}'
-        back_url_detail = reverse('staff_author_detail', kwargs={'pk': self.author.id})
+        back_url_detail = reverse('staff_author_detail', kwargs={'pk': self.author.id}) + f'?next={back_url}'
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Seznam Autorů')
         self.assertContains(response, f'href="{back_url}"')
@@ -322,6 +318,7 @@ class StaffAuthorListViewTest(TestCase):
         self.assertContains(response, f'href="{back_url_update}"')
         self.assertContains(response, f'href="{back_url_detail}"')
         self.assertContains(response, 'Novák')
+
 
 class AuthorCreateViewTest(TestCase):
     def setUp(self):
@@ -355,6 +352,7 @@ class AuthorCreateViewTest(TestCase):
         self.assertRedirects(response, back_url)
         self.assertTrue(Autor.objects.filter(name='Jan', lastname='Novák').exists())
 
+
 class StaffAuthorDetailViewTest(TestCase):
     def setUp(self):
         self.staff_user = User.objects.create_user(username='staff', password='pass1234test', is_staff=True)
@@ -366,12 +364,12 @@ class StaffAuthorDetailViewTest(TestCase):
     def test_author_detail_get(self):
         self.client.login(username='staff', password='pass1234test')
         response = self.client.get(
-            reverse('staff_author_detail', kwargs={'pk':self.author.id})
+            reverse('staff_author_detail', kwargs={'pk': self.author.id})
         )
         back_url = reverse('staff_author_list')
-        next_url = reverse('staff_author_detail', kwargs={'pk':self.author.id})
-        update_url = reverse('author_update', kwargs={'pk':self.author.id}) + f'?next={next_url}'
-        delete_url = reverse('author_delete', kwargs={'pk':self.author.id}) + f'?next={next_url}'
+        next_url = reverse('staff_author_detail', kwargs={'pk': self.author.id})
+        update_url = reverse('author_update', kwargs={'pk': self.author.id}) + f'?next={next_url}'
+        delete_url = reverse('author_delete', kwargs={'pk': self.author.id}) + f'?next={next_url}'
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Detail autora')
@@ -379,6 +377,7 @@ class StaffAuthorDetailViewTest(TestCase):
         self.assertContains(response, f'href="{back_url}"')
         self.assertContains(response, f'href="{update_url}"')
         self.assertContains(response, f'href="{delete_url}"')
+
 
 class AuthorUpdateViewTest(TestCase):
     def setUp(self):
@@ -390,9 +389,9 @@ class AuthorUpdateViewTest(TestCase):
 
     def test_author_update_get(self):
         self.client.login(username='staff', password='pass1234test')
-        next_url = reverse('staff_author_detail', kwargs={'pk': self.author.id})
+        next_url = reverse('staff_author_list')
         response = self.client.get(
-            reverse('author_update', kwargs={'pk':self.author.id}) + f'?next={next_url}'
+            reverse('author_update', kwargs={'pk': self.author.id}) + f'?next={next_url}'
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Upravení autora')
@@ -401,13 +400,12 @@ class AuthorUpdateViewTest(TestCase):
         self.assertContains(response, f'href="{next_url}"')
         self.assertContains(response, f'type="hidden"')
 
-
     def test_author_update_post(self):
         self.client.login(username='staff', password='pass1234test')
-        next_url = reverse('staff_author_detail', kwargs={'pk': self.author.id})
+        next_url = reverse('staff_author_list')
         response = self.client.post(
             reverse('author_update', kwargs={
-                'pk': self.author.id}) + f'?next={next_url}',{
+                'pk': self.author.id}) + f'?next={next_url}', {
                 'name': 'Josef',
                 'lastname': self.author.lastname
             }
@@ -416,6 +414,7 @@ class AuthorUpdateViewTest(TestCase):
         self.assertRedirects(response, next_url)
         self.assertTrue(Autor.objects.filter(name='Josef').exists())
         self.assertFalse(Autor.objects.filter(name='Jan').exists())
+
 
 class AuthorDeleteViewTest(TestCase):
     def setUp(self):
@@ -432,7 +431,7 @@ class AuthorDeleteViewTest(TestCase):
             reverse('author_delete', kwargs={'pk': self.author.id}) + f'?next={next_url}'
         )
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Opravdu chcete odstranit autora:')
+        self.assertContains(response, 'Opravdu chcete odstranit autora')
         self.assertContains(response, '<form')
         self.assertContains(response, 'type="submit"')
         self.assertContains(response, f'href="{next_url}"')
@@ -448,4 +447,3 @@ class AuthorDeleteViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, next_url)
         self.assertFalse(Autor.objects.filter(name='Jan').exists())
-

@@ -14,7 +14,7 @@ from django.views.decorators.http import require_GET
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, TemplateView
 
-from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm, ImageFormSet
+from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm #, ImageFormSet
 from eshop.mixins import StaffRequiredMixin
 from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Order
 
@@ -227,24 +227,24 @@ class BookCreateView(PermissionRequiredMixin, CreateView):
     success_url = reverse_lazy('staff_book_list')
     permission_required = 'eshop.add_book'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['formset'] = ImageFormSet(self.request.POST, self.request.FILES)
-        else:
-            context['formset'] = ImageFormSet()
-        return context
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        formset = context['formset']
-        if form.is_valid() and formset.is_valid():
-            self.object = form.save()
-            formset.instance = self.object
-            formset.save()
-            return redirect(self.get_success_url())
-        else:
-            return self.form_invalid(form)
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     if self.request.POST:
+    #         context['formset'] = ImageFormSet(self.request.POST, self.request.FILES)
+    #     else:
+    #         context['formset'] = ImageFormSet()
+    #     return context
+    #
+    # def form_valid(self, form):
+    #     context = self.get_context_data()
+    #     formset = context['formset']
+    #     if form.is_valid() and formset.is_valid():
+    #         self.object = form.save()
+    #         formset.instance = self.object
+    #         formset.save()
+    #         return redirect(self.get_success_url())
+    #     else:
+    #         return self.form_invalid(form)
 
 class BookUpdateView(PermissionRequiredMixin, UpdateView):
     model = Book
@@ -259,22 +259,22 @@ class BookUpdateView(PermissionRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['back_url'] = self.request.GET.get('next', '/')
-        if self.request.POST:
-            context['formset'] = ImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
-        else:
-            context['formset'] = ImageFormSet(instance=self.object)
+        # if self.request.POST:
+        #     context['formset'] = ImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        # else:
+        #     context['formset'] = ImageFormSet(instance=self.object)
         return context
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        formset = context['formset']
-        if form.is_valid() and formset.is_valid():
-            self.object = form.save()
-            formset.instance = self.object
-            formset.save()
-            return redirect(self.get_success_url())
-        else:
-            return self.form_invalid(form)
+    # def form_valid(self, form):
+    #     context = self.get_context_data()
+    #     formset = context['formset']
+    #     if form.is_valid() and formset.is_valid():
+    #         self.object = form.save()
+    #         formset.instance = self.object
+    #         formset.save()
+    #         return redirect(self.get_success_url())
+    #     else:
+    #         return self.form_invalid(form)
 
 class BookDeleteView(PermissionRequiredMixin, DeleteView):
     model = Book
@@ -573,7 +573,7 @@ class UpdateCartView(View):
 
 # post a <form>????????????????????????????????????????????????????????????????????
 class RemoveFromCartView(View):
-    def get(self, request, item_id, *args, **kwargs):   # mělo by být post?
+    def post(self, request, item_id, *args, **kwargs):   # mělo by být post?
         try:
             item = SelectedProduct.objects.get(id=item_id)
             item.delete()

@@ -28,7 +28,7 @@ class Autor(models.Model):
         return f"{self.name} {self.lastname}"
 
     def __repr__(self):
-        pass
+        return f"Autor(name={self.name}, lastname={self.lastname})"
 
 
 class Book(models.Model):
@@ -112,10 +112,14 @@ class Cart(models.Model):
     session_key = models.CharField(max_length=40, null=True, blank=True)
 
     def __str__(self):
-        pass
+        if self.user:
+            return f"košík uživatele {self.user}"
+        return f"košík na session {self.session_key}"
 
     def __repr__(self):
-        pass
+        if self.user:
+            return f"Cart(user={self.user}"
+        return f"Cart(session_key={self.session_key}"
 
     def get_total_cart_price(self):
         total_price = 0
