@@ -544,29 +544,6 @@ section{
     height: 25rem;
 }
 
-.featured .featured-slider .box .icons{
-    border-bottom: var(--border-hover);
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    background: #fff;
-    z-index: 1;
-    transform: translateY(-105%) ;
-}
-
-.featured .featured-slider .box:hover .icons{
-    transform: translateY(0%)
-}
-
-.featured .featured-slider .box .icons a {
-    color: var(--black);
-    font-size: 2.2rem;
-    padding:1.3rem 1.5rem;
-}
-
-.featured .featured-slider .box .icons a:hover{
-    background: var(--green);
-    color: #fff;
-}
 
 .featured .featured-slider .box .content{
     background: #eee;
@@ -1036,3 +1013,57 @@ section{
     75%  { transform: perspective(400px) rotateY(-15deg); }
     100% { transform: perspective(400px) rotateY(0deg); }
   }
+
+/* společný styl ikon */
+.featured .featured-slider .box .icons a,
+.featured .featured-slider .box .icons button {
+  color: var(--black);
+  font-size: 2.2rem;
+  padding: 1.3rem 1.5rem;
+  background: white;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s, color .2s;
+  margin: 0 .2rem;
+}
+.featured .featured-slider .box .icons a:hover,
+.featured .featured-slider .box .icons button:hover {
+  background: var(--green);
+  color: #fff;
+}
+
+/* jen to „form button“ přejmenujeme, aby mohl zůstat vzhled */
+.featured .featured-slider .box .icons .fav-btn {
+  /* nic navíc – dělaná přes stejný selektor výše */
+}
+
+.featured .featured-slider .box .icons{
+    border-bottom: var(--border-hover);
+    position: absolute;
+    top: 0;left: 0;right: 0;
+    background: #fff;
+    z-index: 1;
+    transform: translateY(-105%);
+}
+.featured .featured-slider .box:hover .icons{
+        transform: translateY(0%);
+}
+
+
+.card .delete-btn {
+  position: absolute;
+  top: 0.5rem;        /* odsazení od horního okraje karty */
+  right: 0.5rem;      /* odsazení od pravého okraje karty */
+  font-size: 1.2rem;  /* velikost křížku */
+  color: #888;        /* stejná šedá jako okraj karty */
+  text-decoration: none;
+  z-index: 10;
+  transition: color .2s, transform .1s;
+}
+
+.card .delete-btn:hover {
+  color: #555;
+  transform: scale(1.2);
+}

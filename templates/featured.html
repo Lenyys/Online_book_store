@@ -7,26 +7,18 @@
             <div class="swiper-slide box">
                 <div class="icons">
                     <a href="#" class="fas fa-search"></a>
-                    <form action="{% url 'favorite_book' book.id %}" method="post" style="display: inline;">
-                        {% csrf_token %}
-                        <input type="hidden" name="next" value="{{ request.path }}">
-                        <button type="submit" class="fas fa-heart">
-                            {% comment %}
-                            {% if user in book.favorite_book.all %}
-                                Odebrat z oblíbených
-                            {% else %}
-                                Přidat do oblíbených
-                            {% endif %}
-                            {% endcomment %}
-                        </button>
-                    </form>
+                         <button
+                            class="fas fa-heart fav-btn"
+                            data-url="{% url 'favorite_book' book.id %}"
+                            title="Přidat / Odebrat z oblíbených"
+                          ></button>
 <!--                    <a href="{% url 'favorite_book' book.id %}?next={{ request.path }} " class="fas fa-heart" >{% if user in book.favorite_book.all %}&ndash;&gt;-->
 <!--                                Odebrat z oblíbených-->
 <!--                            {% else %}-->
 <!--                                Přidat do oblíbených-->
 <!--                            {% endif %}-->
 <!--                    </a>-->
-                    <a href="#" class="fas fa-eye"></a>
+                    <a href="{% url 'book_detail' book.id %}" class="fas fa-eye" title="Zobrazit"></a>
                 </div>
                 <div class="image">
                     <img src="{{ book.images.first.image.url }}" alt="{{ book.images.first.description }} ">
