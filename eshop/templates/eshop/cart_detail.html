@@ -8,77 +8,69 @@
 {% endfor %}
 {% endif %}
 {% if items %}
-  <div class="cart-card">
+<div class="cart-card">
     <h1 class="form-title">Váš košík</h1>
     <button class="refresh-btn" title="Aktualizovat košík">
-      <i class="fas fa-sync-alt"></i>
+        <i class="fas fa-sync-alt"></i>
     </button>
 
     <form method="post" action="{% url 'update_cart' %}">
-      {% csrf_token %}
+        {% csrf_token %}
 
-      {% for item in items %}
-      <div class="cart-item row align-items-center">
-        <div class="col-6">
-          {{ forloop.counter }}.
-          <a href="{% url 'book_detail' item.product.id %}" class="item-name">
-            {{ item.product.name }}
-          </a>
-          <div class="item-author">Helen Exley</div>
+        {% for item in items %}
+        <div class="cart-item row align-items-center">
+            <div class="col-6">
+                {{ forloop.counter }}.
+                <a href="{% url 'book_detail' item.product.id %}" class="item-name">
+                    {{ item.product.name }}
+                </a>
+                <div class="item-author">Helen Exley</div>
+            </div>
+            <div class="col-3 text-sm-right">
+                {{ item.product.price }} Kč
+            </div>
+
+            <div class="col-2">
+                <input type="number"
+                       name="quantity-{{ item.id }}"
+                       value="{{ item.quantity }}"
+                       min="1"
+                       class="form-control form-control-sm"
+                       onchange="this.form.submit()"/>
+            </div>
+
+            <div class="col-1 text-center">
+                <a href="{% url 'remove_from_cart' item.id %}" class="remove-item" title="Odstranit položku">❌ </a>
+            </div>
+
         </div>
-        <div class="col-3 text-sm-right">
-          {{ item.product.price }} Kč
+        {% endfor %}
+
+        <div class="cart-total row mt-3">
+            <div class="col text-right">
+                <strong>Celková cena:</strong> {{ total_price }} Kč
+            </div>
         </div>
-
-        <div class="col-2">
-          <input type="number"
-                 name="quantity-{{ item.id }}"
-                 value="{{ item.quantity }}"
-                 min="1"
-                 class="form-control form-control-sm"
-                 onchange="this.form.submit()"/>
-        </div>
-
-        <div class="col-1 text-center">
-
-          <form method="post" action="{% url 'remove_from_cart' item.id %}" style="display: inline;">
-              {% csrf_token %}
-              <button type="submit" class="remove-item" title="Odstranit položku">❌</button>
-          </form>
-
-          {% comment %}
-          <a href="{% url 'remove_from_cart' item.id %}" class="remove-item" title="Odstranit položku">❌ </a>
-          {% endcomment %}
-        </div>
-
-      </div>
-      {% endfor %}
-
-      <div class="cart-total row mt-3">
-        <div class="col text-right">
-          <strong>Celková cena:</strong> {{ total_price }} Kč
-        </div>
-      </div>
 
     </form>
 
-     <div class="form-buttons">
-      <a href="{% url 'book_list' %}" class="btn btn-secondary">
-        Pokračovat v nákupu
-      </a>
-      <a href="{% url 'create_order' %}" class="btn btn-success">
-        Přejít na objednávku
-      </a>
+    <div class="form-buttons">
+        <a href="{% url 'book_list' %}" class="btn btn-secondary">
+            Pokračovat v nákupu
+        </a>
+        <a href="{% url 'create_order' %}" class="btn btn-success">
+            Přejít na objednávku
+        </a>
     </div>
 
-  </div>
+</div>
 {% else %}
- <li class="list-group-item text-center py-5">
-   <i class="fa-solid fa-cart-plus fa-4x text-secondary mb-3"></i>
-   <div class="fw-bold mb-3">Váš Košík Je Prázdný</div>
-   <a href="{% url 'book_list' %}" class="btn btn-outline-success btn-sm">
-     Procházet knihy
-   </a>
- </li>
+<li class="list-group-item text-center py-5">
+    <i class="fa-solid fa-cart-plus fa-4x text-secondary mb-3"></i>
+    <div class="fw-bold mb-3">Váš Košík Je Prázdný</div>
+    <a href="{% url 'book_list' %}" class="btn btn-outline-success btn-sm">
+        Procházet knihy
+    </a>
+</li>
 {% endif %}
 {% endblock %}

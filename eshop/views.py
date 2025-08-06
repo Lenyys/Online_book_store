@@ -50,7 +50,6 @@ def autocomplete_search(request):
     data = []
 
     if query:
-        # vezmeme maximálně 6 knih odpovídajících hledanému řetězci
         qs = Book.objects.filter(name__icontains=query)[:6]
         for book in qs:
             data.append({
@@ -153,9 +152,6 @@ class BookListView(ListView):
         context = super().get_context_data(**kwargs)
         categories = Category.objects.all()
         context['categories'] = categories
-        # category_id = self.request.GET.get('category')
-        # if category_id:
-        #     context['selected_category'] = get_object_or_404(Category, id=category_id)
         return context
 
 
@@ -177,7 +173,6 @@ class EBookListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
-        # Bez nadpisu: context['page_title'] = 'E-knihy'
         return context
 
 
@@ -227,24 +222,6 @@ class BookCreateView(PermissionRequiredMixin, CreateView):
     success_url = reverse_lazy('staff_book_list')
     permission_required = 'eshop.add_book'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     if self.request.POST:
-    #         context['formset'] = ImageFormSet(self.request.POST, self.request.FILES)
-    #     else:
-    #         context['formset'] = ImageFormSet()
-    #     return context
-    #
-    # def form_valid(self, form):
-    #     context = self.get_context_data()
-    #     formset = context['formset']
-    #     if form.is_valid() and formset.is_valid():
-    #         self.object = form.save()
-    #         formset.instance = self.object
-    #         formset.save()
-    #         return redirect(self.get_success_url())
-    #     else:
-    #         return self.form_invalid(form)
 
 class BookUpdateView(PermissionRequiredMixin, UpdateView):
     model = Book
@@ -259,22 +236,8 @@ class BookUpdateView(PermissionRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['back_url'] = self.request.GET.get('next', '/')
-        # if self.request.POST:
-        #     context['formset'] = ImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
-        # else:
-        #     context['formset'] = ImageFormSet(instance=self.object)
         return context
 
-    # def form_valid(self, form):
-    #     context = self.get_context_data()
-    #     formset = context['formset']
-    #     if form.is_valid() and formset.is_valid():
-    #         self.object = form.save()
-    #         formset.instance = self.object
-    #         formset.save()
-    #         return redirect(self.get_success_url())
-    #     else:
-    #         return self.form_invalid(form)
 
 class BookDeleteView(PermissionRequiredMixin, DeleteView):
     model = Book
@@ -296,9 +259,7 @@ class FavoriteBooksListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return self.request.user.favorite_books.all()
 
-# ????????????????????????????????????????????????
 class FavoriteBookRemoveFromFavoritesList(LoginRequiredMixin, View):
-
     def get(self, request, book_id):
         book = get_object_or_404(Book, id=book_id)
         return render(request, 'eshop/remove_favorite.html', {
@@ -571,16 +532,12 @@ class UpdateCartView(View):
                     continue
         return redirect('cart_detail')
 
-# post a <form>????????????????????????????????????????????????????????????????????
-class RemoveFromCartView(View):
-    def post(self, request, item_id, *args, **kwargs):   # mělo by být post?
-        try:
-            item = SelectedProduct.objects.get(id=item_id)
-            item.delete()
-            messages.success(request, "Položka byla odstraněna z košíku.")
-        except SelectedProduct.DoesNotExist:
-            messages.error(request, "Položka nebyla nalezena.")
-        return redirect('cart_detail')
+
+class RemoveFromCartView(DeleteView):
+    model = SelectedProduct
+    template_name = 'eshop/remove_from_cart.html'
+    success_url = reverse_lazy('cart_detail')
+    context_object_name = 'book'
 
 
 @method_decorator(never_cache, name='dispatch')
@@ -653,68 +610,6 @@ class CreateOrderView(View):
              return redirect('order_confirmation', pk=order.id)
         return render(request, 'eshop/order_form.html', {
             'form': form, 'cart': cart, 'total_price': total_price })
-
-    # def post(self, request, *args, **kwargs):
-    #     form = OrderForm(request.POST)
-    #     if form.is_valid():
-    #         delivery_address = form.cleaned_data.get('delivery_address')
-    #         note = form.cleaned_data.get('note')
-    #         first_name = form.cleaned_data.get('first_name')
-    #         last_name = form.cleaned_data.get('last_name')
-    #         email = form.cleaned_data.get('email')
-    #         phone = form.cleaned_data.get('phone')
-    #         postal_code = form.cleaned_data.get('postal_code')
-    #
-    #         if self.request.user.is_authenticated:
-    #             cart = get_object_or_404(Cart, user=self.request.user, is_temporary=True)
-    #         else:
-    #             cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
-    #         with transaction.atomic():
-    #             if self.request.user.is_authenticated:
-    #                 order = Order.objects.create(
-    #                     user=self.request.user,
-    #                     delivery_address=delivery_address,
-    #                     total_price=cart.get_total_cart_price(),
-    #                     paid=False,
-    #                     first_name=first_name,
-    #                     last_name=last_name,
-    #                     email=email,
-    #                     phone=phone,
-    #                     postal_code=postal_code,
-    #                     note=note
-    #                 )
-    #             else:
-    #                 order = Order.objects.create(
-    #                     user=None,
-    #                     delivery_address=delivery_address,
-    #                     total_price=cart.get_total_cart_price(),
-    #                     paid=False,
-    #                     first_name=first_name,
-    #                     last_name=last_name,
-    #                     email=email,
-    #                     phone=phone,
-    #                     postal_code=postal_code,
-    #                     note=note
-    #                 )
-    #             for item in cart.selected_products.all():
-    #                 item.product.stock_quantity -= item.quantity
-    #                 item.product.save()
-    #                 item.order = order
-    #                 item.cart = None
-    #                 item.product_price = item.product.price
-    #                 item.save()
-    #
-    #             cart.is_temporary = True
-    #             cart.save()
-    #             email = EmailMessage(
-    #                 subject='Potvrzení objednávky',
-    #                 body=f'Děkujeme za objednávku... č. {order.id}',
-    #                 from_email='eshop@example.com',
-    #                 to=[order.email],
-    #             )
-    #             email.send()
-    #         return redirect('order_confirmation', pk=order.id)
-    #     return render(request, 'eshop/order_form.html', {'form': form})
 
 
 class OrderConfirmationView(TemplateView):

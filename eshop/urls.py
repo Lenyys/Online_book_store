@@ -42,11 +42,10 @@ urlpatterns = [
     path('staff_category_delete/<int:pk>/', StaffCategoryDeleteView.as_view(), name='staff_category_delete'),
     path('staff_category_create/', StaffCategoryCreateView.as_view(), name='staff_category_create'),
 
-
     path('cart/add/<int:pk>/', AddToCartView.as_view(), name='add_to_cart'),
     path('cart_detail/', CartDetailView.as_view(), name='cart_detail'),
     path('cart/update/', UpdateCartView.as_view(), name='update_cart'),
-    path('cart/remove/<int:item_id>/', RemoveFromCartView.as_view(), name='remove_from_cart'),
+    path('cart/remove/<int:pk>/', RemoveFromCartView.as_view(), name='remove_from_cart'),
 
     path('create_order/', CreateOrderView.as_view(), name='create_order'),
     path('order_confirmation/<int:pk>/', OrderConfirmationView.as_view(), name='order_confirmation'),
@@ -57,5 +56,4 @@ urlpatterns = [
 
     path('autocomplete-search/', autocomplete_search, name="autocomplete_search"),
     path('search/', search_view, name="search"),
-
 ]

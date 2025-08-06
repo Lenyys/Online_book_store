@@ -4,11 +4,9 @@ from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 
 
-
 class Category(MPTTModel):
     name = models.CharField(max_length=100)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
-
 
     class MPTTMeta:
         order_insertion_by = ['name']
@@ -19,11 +17,12 @@ class Category(MPTTModel):
     def __repr__(self):
         return f"Category(name={self.name})"
 
+
 class Autor(models.Model):
     name = models.CharField(max_length=80, null=False, blank=False)
     lastname = models.CharField(max_length=150, null=False, blank=False)
     date_of_birth = models.DateField(null=True, blank=True)
-    # biografie, datum 
+
     def __str__(self):
         return f"{self.name} {self.lastname}"
 
@@ -37,10 +36,9 @@ class Book(models.Model):
         ('ebook', 'E-kniha'),
         ('audiobook', 'Audiokniha'),
     ]
-
     name = models.CharField(max_length=150, null=False, blank=False)
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='book')  # <-- TADY
-    autor = models.ManyToManyField(Autor,blank=True, related_name='books')
+    autor = models.ManyToManyField(Autor, blank=True, related_name='books')
     isbn = models.CharField(max_length=20, null=True, blank=True)
     ean = models.PositiveIntegerField(null=True, blank=True)
     description = models.TextField(null=False, blank=False)
@@ -49,8 +47,10 @@ class Book(models.Model):
     category = models.ManyToManyField(Category, blank=True, related_name='books')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='products_created')
-    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='products_updated')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
+                                   related_name='products_created')
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
+                                   related_name='products_updated')
     favorite_book = models.ManyToManyField(User, blank=True, related_name='favorite_books')
     discount = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False, default=0)
 
@@ -59,7 +59,7 @@ class Book(models.Model):
 
     def get_discount_price(self):
         if self.discount:
-            return self.price * (1- self.discount / 100)
+            return self.price * (1 - self.discount / 100)
         return self.price
 
     def __str__(self):
@@ -127,12 +127,12 @@ class Cart(models.Model):
             total_price += (item.product.price * item.quantity)
         return total_price
 
+
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='orders')
     created_at = models.DateTimeField(auto_now_add=True)
     paid = models.BooleanField(default=False)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=True, default=0)
-
     delivery_address = models.TextField(null=False, blank=False)
     first_name = models.CharField(max_length=150, null=False, blank=False)
     last_name = models.CharField(max_length=150, null=False, blank=False)
@@ -145,7 +145,8 @@ class Order(models.Model):
         return f"objednávka #{self.id} - {self.user_name} {self.user_last_name}"
 
     def __repr__(self):
-        pass
+        return (f"Order(user={self.user}, first_name={self.first_name},"
+                f"lastname={self.last_name}, delivery_address={self.delivery_address}")
 
 
 class SelectedProduct(models.Model):
@@ -158,8 +159,7 @@ class SelectedProduct(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        pass
+        return f"{self.product} ({self.quantity})"
+
     def __repr__(self):
-        pass
-
-
+        return f"SelectedProduct(product={self.product})"

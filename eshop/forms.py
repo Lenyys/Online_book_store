@@ -3,7 +3,6 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.forms import inlineformset_factory, BaseInlineFormSet
 
 from eshop.models import Book, Category, Image, Autor, Order
 
@@ -115,22 +114,6 @@ class ImageForm(forms.ModelForm):
             'description': 'Popis k obrázku'
         }
 
-# class CustomImageFormSet(BaseInlineFormSet):
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         for form in self.forms:
-#             if 'DELETE' in form.fields:
-#                 form.fields['DELETE'].label = 'Odstranit obrázek'
-#
-#
-# ImageFormSet = inlineformset_factory(
-#     Book, Image,
-#     form=ImageForm,
-#     formset=CustomImageFormSet,
-#     fields=['image', 'description'],
-#     extra=1,
-#     can_delete=True
-# )
 
 class AddOrCreateAuthorForm(forms.Form):
     existing_author = forms.ModelChoiceField(
@@ -254,27 +237,6 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = '__all__'
 
-#
-# class OrderForm(forms.Form):
-#     first_name = forms.CharField(label='Jméno', max_length=50,
-#                                  widget=forms.TextInput(attrs={'class': 'form-control', }))
-#     last_name = forms.CharField(label='Příjmení', max_length=50,
-#                                 widget=forms.TextInput(attrs={'class': 'form-control', }))
-#     email = forms.EmailField(label='E-mail', widget=forms.EmailInput(attrs={'class': 'form-control', }))
-#     phone = forms.CharField(label='Telefon', max_length=20, required=False,
-#                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '607123456'}))
-#     delivery_address = forms.CharField(
-#         label='Dodací adresa',
-#         widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control', }),
-#     )
-#     # city = forms.CharField(label='Město', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control',}))
-#     postal_code = forms.CharField(label='PSČ', max_length=10, widget=forms.TextInput(attrs={'class': 'form-control', }))
-#     note = forms.CharField(
-#         label='Poznámka k objednávce',
-#         widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control', }),
-#         required=False,
-#
-#     )
 
 class OrderForm(forms.ModelForm):
     class Meta:
