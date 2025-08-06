@@ -13,6 +13,9 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, TemplateView
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 
 from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm, ImageFormSet
 from eshop.mixins import StaffRequiredMixin
@@ -59,6 +62,19 @@ def autocomplete_search(request):
             })
 
     return JsonResponse({"results": data})
+
+
+@login_required
+@require_POST
+def favorite_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.user in book.favorite_book.all():
+        book.favorite_book.remove(request.user)
+        favorited = False
+    else:
+        book.favorite_book.add(request.user)
+        favorited = True
+    return JsonResponse({'favorited': favorited})
 
 
 class CategoryListView(ListView):
