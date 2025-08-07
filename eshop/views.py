@@ -23,9 +23,11 @@ def home(request):
     books = Book.objects.all()
     ebooks = books.filter(type='ebook')
     books = books.filter(type='book')
+    print(f"ebook pocet: {len(ebooks)}")
     time_delta = timezone.now() - timedelta(days=30)
     new_books = books.filter(created_at__gte=time_delta)
-    new_ebooks = ebooks.filter(created_at__lte=time_delta)
+    new_ebooks = ebooks.filter(created_at__gte=time_delta)
+    print(f"ebook new pocet: {len(new_ebooks)}")
     return render(request, 'home.html', {
         'books': books,
         'new_ebooks': new_ebooks,

@@ -8,12 +8,18 @@
 
             <div class="swiper books-slider">
                 <div class="swiper-wrapper">
+                    {% for book in books %}
+                    <a  href ="{% url 'book_detail' book.id %}"class = "swiper-slide mx-4"><img src="{{ book.images.first.image.url }}" alt="{{ book.images.first.description }} ">
+
+                    {% endfor %}
+                        {% comment %}
                     <a  href ="#"class = "swiper-slide"><img src="/media/eshop/images/python-snadno-a-rychle.jpg" alt=""></a>
                     <a  href ="#"class = "swiper-slide"><img src="/media/eshop/images/deep-learning-v-jazyku-python-2.jpg" alt=""></a>
                     <a  href ="#"class = "swiper-slide"><img src="/media/eshop/images/db148369-2b5b-45cf-8168-2fc2c8fd5e10.jpg" alt=""></a>
                     <a  href ="#"class = "swiper-slide"><img src="/media/eshop/images/zaciname-programovat-v-jazyku-python.jpg" alt=""></a>
                     <a  href ="#"class = "swiper-slide"><img src="/media/eshop/images/zaciname-programovat-v-jazyku-python_dQoZhqd.jpg" alt=""></a>
                     <a  href ="#"class = "swiper-slide"><img src="/media/eshop/images/python-snadno-a-rychle.jpg" alt=""></a>
+                        {% endcomment %}
                 </div>
             <img src="/media/eshop/images/stand2.png" class="stand" alt="">
             </div>

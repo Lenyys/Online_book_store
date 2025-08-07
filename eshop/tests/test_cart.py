@@ -66,7 +66,7 @@ class CartDetailViewTest(TestCase):
         total_price = self.cart.get_total_cart_price()
         response = self.client.get(reverse('cart_detail'))
         continue_url = reverse('book_list')
-        remove_url = reverse('remove_from_cart', kwargs={'item_id':self.cart_item.id})
+        remove_url = reverse('remove_from_cart', kwargs={'pk':self.cart_item.id})
         update_cart_url = reverse('update_cart')
 
 
@@ -79,11 +79,11 @@ class CartDetailViewTest(TestCase):
         self.assertContains(response, "<form")
         self.assertContains(response, f'action="{update_cart_url}"')
         self.assertContains(response, f'href="{continue_url}"')
-        self.assertContains(response, f'action="{remove_url}"')
+        self.assertContains(response, f'href="{remove_url}"')
 
     def test_remove_item_from_cart(self):
         self.client.login(username='testuser', password='testpass123')
-        response = self.client.post(reverse('remove_from_cart', kwargs={'item_id':self.cart_item.id}), {})
+        response = self.client.post(reverse('remove_from_cart', kwargs={'pk':self.cart_item.id}), {})
 
         self.assertEqual(response.status_code,302)
         self.assertRedirects(response, reverse('cart_detail'))
