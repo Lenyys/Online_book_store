@@ -1,46 +1,46 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="book-detail-page">
-  <div class="book-header">
-    <img src="{{ book.images.all.0.image.url }}" alt="Obálka knihy" class="book-cover">
-    <div class="book-info-box">
-      <h1 class="book-title">{{ book.name }}</h1>
-      <p class="book-author">
-        {% if book.autor.all %}
-          {{ book.autor.all|join:", " }}
-        {% else %}
-          (bez autora)
-        {% endif %}
-      </p>
-      <p class="book-description">{{ book.description }}</p>
-      <p class="book-stock">
-        {% if book.stock_quantity > 5 %}
-          Na skladě: 5+ ks
-        {% else %}
-          Na skladě: {{ book.stock_quantity }} ks
-        {% endif %}
-      </p>
-      <p class="book-price">{{ book.price }} Kč</p>
+    <div class="book-header">
+        <img src="{{ book.images.all.0.image.url }}" alt="Obálka knihy" class="book-cover">
+        <div class="book-info-box">
+            <h1 class="book-title">{{ book.name }}</h1>
+            <p class="book-author">
+                {% if book.autor.all %}
+                {{ book.autor.all|join:", " }}
+                {% else %}
+                (bez autora)
+                {% endif %}
+            </p>
+            <p class="book-description">{{ book.description }}</p>
+            <p class="book-stock">
+                {% if book.stock_quantity > 5 %}
+                Na skladě: 5+ ks
+                {% else %}
+                Na skladě: {{ book.stock_quantity }} ks
+                {% endif %}
+            </p>
+            <p class="book-price">{{ book.price }} Kč</p>
 
-      {% if book.stock_quantity > 0 %}
-      <form action="{% url 'add_to_cart' book.pk %}" method="post" class="add-to-cart-form">
-        {% csrf_token %}
-        <button class="add-to-cart-btn" type="submit">Přidat do košíku</button>
-      </form>
-      {% else %}
-        <p class="out-of-stock">Produkt je vyprodán</p>
-      {% endif %}
+            {% if book.stock_quantity > 0 %}
+            <form action="{% url 'add_to_cart' book.pk %}" method="post" class="add-to-cart-form">
+                {% csrf_token %}
+                <button class="add-to-cart-btn" type="submit">Přidat do košíku</button>
+            </form>
+            {% else %}
+            <p class="out-of-stock">Produkt je vyprodán</p>
+            {% endif %}
 
+        </div>
     </div>
-  </div>
 
-  {% if book.images.all|length > 1 %}
-  <div class="book-thumbnails">
-    {% for img in book.images.all|slice:"1:" %}
-      <img src="{{ img.image.url }}" alt="Galerie" class="thumbnail">
-    {% endfor %}
-  </div>
-  {% endif %}
+    {% if book.images.all|length > 1 %}
+    <div class="book-thumbnails">
+        {% for img in book.images.all|slice:"1:" %}
+        <img src="{{ img.image.url }}" alt="Galerie" class="thumbnail">
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}

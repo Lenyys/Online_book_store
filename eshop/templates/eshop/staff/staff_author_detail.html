@@ -2,38 +2,37 @@
 
 {% block content %}
 <div class="form-container">
-  <h1 class="form-title">Detail autora</h1>
+    <h1 class="form-title">Detail autora</h1>
 
-  <div class="info">
-    <div>
-      <h4>Jméno autora:</h4>
-      <p>{{ author.name }}</p>
+    <div class="info">
+        <div>
+            <h4>Jméno autora:</h4>
+            <p>{{ author.name }}</p>
+        </div>
+        <div>
+            <h4>Příjmení autora:</h4>
+            <p>{{ author.lastname }}</p>
+        </div>
+        <div>
+            <h5>Datum narození:</h5>
+            {% if author.date_of_birth %}
+            <p>{{ author.date_of_birth }}</p>
+            {% else %}
+            <p>Nezadáno</p>
+            {% endif %}
+        </div>
     </div>
-    <div>
-      <h4>Příjmení autora:</h4>
-      <p>{{ author.lastname }}</p>
-    </div>
-    <div>
-      <h5>Datum narození:</h5>
-      {% if author.date_of_birth %}
-        <p>{{ author.date_of_birth }}</p>
-      {% else %}
-        <p>Nezadáno</p>
-      {% endif %}
-    </div>
-  </div>
 
     <div class="form-buttons">
-      {% if perms.eshop.change_autor %}
+        {% if perms.eshop.change_autor %}
         <a class="btn btn-success" href="{% url 'author_update' author.id %}?next={{ request.path }}">Upravit </a>
-      {% endif %}
-      {% if perms.eshop.delete_autor %}
-        <a class="btn btn-danger"  href="{% url 'author_delete' author.id %}?next={{ request.path }}">Smazat </a>
-      {% endif %}
-      {% if user.is_authenticated and user.is_superuser or user.is_staff %}
-      <a class="btn btn-secondary" href="{% url 'staff_author_list' %}">Zpět na seznam</a>
-      {% endif %}
+        {% endif %}
+        {% if perms.eshop.delete_autor %}
+        <a class="btn btn-danger" href="{% url 'author_delete' author.id %}?next={{ request.path }}">Smazat </a>
+        {% endif %}
+        {% if user.is_authenticated and user.is_superuser or user.is_staff %}
+        <a class="btn btn-secondary" href="{% url 'staff_author_list' %}">Zpět na seznam</a>
+        {% endif %}
     </div>
-
 </div>
 {% endblock %}

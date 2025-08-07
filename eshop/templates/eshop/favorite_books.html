@@ -3,40 +3,39 @@
 
 {% block content %}
 <div class="container py-4">
-  <h1 class="mb-4 text-center">Oblíbené knihy</h1>
+    <h1 class="mb-4 text-center">Oblíbené knihy</h1>
 
-  {% if favorite_books %}
+    {% if favorite_books %}
     <div class="row g-4">
-      {% for book in favorite_books %}
+        {% for book in favorite_books %}
         <div class="col-6 col-md-4 col-lg-3">
-          <div class="card h-100 shadow-sm">
-            {% if book.image %}
-              <img src="{{ book.image.url }}"
-                   class="card-img-top"
-                   alt="{{ book.name }}">
-            {% else %}
-              <div class="card-img-top d-flex align-items-center justify-content-center bg-light"
-                   style="height:100px;">
-                <i class="fa-solid fa-book-open fa-4x text-success"></i>
-              </div>
-            {% endif %}
+            <div class="lupa">
+                <div class="card h-100 shadow-sm">
+                    <a href="{% url 'favorite_remove' book.id %}?next={{ request.path }}"
+                       class="delete-btn"
+                       title="Smazat">❌</a>
+                    {% if book.image %}
+                    <img src="{{ book.image.url }}"
+                         class="card-img-top"
+                         alt="{{ book.name }}">
+                    {% else %}
+                    <div class="card-img-top d-flex align-items-center justify-content-center bg-light"
+                         style="height:100px;">
+                        <i class="fa-solid fa-book-open fa-4x text-success"></i>
+                    </div>
+                    {% endif %}
 
-            <div class="card-body d-flex flex-column text-center">
-              <h5 class="card-title mb-2">{{ book.name }}</h5>
-              <p class="mt-auto fw-bold">{{ book.price }} Kč</p>
+                    <div class="card-body d-flex flex-column text-center">
+                        <h5 class="card-title mb-2">{{ book.name }}</h5>
+                        <p class="mt-auto fw-bold">{{ book.price }} Kč</p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-{% comment %}
-<!--<a href="{% url 'favorite_remove' book.id %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>-->
-{% endcomment %}
-   {% endfor %}
+        {% endfor %}
     </div>
-  {% else %}
+    {% else %}
     <p class="text-muted text-center">Nemáte žádné oblíbené knihy.</p>
-  {% endif %}
+    {% endif %}
 </div>
-{% comment %}
-<!--<a href="{% url 'favorite_remove' book.id %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>-->
-{% endcomment %}
 {% endblock %}

@@ -2,12 +2,11 @@
 
 {% block content %}
 
-
 <div class="form-container">
     <h1 class="form-title">Přidání obrázku ke knize:</h1>
-       <div class="col-12 text-center ">
-              <h2>{{ book.name }}</h2>
-       </div>
+    <div class="col-12 text-center ">
+        <h2>{{ book.name }}</h2>
+    </div>
     <form method="post" class="styled-form" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}

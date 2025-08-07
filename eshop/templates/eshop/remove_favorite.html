@@ -2,19 +2,17 @@
 
 {% block content %}
 <div class="form-container">
-     <h1 class="form-title">Opravdu chcete odstranit knihu z oblíbených?</h1>
-        <form method="post" class="styled-form">
-            <div class="form-row">
-                <span class="form-label">Název knihy:</span>
-                <span class="form-value">{{ book.name }}</span>
-            </div>
-
-            {% csrf_token %}
-<!--            <input type="hidden" name="next" value="{{ back_url }}">-->
-            <div class="form-buttons">
-                <button type="submit" class="btn btn-danger">Ano smazat</button>
-                <a href="{% url 'user_favorite_books' %}" class="btn btn-secondary">Zpět</a>
-            </div>
-        </form>
+    <h1 class="form-title">Opravdu chcete odstranit knihu z oblíbených?</h1>
+    <form method="post" class="styled-form">
+        <div class="form-row">
+            <span class="form-label">Název knihy:</span>
+            <span class="form-value">{{ book.name }}</span>
+        </div>
+        {% csrf_token %}
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-danger">Ano smazat</button>
+            <a href="{% url 'user_favorite_books' %}" class="btn btn-secondary">Zpět</a>
+        </div>
+    </form>
 </div>
 {% endblock %}

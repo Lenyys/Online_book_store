@@ -2,40 +2,43 @@
 
 {% block content %}
 <div class="authors-page">  <!-- použijeme stejný wrapper jako u autorů -->
-  <h1 class="authors-title">Seznam Knih</h1>
+    <h1 class="authors-title">Seznam Knih</h1>
 
-  <div class="authors-grid"> <!-- znovu použijeme authors-grid -->
-    {% for book in books %}
-      <div class="author-card"> <!-- použijeme stejné stylování jako autor -->
-        <div class="author-avatar">
-          📘
+    <div class="authors-grid"> <!-- znovu použijeme authors-grid -->
+        {% for book in books %}
+        <div class="author-card"> <!-- použijeme stejné stylování jako autor -->
+            <div class="author-avatar">
+                📘
+            </div>
+            <h2 class="author-name">{{ book.name }}</h2>
+            <div class="author-actions">
+                {% if perms.eshop.change_book %}
+                <a href="{% url 'book_update' book.id %}?next={{ request.path }}" class="edit-btn"
+                   title="Upravit">✏️</a>
+                {% endif %}
+                {% if perms.eshop.delete_book %}
+                <a href="{% url 'book_delete' book.id %}?next={{ request.path }}" class="delete-btn"
+                   title="Smazat">❌</a>
+                {% endif %}
+                {% if user.is_authenticated and user.is_superuser or user.is_staff %}
+                <a href="{% url 'staff_book_detail' book.id %}?next={{ request.path }}" class="detail-btn"
+                   title="Detail knihy">
+                    <i class="bi bi-search"></i>
+                </a>
+                {% endif %}
+            </div>
         </div>
-        <h2 class="author-name">{{ book.name }}</h2>
-        <div class="author-actions">
-          {% if perms.eshop.change_book %}
-          <a href="{% url 'book_update' book.id %}?next={{ request.path }}" class="edit-btn" title="Upravit">✏️</a>
-          {% endif %}
-          {% if perms.eshop.delete_book %}
-          <a href="{% url 'book_delete' book.id %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>
-          {% endif %}
-          {% if user.is_authenticated and user.is_superuser or user.is_staff %}
-          <a href="{% url 'staff_book_detail' book.id %}?next={{ request.path }}" class="detail-btn" title="Detail knihy">
-            <i class="bi bi-search"></i>
-          </a>
-          {% endif %}
-        </div>
-      </div>
-    {% empty %}
-      <p class="no-authors">Žádné knihy k zobrazení.</p>
-    {% endfor %}
-  </div>
+        {% empty %}
+        <p class="no-authors">Žádné knihy k zobrazení.</p>
+        {% endfor %}
+    </div>
 
-  <div class="add-author-wrap">
-    {% if perms.eshop.add_book %}
-    <a class="btn btn-success add-author-btn" href="{% url 'book_create' %}">
-      Přidat knihu
-    </a>
-    {% endif %}
-  </div>
+    <div class="add-author-wrap">
+        {% if perms.eshop.add_book %}
+        <a class="btn btn-success add-author-btn" href="{% url 'book_create' %}">
+            Přidat knihu
+        </a>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

@@ -4,19 +4,19 @@
 {% if query %}
 <div class="form-container">
     <h1 class="form-title">Hledaný výraz: <strong>{{ query }}</strong></h1>
-    <form method="post" >
+    <form method="post">
         <div class="results_search">
-          {% if results %}
-          <ul>
-          {% for book in results %}
-          <li><a href="{% url 'book_detail' book.id %}">{{ book.name }}</a></li>
-          {% endfor %}
-          </ul>
-          {% else %}
-          <p>Nic nalezeno.</p>
-          {% endif %}
-          {% else %}
-          <p>Zadejte hledaný výraz.</p>
+            {% if results %}
+            <ul>
+                {% for book in results %}
+                <li><a href="{% url 'book_detail' book.id %}">{{ book.name }}</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>Nic nalezeno.</p>
+            {% endif %}
+            {% else %}
+            <p>Zadejte hledaný výraz.</p>
         </div>
     </form>
 </div>

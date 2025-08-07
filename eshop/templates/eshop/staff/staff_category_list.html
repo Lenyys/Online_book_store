@@ -4,30 +4,33 @@
 
 {% block content %}
 <div class="authors-page">
-  <h1 class="authors-title">Seznam kategorií</h1>
+    <h1 class="authors-title">Seznam kategorií</h1>
 
-  <div class="authors-grid">
-    {% for category in categories %}
-      <div class="author-card">
-        <div class="author-avatar">
-          <i class="bi bi-bookmarks-fill"></i>
+    <div class="authors-grid">
+        {% for category in categories %}
+        <div class="author-card">
+            <div class="author-avatar">
+                <i class="bi bi-bookmarks-fill"></i>
+            </div>
+            <h2 class="author-name">{{ category.name }}</h2>
+            <div class="author-actions">
+                <a href="{% url 'staff_category_edit' pk=category.pk %}?next={% url 'staff_category_list' %}"
+                   class="edit-btn" title="Upravit">✏️</a>
+                <a href="{% url 'staff_category_delete' pk=category.pk %}?next={{ request.path }}" class="delete-btn"
+                   title="Smazat">❌</a>
+                <a href="{% url 'staff_category_detail' pk=category.pk %}" class="detail-btn"
+                   title="Detail (admin)">🔍</a>
+            </div>
         </div>
-        <h2 class="author-name">{{ category.name }}</h2>
-        <div class="author-actions">
-          <a href="{% url 'staff_category_edit' pk=category.pk %}?next={% url 'staff_category_list' %}" class="edit-btn" title="Upravit">✏️</a>
-          <a href="{% url 'staff_category_delete' pk=category.pk %}?next={{ request.path }}" class="delete-btn" title="Smazat">❌</a>
-          <a href="{% url 'staff_category_detail' pk=category.pk %}" class="detail-btn" title="Detail (admin)">🔍</a>
-        </div>
-      </div>
-    {% empty %}
-      <p class="no-authors">Žádné kategorie k zobrazení.</p>
-    {% endfor %}
-  </div>
+        {% empty %}
+        <p class="no-authors">Žádné kategorie k zobrazení.</p>
+        {% endfor %}
+    </div>
 
-  <div class="add-author-wrap">
-    <a class="btn btn-success add-author-btn" href="{% url 'staff_category_create' %}">
-      Přidat kategorii
-    </a>
-  </div>
+    <div class="add-author-wrap">
+        <a class="btn btn-success add-author-btn" href="{% url 'staff_category_create' %}">
+            Přidat kategorii
+        </a>
+    </div>
 </div>
 {% endblock %}
