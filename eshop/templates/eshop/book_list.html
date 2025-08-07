@@ -17,21 +17,19 @@
                 Kategorie
             </button>
             <ul class="dropdown-menu" aria-labelledby="catDropdown">
-                <li>
-                    <a class="dropdown-item"
-                       href="{% url 'book_list' %}">
-                        Všechny kategorie
-                    </a>
-                </li>
-                {% for category in categories %}
-                <li>
-                    <a class="dropdown-item"
-                       href="{% url 'book_list' %}?category={{ category.id }}">
-                        {{ category.name }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
+    <li>
+        <a class="dropdown-item" href="?">
+            Všechny kategorie
+        </a>
+    </li>
+    {% for category in categories %}
+    <li>
+        <a class="dropdown-item" href="?category={{ category.id }}">
+            {{ category.name }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
         </div>
     </div>
 
