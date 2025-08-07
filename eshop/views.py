@@ -1,5 +1,5 @@
-from datetime import timedelta
-
+import requests
+from datetime import timedelta, datetime, date
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.mail import EmailMessage
@@ -636,3 +636,54 @@ def delete_category_immediately(request, pk):
 
     next_url = request.GET.get('next')
     return redirect(next_url) if next_url else redirect('category-list')
+
+
+def exchange_rate_page(request):
+    exchange_rates = request.session.get("exchange_rates_cnb")
+    today = date.today()
+    exchange_valid_for = None
+    last_change = request.session.get('exchange_rate_last_change')
+    if last_change:
+        try:
+            last_change = datetime.strptime(last_change, "%Y-%m-%d").date()
+        except Exception as e:
+            print("Chyba při parsování last_change:", e)
+            last_change = None
+    if exchange_rates:
+        try:
+            exchange_valid_for_str = exchange_rates["EUR"][1]
+            exchange_valid_for = datetime.strptime(exchange_valid_for_str, "%Y-%m-%d").date()
+            # print(f"valid_for: {exchange_valid_for}")
+            # print(f"valid_for < today: {exchange_valid_for < today}")
+        except Exception as e:
+            print("Chyba při parsování validFor:", e)
+    if not exchange_rates or (
+            exchange_valid_for and exchange_valid_for < today and (
+            not last_change or last_change < today)):
+        print("stahujeme nový kurzoový lístek z cnb")
+        url = "https://api.cnb.cz/cnbapi/exrates/daily"
+        params = {}
+        try:
+            response = requests.get(url, params=params)
+            response.raise_for_status()
+            data = response.json()
+            currency_wanted = ["EUR", "USD"]
+            exchange_rates = {
+                rate["currencyCode"]: (rate["rate"], rate["validFor"])
+                for rate in data.get("rates", [])
+                if rate["currencyCode"] in currency_wanted
+            }
+            request.session["exchange_rates_cnb"] = exchange_rates
+            request.session["exchange_rate_last_change"] = today.isoformat()
+            print("uloženo do session")
+
+        except Exception as e:
+            print(e)
+
+    exchange_rates_dict = {}
+    for currency, (cur_rate, valid_for) in exchange_rates.items():
+        exchange_rates_dict[currency] = cur_rate
+
+    return render(request, 'eshop/exchange_rate.html', {
+        'exchange_rates_dict': exchange_rates_dict
+    })

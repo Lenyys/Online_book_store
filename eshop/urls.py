@@ -1,6 +1,6 @@
 from django.urls import path
 from eshop.views import (BookListView, EBookListView, AudioBookListView, BookDetailView, BookCreateView, BookUpdateView,
-                         BookDeleteView, ImageCreateView,ImageDeleteView,
+                         BookDeleteView, ImageCreateView, ImageDeleteView,
                          CategoryListView, StaffCategoryDeleteView, StaffCategoryCreateView,
                          StaffCategoryDetailView, StaffCategoryUpdateView, StaffCategoryListView,
                          ImageUpdateView, AuthorCreateView, RemoveAuthorFromBook, AuthorUpdateView,
@@ -8,7 +8,7 @@ from eshop.views import (BookListView, EBookListView, AudioBookListView, BookDet
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
                          UpdateCartView, RemoveFromCartView,
                          OrderConfirmationView, CreateOrderView, FavoriteBookView, FavoriteBooksListView,
-                         search_view, autocomplete_search, FavoriteBookRemoveFromFavoritesList)
+                         search_view, autocomplete_search, FavoriteBookRemoveFromFavoritesList, exchange_rate_page)
 
 urlpatterns = [
     path('book_list/', BookListView.as_view(), name='book_list'),
@@ -56,4 +56,6 @@ urlpatterns = [
 
     path('autocomplete-search/', autocomplete_search, name="autocomplete_search"),
     path('search/', search_view, name="search"),
+
+    path('exchange_rate/', exchange_rate_page, name='exchange_rate')
 ]
