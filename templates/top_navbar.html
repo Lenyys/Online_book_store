@@ -8,8 +8,8 @@
 
 <!--           <a href="#" id="book-list-link" data-auth="{% if user.is_authenticated and user.is_staff or user.is_superuser %}true{% else %}false{% endif %}" data-url="{% url 'staff_book_list' %}">Book List</a>-->
            {% if user.is_authenticated and user.is_superuser or user.is_staff %}
-           <a href="{% url 'staff_book_list' %}">Book List</a>
-           <a href="{% url 'staff_author_list' %}">List of Authors</a>
+           <a href="{% url 'staff_book_list' %}">Book list</a>
+           <a href="{% url 'staff_author_list' %}">List of authors</a>
            <a href="{% url 'staff_category_list' %}">Category list</a>
            {% endif %}
            <!--
