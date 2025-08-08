@@ -1,52 +1,62 @@
-# Online_store
+# 📚 Jirásek - internetové knihkupectví
+
+Tato webová aplikace nabízí jednoduché rozhraní, filtrování, vyhledávání, plně funkční nákupní košík 
+a vytváření objednávek 
 
 
-- [x] 0. home, base.html 
+![Ukázka aplikace] (static/screenshots/........)
 
-- [ ] 1. naplnění databáze
-- [x] 2. accounts
-- [x] 3. seznam produktů
- - [] 3.2 seznam kategorií
-   - [x] backend
-   - [ ]
-- [x] 4. detail produktu
-- [ ] 5. filtrování produktů
-  - [x] 5.1 kategorie 
-  - [ ] 5.2 
-  
-- [ ] 6. přidávání 
-  - [x] 6.1 produktů
-  - [x] 6.2 kategorí
-  - [x] 6.3 obrázků
-  - [x] 6.4 uživatelů
-  - [x] autorů
-- [ ] 7. editace
-  - [x] 7.1 produktu
-  - [x] 7.2 kategorií
-  - [] 7.3 uživatelů
-  - [x] autorů
-  - [x] obrázků
-- [ ] 8. mazání
-  - [x] 8.1 produktu
-  - [x] 8.2 kategorií 
-  - [ ] 8.3 uživatelů
-  - [x] autorů
-  - [x] obrázků
-
-- [ ] 9. testování
-- [ ] 10. autentizace
-- [ ] 11. autorizace
-
-- [ ] 12. košík
-  - [ ] 12.1 přidávání
-  - [ ] 12.2 mazání z košíku
-  - [ ] 12.3 update košíku
-  
-- [ ] 13. objednávka
+## 🚀 Funkce
+- registrace, přihlášení
+- Prohlížení katalogu knih s možností filtrovat podle názvu knihy
+- přidávání knih do oblíbených ( pro přihlášeného uživatele)
+- přidávání knih do nákupního košíku a vytváření objednávek pro přihlášené i nepřihlášené uživatele
+- Sekce pro zaměstrnance pro správu khih
 
 
---------------------------------------
-[ ] hledání
-[ ] platba kartou
-[ ] slevy
-[ ] hodnocení
+## 🛠️ Instalace
+1. naklonuj repositář
+```bash
+https://github.com/PetrTomsik/Online_store.git
+cd Online_store
+```
+
+
+2. Vytvoř a aktivuj virtuální prostředí
+
+3. nainstaluj závislosti
+```bash
+pip install -r requirements.txt
+```
+
+4. Nastav databázi 
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+5. spusť vývojový server
+```bash
+python manage.py runserver
+```
+
+## 🔧 Technologie
+- Django (backend, templates)
+- SQL Lite
+- JavaScript
+- CSS
+- Git (.gitignore)
+
+##  🧪 Testování 
+```bash
+python manage.py test
+```
+
+## Vytvořili
+Lenka Marešová, Petr Tomšík, Petr Markvart
+
+### další ukázky 
+![Seznam knih](static/screenshots/book_list.png)
+
+![detail knihy](static/screenshots/book_detail.png)
+
+![detail košíku](static/screenshots/cart_detail.png)

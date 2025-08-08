@@ -20,7 +20,7 @@
                 Na skladě: {{ book.stock_quantity }} ks
                 {% endif %}
             </p>
-            <p class="book-price">{{ book.price }} Kč</p>
+            <p class="book-price">{{ book.price }} Kč ({{ book.converted_price_eur }} EUR)</p>
 
             {% if book.stock_quantity > 0 %}
             <form action="{% url 'add_to_cart' book.pk %}" method="post" class="add-to-cart-form">

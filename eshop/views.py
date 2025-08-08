@@ -23,11 +23,9 @@ def home(request):
     books = Book.objects.all()
     ebooks = books.filter(type='ebook')
     books = books.filter(type='book')
-    print(f"ebook pocet: {len(ebooks)}")
     time_delta = timezone.now() - timedelta(days=30)
     new_books = books.filter(created_at__gte=time_delta)
     new_ebooks = ebooks.filter(created_at__gte=time_delta)
-    print(f"ebook new pocet: {len(new_ebooks)}")
     return render(request, 'home.html', {
         'books': books,
         'new_ebooks': new_ebooks,
@@ -154,6 +152,15 @@ class BookListView(ListView):
         context = super().get_context_data(**kwargs)
         categories = Category.objects.all()
         context['categories'] = categories
+        exchange_rates = self.request.session.get("exchange_rates_cnb", {})
+        eur_rate = 0
+        if exchange_rates:
+            eur_rate = exchange_rates["EUR"][0]
+        for book in context['books']:
+            if eur_rate:
+                book.converted_price = round(float(book.price) / eur_rate,2)
+            else:
+                book.converted_price = None
         return context
 
 
@@ -203,6 +210,20 @@ class BookDetailView(DetailView):
     model = Book
     template_name = 'eshop/book_detail.html'
     context_object_name = 'book'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        exchange_rates = self.request.session.get("exchange_rates_cnb", {})
+        eur_rate = 0
+        book = context['book']
+        if exchange_rates:
+            eur_rate = exchange_rates["EUR"][0]
+        print(f"EURO: {eur_rate}")
+        if eur_rate:
+            book.converted_price_eur = round(float(book.price) / eur_rate, 2)
+        else:
+            book.converted_price_eur = None
+        return context
 
 
 class StaffBookListView(StaffRequiredMixin, ListView):

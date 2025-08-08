@@ -1036,3 +1036,19 @@ section{
     75%  { transform: perspective(400px) rotateY(-15deg); }
     100% { transform: perspective(400px) rotateY(0deg); }
   }
+
+  .card .delete-btn {
+  position: absolute;
+  top: 0.5rem;        /* odsazení od horního okraje karty */
+  right: 0.5rem;      /* odsazení od pravého okraje karty */
+  font-size: 1.2rem;  /* velikost křížku */
+  color: #888;        /* stejná šedá jako okraj karty */
+  text-decoration: none;
+  z-index: 10;
+  transition: color .2s, transform .1s;
+}
+
+.card .delete-btn:hover {
+  color: #555;
+  transform: scale(1.2);
+}
