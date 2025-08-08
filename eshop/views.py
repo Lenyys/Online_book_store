@@ -137,7 +137,7 @@ class BookListView(ListView):
     model = Book
     template_name = 'eshop/book_list.html'
     context_object_name = 'books'
-    paginate_by = 10
+    paginate_by = 12
     ordering = ['-price']
 
     def get_queryset(self):
