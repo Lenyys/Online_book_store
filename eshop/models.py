@@ -140,10 +140,10 @@ class Order(models.Model):
     note = models.TextField(blank=True)
 
     def __str__(self):
-        return f"objednávka #{self.id} - {self.user_name} {self.user_last_name}"
+        return f"objednávka #{self.id} - {self.first_name} {self.last_name}"
 
     def __repr__(self):
-        return (f"Order(user={self.user}, first_name={self.first_name},"
+        return (f"Order(first_name={self.first_name},"
                 f"lastname={self.last_name}, delivery_address={self.delivery_address}")
 
 
