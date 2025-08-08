@@ -548,38 +548,3 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('order-thanks').style.display = 'block';
     }, 1000);
   });
-
-// helper pro CSRF z cookie
-function getCookie(name) {
-  let v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-  return v ? v.pop() : '';
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.fav-btn').forEach(btn => {
-    btn.addEventListener('click', async e => {
-      e.preventDefault();
-      const url = btn.dataset.url;
-      const csrftoken = getCookie('csrftoken');
-      try {
-        const resp = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': csrftoken,
-            'Accept': 'application/json',
-          },
-        });
-        if (!resp.ok) throw new Error(resp.statusText);
-        const data = await resp.json();
-        // třeba přepnout třídu podle návratu
-        if (data.favorited) {
-          btn.classList.add('favorited');
-        } else {
-          btn.classList.remove('favorited');
-        }
-      } catch (err) {
-        console.error('Chyba při oblíbených:', err);
-      }
-    });
-  });
-});

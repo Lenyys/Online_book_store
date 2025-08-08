@@ -1,14 +1,20 @@
 <div class="login-form-container {% if login_failed %}active{% endif %}">
-    <div id="close-login-btn" class="fas fa-times"></div>
+        <div id="close-login-btn" class="fas fa-times"></div>
         <form action="{% url 'custom_login' %}" method="POST">
             {% csrf_token %}
-            <h3>Přihlásit se</h3>
-            <span>Uživatelské jméno</span>
-            <input type="text" name="username" class="box" placeholder="Zadejte e-mail" required>
-            <span>Heslo</span>
-            <input type="password" name="password" class="box" placeholder="Zadejte své heslo" required>
+            <h3>sign in</h3>
 
-            <div class="login-message">
+            <span>Username</span>
+            <input type="text" name="username" class="box" placeholder="enter your email" required>
+            <span>Password</span>
+            <input type="password" name="password" class="box" placeholder="enter your password" required>
+            <!--
+            <div class="checkbox">
+                <input type="checkbox" name="" id="remember-me">
+                <label for="remember-me">remember me</label>
+            </div>
+            -->
+           <div class="login-message">
                 {% if messages %}
                     {% for message in messages %}
                         <p class="{% if message.tags == 'error' %}text-error{% else %}text-success{% endif %}">
@@ -20,6 +26,9 @@
 
             <input type="submit" value="sign in" class="btn" id="login-submit">
 
-            <p>Nemáte účet?  <a href="{% url 'signup' %}">Vytvořte si ho</a> </p>
+            <!--
+            <p>forget password ? <a href="{% url 'password_change' %}">click here</a> </p>
+            -->
+            <p>don't have an account ? <a href="{% url 'signup' %}">create one</a> </p>
         </form>
   </div>
