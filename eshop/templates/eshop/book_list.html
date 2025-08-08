@@ -51,7 +51,10 @@
                         </a>
                     </h6>
                     <p class="card-text mb-3 text-muted small">Cena: <strong>{{ book.price }} Kč</strong><br>
-                        ({{ book.converted_price }} EUR)</p>
+                        {% if book.converted_price %}
+                        ({{ book.converted_price }} EUR)
+                        {% endif %}
+                    </p>
                     <a href="{% url 'book_detail' book.id %}"
                        class="mt-auto btn btn-outline-success btn-sm">
                         Více…
