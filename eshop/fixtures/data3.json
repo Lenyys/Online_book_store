@@ -1,0 +1,647 @@
+[
+  {
+    "model": "eshop.category",
+    "pk": 2,
+    "fields": {
+      "name": "Poezie"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 3,
+    "fields": {
+      "name": "Historická literatura"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 11,
+    "fields": {
+      "name": "Rozvoj osobnosti"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 13,
+    "fields": {
+      "name": "Zdraví a sport"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 14,
+    "fields": {
+      "name": "Učebnice"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 15,
+    "fields": {
+      "name": "Obrazové publikace"
+    }
+  },
+  {
+    "model": "eshop.category",
+    "pk": 20,
+    "fields": {
+      "name": "Beletrie"
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 1,
+    "fields": {
+      "name": "Zdeněk",
+      "lastname": "Smetana",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 4,
+    "fields": {
+      "name": "Helen",
+      "lastname": "Exley",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 7,
+    "fields": {
+      "name": "Dan",
+      "lastname": "Brown",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 9,
+    "fields": {
+      "name": "Robert",
+      "lastname": "Galbraith",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 10,
+    "fields": {
+      "name": "Umberto",
+      "lastname": "Eco",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 11,
+    "fields": {
+      "name": "Morgan",
+      "lastname": "Housel",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 12,
+    "fields": {
+      "name": "Oldřich",
+      "lastname": "Lepil",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 13,
+    "fields": {
+      "name": "Vlastimil",
+      "lastname": "Vondruška",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 14,
+    "fields": {
+      "name": "Martin",
+      "lastname": "Brzóska",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 15,
+    "fields": {
+      "name": "Karel",
+      "lastname": "Havlíček Borovský",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 16,
+    "fields": {
+      "name": "Richard",
+      "lastname": "Ludvík",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.autor",
+    "pk": 17,
+    "fields": {
+      "name": "Klára",
+      "lastname": "Kolouchová",
+      "date_of_birth": null
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 1,
+    "fields": {
+      "name": "Tajemství všech tajemství",
+      "type": "book",
+      "isbn": "9788025747674",
+      "ean": 9788025747674,
+      "description": "Nejpopulárnější autor současnosti se vrací na scénu a nabízí své doposud nejúchvatnější dílo – akční, spletitý a myšlenkově provokativní příběh, který čtenáře pobaví tak, jak to dokáže jen Dan Brown. Robert Langdon, uznávaný profesor symbologie, přijíždí do Prahy a vydává se na přednášku Katherine Solomonové – přední badatelky v oblasti noetiky, s níž nedávno navázal romantický vztah. Katherine chystá k vydání kontroverzní knihu, jež přináší alarmující odhalení o podstatě lidského vědomí a má potenciál vyvrátit leccos, čemu lidstvo pevně věří po staletí. Poklidný průběh jejich pražského pobytu však náhle naruší brutální vražda a zavládne naprostý chaos: Katherine záhadně zmizí i se svým rukopisem a Langdon se stane objektem zájmu mocné organizace i terčem záhadného útočníka, jenž jako by se vynořil z dávných pražských legend. A zatímco se děj přelévá i do Londýna a New Yorku, Langdon zoufale hledá Katherine… a také odpovědi. Během zběsilé honičky přízračným světem futuristické vědy i prastaré mytologie objevuje šokující pravdu o tajném projektu, která navždy promění naše vnímání lidské mysli.",
+      "price": "598.00",
+      "stock_quantity": 3,
+      "created_at": "2025-07-16T18:13:22.310Z",
+      "updated_at": "2025-08-04T18:46:54.735Z",
+      "created_by": 1,
+      "updated_by": 1,
+      "discount": "0.00",
+      "autor": [
+        7
+      ],
+      "category": [
+        20
+      ],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 2,
+    "fields": {
+      "name": "365 myšlenek o míru a naději",
+      "type": "ebook",
+      "isbn": "9788075296221",
+      "ean": 9788075296221,
+      "description": "Když se zadíváte na inspirující ilustrace a začtete se do odkazů myslitelů celé lidské historii, okamžitě se budete cítit radostně, budete vyrovnaní a plní optimismu. Úžasné fotografi e zachycují přírodu v celé její velikosti, od moře přes stromy až k uklidňujícímu nebi. A to vše doprovázejí citáty pocházející od tak inspirativních velikánů, jako je Matka Teresa, Nelson Mandela, Marcel Proust, Oscar Wilde, Hermann Hesse, nebo Bob Dylan.",
+      "price": "312.00",
+      "stock_quantity": 3,
+      "created_at": "2025-07-16T18:20:50.182Z",
+      "updated_at": "2025-08-04T18:46:19.754Z",
+      "created_by": 1,
+      "updated_by": 1,
+      "discount": "0.00",
+      "autor": [
+        4
+      ],
+      "category": [],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 3,
+    "fields": {
+      "name": "Přísloví",
+      "type": "book",
+      "isbn": null,
+      "ean": null,
+      "description": "Tato kniha obsahuje řadu známých i méně známých přísloví, jak je svým originálním a vytříbeným stylem nakreslil výtvarník a režisér Zdeněk Smetana, autor známých postaviček Křemílka a Vochomůrky nebo Rákosníčka. Autorovy kresby jsou vtipné, ale mnohé z nich jsou také k zamyšlení.",
+      "price": "242.00",
+      "stock_quantity": 1,
+      "created_at": "2025-07-16T18:24:24.712Z",
+      "updated_at": "2025-08-04T18:46:42.444Z",
+      "created_by": 1,
+      "updated_by": 1,
+      "discount": "0.00",
+      "autor": [
+        1
+      ],
+      "category": [
+        2
+      ],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 5,
+    "fields": {
+      "name": "Hladový hrob",
+      "type": "audiobook",
+      "isbn": null,
+      "ean": null,
+      "description": "Cormorana Strika kontaktuje znepokojený muž, jehož syn se vydal do hlubin norfolkského venkova, aby se připojil k náboženské sektě. Univerzální humanitární církev navenek působí jako mírumilovná organizace, pojí se s ní však zlověstné události a nevysvětlená úmrtí. Robin Ellacottová se proto rozhodne sektu infiltrovat a odcestuje do Norfolku, aby žila inkognito mezi jejími členy. Není ale připravena na všechna nebezpečí, která tam na ni čekají – ani na to, jaké oběti bude muset přinést…",
+      "price": "769.00",
+      "stock_quantity": 4,
+      "created_at": "2025-07-17T15:37:27.257Z",
+      "updated_at": "2025-08-04T18:46:31.952Z",
+      "created_by": 1,
+      "updated_by": 1,
+      "discount": "0.00",
+      "autor": [
+        9
+      ],
+      "category": [
+        20
+      ],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 6,
+    "fields": {
+      "name": "Kineziologie - Dotek pro zdraví",
+      "type": "book",
+      "isbn": null,
+      "ean": null,
+      "description": "Kineziologie je systém přírodní péče o zdraví využívající svalový test k přímé komunikaci s tělem i myslí, k rozpoznání zdravotních potíží a jejich účinné léčby. Čerpá z postupů čínské medicíny a používá řadu účinných, ale přesto šetrných léčebných technik, je efektivní v léčbě mnoha onemocnění včetně alergií, bolesti zad, únavy, migrény, kožních vyrážek, problémů se zažíváním i emocionálních potíží. Toto nové vydání poslouží jako seriózní úvod do kineziologie a zodpoví mnohé související otázky: • Co to je kineziologie a jak funguje • V čem pomáhá • Jak si vybrat kineziologa • Jak používat samoléčebné techniky • Jaké jsou možnosti kineziologie v rámci jiných terapií Maggie La Tourelleová se již 30 let zabývá oborem celostní zdravotní péče jako lékařka, učitelka a spisovatelka využívající kineziologii, poradenství, psychoterapii a NLP. Je čestnou členkou Kineziologické federace a členkou Asociace terapeutických léčitelů, Britské asociace poradenství a psychoterapie, Vědecké a lékařské sítě a Spolku píšících zdravotníků. Žije v Londýně. Anthea Courtenayová je nezávislá spisovatelka, novinářka a překladatelka, která také žije v Londýně.",
+      "price": "311.00",
+      "stock_quantity": 1,
+      "created_at": "2025-08-04T18:38:32.409Z",
+      "updated_at": "2025-08-04T18:38:32.409Z",
+      "created_by": null,
+      "updated_by": null,
+      "discount": "0.00",
+      "autor": [],
+      "category": [
+        13
+      ],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 7,
+    "fields": {
+      "name": "Jméno růže",
+      "type": "ebook",
+      "isbn": null,
+      "ean": null,
+      "description": "Na sklonku života vzpomíná mnich Adso na události, jichž byl svědkem, když v roce 1322 pobýval se svým mistrem, učeným františkánem Vilémem z Baskervillu, v jistém severoitalském opatství. Mělo zde dojít k jednání mezi stranou císařskou a papežskou, ale klid kláštera narušila série záhadných vražd. Tak začíná proslulý román Umberta Eca Jméno růže, který nyní vychází v doplněné verzi. Lze jej číst jako detektivku nebo jako historické vyprávění, Eco se však inspiruje i románem gotickým či iniciačním. Pátrání po neznámém vrahovi, vrcholící v bludišti klášterní knihovny, je pro autora navíc záminkou, aby podal neobyčejně plastický obraz evropského středověku, vztahem křesťanského intelektuála k nekřesťanské učenosti počínaje a kacířskými učeními a inkviziční praxí konče.",
+      "price": "535.00",
+      "stock_quantity": 3,
+      "created_at": "2025-08-04T18:51:17.143Z",
+      "updated_at": "2025-08-04T18:53:45.216Z",
+      "created_by": null,
+      "updated_by": null,
+      "discount": "0.00",
+      "autor": [
+        10
+      ],
+      "category": [
+        3
+      ],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 8,
+    "fields": {
+      "name": "Psychologie peněz",
+      "type": "book",
+      "isbn": null,
+      "ean": null,
+      "description": "Umět zacházet s penězi není nutně otázka toho, co všechno víte. Důležité je, jak se chováte. Jenže vštípit lidem – dokonce i těm opravdu chytrým – správné vzorce chování není snadné.\r\n \r\nK penězům, investování, osobním financím a podnikatelskému rozhodování se obvykle přistupuje, jako by to byly exaktní disciplíny, kde nám data a vzorce přesně řeknou, co dělat. Ve skutečném světě se ale lidé nerozhodují nad tabulkou v Excelu, nýbrž u večeře nebo na firemní poradě, kde se jejich dosavadní životní zkušenosti a jedinečný pohled na svět splétají s egem, ješitností, marketingem a pokřivenými podněty.\r\n \r\nV knize Psychologie peněz nabízí uznávaný autor Morgan Housel dvacet krátkých pojednání o tom, jak lidé uvažují o penězích, a učí nás, jak se v tomto veledůležitém tématu lépe vyznat.",
+      "price": "339.00",
+      "stock_quantity": 4,
+      "created_at": "2025-08-04T19:03:51.360Z",
+      "updated_at": "2025-08-04T19:03:51.360Z",
+      "created_by": null,
+      "updated_by": null,
+      "discount": "0.00",
+      "autor": [
+        11
+      ],
+      "category": [
+        11
+      ],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 9,
+    "fields": {
+      "name": "Fyzika pro střední školy, 1. díl",
+      "type": "book",
+      "isbn": "9788071965374",
+      "ean": 9788071965374,
+      "description": "První díl dvoudílné učebnice je určen pro výuku fyziky ve vzdělávacích programech všech typů středních škol. Výběr učiva i jeho uspořádání v učebnici plně vyhovuje požadavkům RVP jak pro gymnázia, tak i pro většinu středních odborných škol.\r\nStandardní knižní podoba je doplněna v každém dílu učebnice o elektronický doplněk (ED) obsahující další učební materiály. Je to především rozšiřující učivo obsahující poznatky, které převážně nejsou do RVP zahrnuty, avšak významně přispívají k vytváření fyzikálního obrazu světa. Tím je umožněno optimální využití učebnice i při výuce podle individuálně koncipovaných ŠVP. Elektronické doplňky obsahují i další obrazové a textové materiály: animace k učivu, videozáznamy experimentů, historické poznámky, slovníček fyzikálních pojmů (včetně anglických ekvivalentů) a laboratorní cvičení.\r\nPrvní díl učebnice obsahuje dvě hlavní témata – mechaniku a termiku. Nově je v přepracovaném vydání do učiva mechaniky zařazeno také učivo o mechanickém kmitání a vlnění.",
+      "price": "247.00",
+      "stock_quantity": 4,
+      "created_at": "2025-08-07T17:32:46.447Z",
+      "updated_at": "2025-08-07T17:32:46.447Z",
+      "created_by": null,
+      "updated_by": null,
+      "discount": "0.00",
+      "autor": [
+        12
+      ],
+      "category": [
+        14
+      ],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 10,
+    "fields": {
+      "name": "Stříbrná maska",
+      "type": "book",
+      "isbn": "9788027917648",
+      "ean": 9788027917648,
+      "description": "Oldřich z Chlumu se se svými pomocníky panošem Otou a velitelem družiny Divišem tentokrát ocitne v bouřlivě se rozvíjejícím horním městě Jihlavě. Zde se zaplete do vyšetřování, které zdánlivě nedává smysl, neboť na jeho počátku nestojí mord, ale nález starobylé stříbrné masky. Jistě by se jednalo jen o pozoruhodnou památku z pohanských časů, kdyby vzápětí neznámý muž nezavraždil purkmistrovu manželku. A aby toho nebylo málo, brzy dojde k záhadné loupeži. Vše nasvědčuje tomu, že stopy vedou do podzemí, kde se těží stříbro...",
+      "price": "309.00",
+      "stock_quantity": 5,
+      "created_at": "2025-08-07T17:37:05.853Z",
+      "updated_at": "2025-08-07T17:37:05.853Z",
+      "created_by": null,
+      "updated_by": null,
+      "discount": "0.00",
+      "autor": [
+        13
+      ],
+      "category": [
+        3
+      ],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 11,
+    "fields": {
+      "name": "Pečeť smrti",
+      "type": "ebook",
+      "isbn": null,
+      "ean": null,
+      "description": "Český král pověří Oldřicha z Chlumu delikátním vyšetřováním. Pražský biskup totiž vlastní darovací listinu děda současného krále na vesnici Makotřasy, o níž je Přemysl II. Otakar přesvědčený, že patří jemu. Královský prokurátor začne pátrat a narazí na vraždu staroměstské měšťanky, která se nechala vydržovat několika zámožnými muži, kromě jiného i nejvyšším komořím. I když to tak na první pohled nevypadá, Oldřich z Chlumu záhy odhalí, že oba zločiny spolu souvisejí. Pomalu začne rozplétat klubko složitých intrik, které ho tentokrát zavedou do křivolakých a ponurých uliček Starého Města pražského. Jenže neustále má kohosi v patách, kdo si dává záležet, aby každý, kdo něco ví, zemřel.",
+      "price": "239.00",
+      "stock_quantity": 5,
+      "created_at": "2025-08-07T17:39:26.117Z",
+      "updated_at": "2025-08-07T17:39:26.117Z",
+      "created_by": null,
+      "updated_by": null,
+      "discount": "0.00",
+      "autor": [
+        13
+      ],
+      "category": [
+        3
+      ],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 13,
+    "fields": {
+      "name": "Tyrolské elegie a Dopisy z Brixenu",
+      "type": "audiobook",
+      "isbn": null,
+      "ean": null,
+      "description": "Karel Havlíček Borovský (1821 - 1856) český básník, novinář a politik byl za svou novinářskou činnost v roce 1851 odvezen do vyhnanství do Brixenu tehdy v jižních Tyrolích, dnes Bressanone v severní Itálii. Ve vyhnanství byl až do roku 1855. O své cestě do Brixenu napsal satirickou básnickou skladbu Tyrolské elegie. Velmi zajímavé je srovnat satirickou výpověď s běžným životem, který popisuje v dopisech z Brixenu, které posílal nejenom manželce Julii a bratru Františkovi, ale také dalším předním osobnostem tehdejší české kultury a společnosti.",
+      "price": "199.00",
+      "stock_quantity": 3,
+      "created_at": "2025-08-07T18:21:46.203Z",
+      "updated_at": "2025-08-07T18:21:46.203Z",
+      "created_by": null,
+      "updated_by": null,
+      "discount": "0.00",
+      "autor": [
+        15
+      ],
+      "category": [
+        2
+      ],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 14,
+    "fields": {
+      "name": "Konverzační business otázky a odpovědi",
+      "type": "audiobook",
+      "isbn": null,
+      "ean": null,
+      "description": "Chtěli byste lépe uspět při pracovním pohovoru? Nebo se lépe domluvit na pracovních poradách? Toto je anglicko-česká audiokniha pro pokročilé, kde najdete přes 600 různých otázek a odpovědí z business prostředí. Ať už jste šéf nebo zaměstnanec, můžete se zlepšit v pokládání otázek. Uslyšíte přes 300 otázek, které se týkají: zákazníků, objednávek, úkolů, cílů, platů nebo kariéry. Dále uslyšíte o: slevách, půjčkách, kapitálu, rizicích, výdělcích nebo propagaci. Zlepšíte si komunikaci se zákazníky pomocí praktických otázek na: maloobchod, velkoobchod, pracovní dobu, podřízené, nabídku a poptávku, inflaci, prezentaci a podobně. Chcete se naučit lépe anglicky reagovat? Je zde přes 300 odlišných odpovědí: Přímé, nepřímé, omluvné, nudné nebo arogantní. Na všechny otázky jsou zde odpovědi. Uslyšíte mnoho příkladů na to, jak se dá v angličtině odpovědět otázkou nebo jak odpovědět, když si nejste zcela jisti. Tyto otázky a odpovědi pro středně pokročilé a pokročilé vám pomůžou cítit se lépe na pracovních poradách, jednáních se zákazníky nebo při pracovních pohovorech. Pořiďte si tuto audioknihu ještě dnes.",
+      "price": "149.00",
+      "stock_quantity": 1,
+      "created_at": "2025-08-07T18:24:58.045Z",
+      "updated_at": "2025-08-07T18:24:58.045Z",
+      "created_by": null,
+      "updated_by": null,
+      "discount": "0.00",
+      "autor": [
+        16
+      ],
+      "category": [
+        14
+      ],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.book",
+    "pk": 15,
+    "fields": {
+      "name": "Nahoře fouká",
+      "type": "audiobook",
+      "isbn": null,
+      "ean": null,
+      "description": "Inspirativní průvodce životem nejen pro ženy, které chtějí jít vlastní cestou. Proč by si měl člověk, pokud stojí na křižovatce a může se svobodně rozhodnout, vybrat tu těžší cestu? Jak moc je důležité pracovat v životě se strachem? A jak jsou vzdáleny vrcholy nejvyšších hor od těch životních? Klára Kolouchová je nespoutaná žena i milující matka, která s láskou, vytrvalostí a jistou dávkou sobectví naplňuje své sny. Jediná česká horolezkyně, která zdolala tři nejvyšší hory světa, dobře ví, že to hezké kolem sebe si musíme vybojovat sami.",
+      "price": "329.00",
+      "stock_quantity": 1,
+      "created_at": "2025-08-07T18:30:36.112Z",
+      "updated_at": "2025-08-07T18:30:36.112Z",
+      "created_by": null,
+      "updated_by": null,
+      "discount": "0.00",
+      "autor": [
+        17
+      ],
+      "category": [
+        11
+      ],
+      "favorite_book": []
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 1,
+    "fields": {
+      "image": "eshop/images/tajemstvi-vsech-tajemstvi-2.jpg",
+      "product": 1,
+      "description": "Tajemství všech tajemství - Dan Brown"
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 2,
+    "fields": {
+      "image": "eshop/images/365_myšlenek_o_míru_a_naději_-_Helen_Exley.jpg",
+      "product": 2,
+      "description": "365 myšlenek o míru a naději - Helen Exley"
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 3,
+    "fields": {
+      "image": "eshop/images/Přísloví_-_Zdeněk_Smetana.jpg",
+      "product": 3,
+      "description": "Přísloví - Zdeněk Smetana"
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 4,
+    "fields": {
+      "image": "eshop/images/hladovy-hrob-Robert-Galbraith.jpg",
+      "product": 5,
+      "description": "Hladový hrob - Robert Galbraith"
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 5,
+    "fields": {
+      "image": "eshop/images/jmeno-ruze-1_1.jpg",
+      "product": 7,
+      "description": "Jméno růže"
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 6,
+    "fields": {
+      "image": "eshop/images/psychologie-penez.jpg",
+      "product": 8,
+      "description": "Psychologie peněz"
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 7,
+    "fields": {
+      "image": "eshop/images/kineziologie-dotek-pro-zdravi.jpg",
+      "product": 6,
+      "description": "Kineziologie - Dotek pro zdraví"
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 8,
+    "fields": {
+      "image": "eshop/images/fyzika-pro-stredni-skoly-1-dil.jpg",
+      "product": 9,
+      "description": "Fyzika pro střední školy, 1. díl"
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 9,
+    "fields": {
+      "image": "eshop/images/stribrna-maska-hrisni-lide-kralovstvi-ceskeho-9788027917648.jpg",
+      "product": 10,
+      "description": "stribrna-maska-hrisni-lide-kralovstvi-ceskeho-9788027917648"
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 10,
+    "fields": {
+      "image": "eshop/images/pecet-smrti-9788024337326-33_.jpeg",
+      "product": 11,
+      "description": "Pečeť smrti"
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 11,
+    "fields": {
+      "image": "eshop/images/tyrolske-elegie-a-dopisy-z-brixenu-19.jpg",
+      "product": 13,
+      "description": "tyrolske-elegie-a-dopisy-z-brixenu-19"
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 12,
+    "fields": {
+      "image": "eshop/images/konverzacni-business-otazky-a-odpovedi-20.jpg",
+      "product": 14,
+      "description": "konverzacni-business-otazky-a-odpovedi-20"
+    }
+  },
+  {
+    "model": "eshop.image",
+    "pk": 13,
+    "fields": {
+      "image": "eshop/images/nahore-fouka-8596434016950-45.jpg",
+      "product": 15,
+      "description": "nahore-fouka-8596434016950-45"
+    }
+  },
+  {
+    "model": "eshop.cart",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "created_at": "2025-07-21T16:40:42.968Z",
+      "updated_at": "2025-07-21T16:40:42.968Z",
+      "is_temporary": true,
+      "session_key": null
+    }
+  },
+  {
+    "model": "eshop.selectedproduct",
+    "pk": 4,
+    "fields": {
+      "product": 3,
+      "product_price": "0.00",
+      "quantity": 1,
+      "cart": 1,
+      "order": null,
+      "created_at": "2025-08-01T17:59:40.841Z",
+      "updated_at": "2025-08-01T17:59:40.841Z"
+    }
+  },
+  {
+    "model": "eshop.selectedproduct",
+    "pk": 5,
+    "fields": {
+      "product": 6,
+      "product_price": "0.00",
+      "quantity": 1,
+      "cart": 1,
+      "order": null,
+      "created_at": "2025-08-07T15:28:36.885Z",
+      "updated_at": "2025-08-07T15:28:36.885Z"
+    }
+  },
+  {
+    "model": "eshop.selectedproduct",
+    "pk": 6,
+    "fields": {
+      "product": 14,
+      "product_price": "0.00",
+      "quantity": 1,
+      "cart": 1,
+      "order": null,
+      "created_at": "2025-08-07T18:25:47.197Z",
+      "updated_at": "2025-08-07T18:25:47.197Z"
+    }
+  }
+]
