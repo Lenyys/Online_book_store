@@ -44,7 +44,6 @@ INSTALLED_APPS = [
 
     'accounts',
     'eshop',
-    'mptt',
 ]
 
 MIDDLEWARE = [
