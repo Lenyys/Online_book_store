@@ -429,7 +429,7 @@ class AuthorUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = 'eshop.change_autor'
 
     def get_success_url(self):
-        next_url = self.request.POST.get('next')  # or self.request.GET.get('next')
+        next_url = self.request.POST.get('next')
         return next_url or reverse_lazy('staff_author_list')
 
     def get_context_data(self, **kwargs):
