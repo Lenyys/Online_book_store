@@ -5,7 +5,7 @@
         <div class="swiper arrivals-slider">
             <div class="swiper-wrapper">
                 {% for book in new_books %}
-                <a href="#" class="swiper-slide box">
+                <a href="{% url 'book_detail' book.id %}" class="swiper-slide box">
                     <div class="image">
                         <img src="{{ book.images.first.image.url }}" alt="{{ book.images.first.description }}">
                     </div>
@@ -17,13 +17,6 @@
                                 {{ book.price }} Kč
                                 {% endif %}
                             </span></div>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
                     </div>
                 </a>
                 {% endfor %}
@@ -34,7 +27,7 @@
             <div class="swiper-wrapper">
 
                 {% for ebook in new_ebooks %}
-                <a href="#" class="swiper-slide box">
+                <a href="{% url 'book_detail' ebook.id %}" class="swiper-slide box">
                     <div class="image">
                         <img src="{{ ebook.images.first.image.url }}" alt="{{ ebook.images.first.description }}">
                     </div>
@@ -45,13 +38,6 @@
                             {{ book.price }} Kč
                             {% endif %}
                         </span></div>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
                     </div>
                 </a>
                 {% endfor %}

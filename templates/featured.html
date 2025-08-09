@@ -32,7 +32,12 @@
                         {{ book.price }} Kč
                         {% endif %}
                     </span></div>
-                    <a href="#" class="btn">Přidat do košíku</a>
+<!--                    -->
+                    <form action="{% url 'add_to_cart' book.pk %}" method="post" class="add-to-cart-form">
+                        {% csrf_token %}
+                        <button class="btn" type="submit">Přidat do košíku</button>
+                    </form>
+<!--                    <a href="#" class="btn">Přidat do košíku</a>-->
                 </div>
             </div>
             {% empty %}
