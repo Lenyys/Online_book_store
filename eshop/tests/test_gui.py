@@ -28,7 +28,6 @@ class GuiTestWithSelenium(TestCase):
         driver.get('http://127.0.0.1:8000/accounts/signup/')
         time.sleep(2)
 
-
         username_field = driver.find_element(By.ID, 'id_username')
         username_field.send_keys('tester1')
         time.sleep(2)
@@ -51,9 +50,10 @@ class GuiTestWithSelenium(TestCase):
         submit_button.send_keys(Keys.RETURN)
         time.sleep(2)
 
-        assert('Username'
-               or 'A user with that username already exists.'
-               in driver.page_source)
+        assert ('Username'
+                or 'A user with that username already exists.'
+                in driver.page_source)
+
     @skip
     def test_book_not_in_db(self):
         driver = webdriver.Chrome()
