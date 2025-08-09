@@ -43,16 +43,16 @@
             {% endif %}
         </div>
         {% empty %}
-            <p>Žádný autor u této knihy</p>
+        <p>Žádný autor u této knihy</p>
         {% endfor %}
     </div>
 
     <div class="book-categories">
         <h3>Kategorie knihy</h3>
         {% for category in book.category.all %}
-            <div>{{ category.name }}</div>
+        <div>{{ category.name }}</div>
         {% empty %}
-            <p>Žádná kategorie</p>
+        <p>Žádná kategorie</p>
         {% endfor %}
     </div>
 
@@ -63,21 +63,23 @@
             {% endif %}
         </h3>
         <div class="image-gallery">
-        {% for image in book.images.all %}
+            {% for image in book.images.all %}
             <div class="image-card">
                 <img src="{{ image.image.url }}" alt="" class="book-image">
                 <div>
                     {% if perms.eshop.delete_image %}
-                    <a class="btn btn-small" href="{% url 'image_delete' image.id %}?next={{ request.path }}">Smazat ❌</a>
+                    <a class="btn btn-small" href="{% url 'image_delete' image.id %}?next={{ request.path }}">Smazat
+                        ❌</a>
                     {% endif %}
                     {% if perms.eshop.change_image %}
-                    <a class="btn btn-small" href="{% url 'image_update' book.id image.id %}?next={{ request.path }}">Upravit ✏️</a>
+                    <a class="btn btn-small" href="{% url 'image_update' book.id image.id %}?next={{ request.path }}">Upravit
+                        ✏️</a>
                     {% endif %}
                 </div>
             </div>
-        {% empty %}
+            {% empty %}
             <p>Žádný obrázek</p>
-        {% endfor %}
+            {% endfor %}
         </div>
     </div>
 </div>

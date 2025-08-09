@@ -7,7 +7,7 @@
 <div>Objednávka č. {{ object.id }}</div>
 <div>
     {% for product in object.selected_products.all %}
-     {{ product.name }}
+    {{ product.name }}
     {% endfor %}
     <form method="post" action="{% url 'order_sent' object.id %}">
         {% csrf_token %}
