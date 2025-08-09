@@ -10,7 +10,7 @@ from eshop.models import Book, Category, Image, Autor, Order
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['name', 'type', 'autor', 'price','discount', 'description', 'stock_quantity',
+        fields = ['name', 'type', 'autor', 'price', 'discount', 'description', 'stock_quantity',
                   'category', 'isbn', 'ean']
         labels = {
             'name': 'Název knihy',
@@ -255,9 +255,9 @@ class OrderForm(forms.ModelForm):
         model = Order
         fields = ['first_name', 'last_name', 'email', 'phone', 'delivery_address', 'postal_code', 'note']
         widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'form-control' }),
-            'last_name': forms.TextInput(attrs={'class': 'form-control' }),
-            'email': forms.EmailInput(attrs={'class': 'form-control' }),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '607123456'}),
             'delivery_address': forms.Textarea(attrs={'rows': 3, 'class': 'form-control', }),
             'postal_code': forms.TextInput(attrs={'class': 'form-control', }),

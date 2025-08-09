@@ -9,4 +9,4 @@ class StaffRequiredMixin(UserPassesTestMixin):
             return False
         if user.is_superuser or user.is_staff:
             return True
-        raise PermissionDenied  # 403 chyba
+        raise PermissionDenied
