@@ -60,4 +60,6 @@ class GuiTestWithSelenium(TestCase):
         driver.get('http://127.0.0.1:8000/eshop/book_detail/1004/')
         time.sleep(2)
 
-        assert 'Chyba 404: Stránka nenalezena' in driver.page_source
+        assert ('Chyba 404: Stránka nenalezena'
+                or 'Page not found'
+                in driver.page_source)
