@@ -50,6 +50,8 @@ urlpatterns = [
 
     path('create_order/', CreateOrderView.as_view(), name='create_order'),
     path('order_confirmation/<int:pk>/', OrderConfirmationView.as_view(), name='order_confirmation'),
+    path("orders/", OrderListView.as_view(), name="orders"),
+    path("order/<int:pk>/finish/", OrderFinishView.as_view(), name="order_finish"),
 
     path('book/favorite_book/<int:book_id>/', FavoriteBookView.as_view(), name='favorite_book'),
     path('books/favorites/', FavoriteBooksListView.as_view(), name='user_favorite_books'),
@@ -59,8 +61,5 @@ urlpatterns = [
     path('search/', search_view, name="search"),
 
     path('exchange_rate/', exchange_rate_page, name='exchange_rate'),
-
-    path("orders/", OrderListView.as_view(), name="orders"),
-    path("order/<int:pk>/finish/", OrderFinishView.as_view(), name="order_finish"),
 
 ]

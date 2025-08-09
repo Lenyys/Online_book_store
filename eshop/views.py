@@ -14,7 +14,7 @@ from django.views.decorators.http import require_GET
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, TemplateView
 
-from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm #, ImageFormSet
+from eshop.forms import BookForm, ImageForm, CategoryForm, AuthorForm, AddOrCreateAuthorForm, OrderForm
 from eshop.mixins import StaffRequiredMixin
 from eshop.models import Book, Category, Image, Autor, Cart, SelectedProduct, Order
 
@@ -31,6 +31,7 @@ def home(request):
         'new_ebooks': new_ebooks,
         'new_books': new_books,
     })
+
 
 def search_view(request):
     query = request.GET.get("q", "").strip()
@@ -158,11 +159,10 @@ class BookListView(ListView):
             eur_rate = exchange_rates["EUR"][0]
         for book in context['books']:
             if eur_rate:
-                book.converted_price = round(float(book.price) / eur_rate,2)
+                book.converted_price = round(float(book.price) / eur_rate, 2)
                 if book.discount:
                     book.converted_price_eur_discount = round(
                         book.converted_price * (1 - float(book.discount) / 100), 2)
-                    print(f"book konverted")
             else:
                 book.converted_price = None
         return context
@@ -222,12 +222,11 @@ class BookDetailView(DetailView):
         book = context['book']
         if exchange_rates:
             eur_rate = exchange_rates["EUR"][0]
-        print(f"EURO: {eur_rate}")
         if eur_rate:
             book.converted_price_eur = round(float(book.price) / eur_rate, 2)
             if book.discount:
                 book.converted_price_eur_discount = round(
-                    book.converted_price_eur * (1 - float(book.discount)/100), 2)
+                    book.converted_price_eur * (1 - float(book.discount) / 100), 2)
         else:
             book.converted_price_eur = None
         return context
@@ -289,7 +288,9 @@ class FavoriteBooksListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return self.request.user.favorite_books.all()
 
+
 class FavoriteBookRemoveFromFavoritesList(LoginRequiredMixin, View):
+
     def get(self, request, book_id):
         book = get_object_or_404(Book, id=book_id)
         return render(request, 'eshop/remove_favorite.html', {
@@ -317,18 +318,6 @@ class FavoriteBookView(LoginRequiredMixin, View):
 
         next_url = self.request.POST.get('next', '/')
         return redirect(next_url)
-
-    # def get(self, request, book_id):
-    #     book = get_object_or_404(Book, id=book_id)
-    #     user = request.user
-    #
-    #     if user in book.favorite_book.all():
-    #         book.favorite_book.remove(user)
-    #     else:
-    #         book.favorite_book.add(user)
-    #
-    #     next_url = self.request.GET.get('next', '/')
-    #     return redirect(next_url)
 
 
 class ImageCreateView(PermissionRequiredMixin, CreateView):
@@ -402,7 +391,7 @@ class AddOrCreateAuthorView(PermissionRequiredMixin, FormView):
         self.book = get_object_or_404(Book, pk=kwargs.get('pk'))
         return super().dispatch(request, *args, **kwargs)
 
-    def form_valid(self, form):
+    def form_valid(self, form, *args, **kwargs):
         author = form.cleaned_data.get('existing_author')
         if not author:
             author = Autor.objects.create(
@@ -440,7 +429,7 @@ class AuthorUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = 'eshop.change_autor'
 
     def get_success_url(self):
-        next_url = self.request.POST.get('next') # or self.request.GET.get('next')
+        next_url = self.request.POST.get('next')  # or self.request.GET.get('next')
         return next_url or reverse_lazy('staff_author_list')
 
     def get_context_data(self, **kwargs):
@@ -487,7 +476,6 @@ class RemoveAuthorFromBook(PermissionRequiredMixin, View):
         self.book.autor.remove(self.author)
         next_url = request.POST.get('next') or reverse('staff_book_detail', kwargs={'pk': self.book.pk})
         return redirect(next_url)
-
 
 
 @method_decorator(never_cache, name='dispatch')
@@ -611,7 +599,7 @@ class CreateOrderView(View):
             cart = get_object_or_404(Cart, user=None, session_key=self.request.session.session_key)
         total_price = cart.get_total_cart_price()
         if form.is_valid():
-             with transaction.atomic():
+            with transaction.atomic():
                 order = form.save(commit=False)
                 if self.request.user.is_authenticated:
                     order.user = self.request.user
@@ -637,9 +625,9 @@ class CreateOrderView(View):
                     to=[order.email],
                 )
                 email.send()
-             return redirect('order_confirmation', pk=order.id)
+            return redirect('order_confirmation', pk=order.id)
         return render(request, 'eshop/order_form.html', {
-            'form': form, 'cart': cart, 'total_price': total_price })
+            'form': form, 'cart': cart, 'total_price': total_price})
 
 
 class OrderConfirmationView(TemplateView):
@@ -681,8 +669,6 @@ def exchange_rate_page(request):
         try:
             exchange_valid_for_str = exchange_rates["EUR"][1]
             exchange_valid_for = datetime.strptime(exchange_valid_for_str, "%Y-%m-%d").date()
-            # print(f"valid_for: {exchange_valid_for}")
-            # print(f"valid_for < today: {exchange_valid_for < today}")
         except Exception as e:
             print("Chyba při parsování validFor:", e)
     if not exchange_rates or (
@@ -715,6 +701,7 @@ def exchange_rate_page(request):
     return render(request, 'eshop/exchange_rate.html', {
         'exchange_rates_dict': exchange_rates_dict
     })
+
 
 class OrderFinishView(StaffRequiredMixin, UpdateView):
     model = Order

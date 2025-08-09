@@ -1,16 +1,16 @@
-   <div class="header-2">
-       <nav class="navbar">
-           <a href="{% url 'home' %}">Domů</a>
-           <a href="{% url 'book_list' %}">Knihy</a>
-           <a href="{% url 'e_book_list' %}">E-knihy</a>
-           <a href="{% url 'audio_book_list' %}">Audioknihy</a>
+<div class="header-2">
+    <nav class="navbar">
+        <a href="{% url 'home' %}">Domů</a>
+        <a href="{% url 'book_list' %}">Knihy</a>
+        <a href="{% url 'e_book_list' %}">E-knihy</a>
+        <a href="{% url 'audio_book_list' %}">Audioknihy</a>
 
-           {% if user.is_authenticated and user.is_superuser or user.is_staff %}
-           <a href="{% url 'staff_book_list' %}">Seznam knih</a>
+        {% if user.is_authenticated and user.is_superuser or user.is_staff %}
+        <a href="{% url 'staff_book_list' %}">Seznam knih</a>
         <a href="{% url 'staff_author_list' %}">Seznam autorů</a>
         <a href="{% url 'staff_category_list' %}">Seznam kategorií</a>
-           <a href="{% url 'orders' %}">Objednávky</a>
-           {% endif %}
-           <a href="{% url 'exchange_rate' %}">Kurzy měn</a>
-       </nav>
-   </div>
+        <a href="{% url 'orders' %}">Objednávky</a>
+        {% endif %}
+        <a href="{% url 'exchange_rate' %}">Kurzy měn</a>
+    </nav>
+</div>

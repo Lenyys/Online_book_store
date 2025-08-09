@@ -5,6 +5,17 @@
         <img src="{{ book.images.all.0.image.url }}" alt="Obálka knihy" class="book-cover">
         <div class="book-info-box">
             <h1 class="book-title">{{ book.name }}</h1>
+            <form action="{% url 'favorite_book' book.id %}" method="post" style="all: unset; display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button type="submit" style="all: unset; font-size:10px;">
+                    {% if user in book.favorite_book.all %}
+                    Odebrat z oblíbených ❤️
+                    {% else %}
+                    přidat do oblíbených ❤︎
+                    {% endif %}
+                </button>
+            </form>
             <p class="book-author">
                 {% if book.autor.all %}
                 {{ book.autor.all|join:", " }}
@@ -26,7 +37,7 @@
                             {{ book.price }} Kč
                             {% endif %}
                         </span> <br>
-                {% if book.converted_price_eur_discount  %}
+                {% if book.converted_price_eur_discount %}
                 ({{ book.converted_price_eur_discount }} EUR)
                 <span class="fs-6 text-muted text-decoration-line-through">
                             {% if book.discount %}
