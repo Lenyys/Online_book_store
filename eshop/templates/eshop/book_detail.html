@@ -5,6 +5,7 @@
         <img src="{{ book.images.all.0.image.url }}" alt="Obálka knihy" class="book-cover">
         <div class="book-info-box">
             <h1 class="book-title">{{ book.name }}</h1>
+            {% if user.is_authenticated %}
             <form action="{% url 'favorite_book' book.id %}" method="post" style="all: unset; display: inline;">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.path }}">
@@ -16,11 +17,10 @@
                     {% endif %}
                 </button>
             </form>
+            {% endif %}
             <p class="book-author">
                 {% if book.autor.all %}
                 {{ book.autor.all|join:", " }}
-                {% else %}
-                (bez autora)
                 {% endif %}
             </p>
             <p class="book-description">{{ book.description }}</p>

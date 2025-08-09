@@ -3,8 +3,9 @@
 {% block content %}
 
 <div class="form-container">
-    <h1 class="form-title">Opravdu chcete odebrat autora {{ author.name }} {{ author.lastname }} z knihy: {{ book.name
-        }}</h1>
+    <h1 class="form-title">
+        Opravdu chcete odebrat autora {{ author.name }} {{ author.lastname }} z knihy: {{ book.name }}
+    </h1>
     <form method="post">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
