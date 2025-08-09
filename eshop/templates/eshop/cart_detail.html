@@ -27,7 +27,15 @@
                 <div class="item-author">Helen Exley</div>
             </div>
             <div class="col-3 text-sm-right">
-                {{ item.product.price }} Kč
+
+                {{ item.product.get_discount_price }} Kč
+                {% if item.product.discount %}
+                <span class="fs-6 text-muted text-decoration-line-through">
+                            {% if item.product.discount %}
+                            {{ item.product.price }} Kč
+                            {% endif %}
+                        </span> <br>
+                {% endif %}
             </div>
 
             <div class="col-2">

@@ -50,14 +50,14 @@ class Book(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
                                    related_name='products_updated')
     favorite_book = models.ManyToManyField(User, blank=True, related_name='favorite_books')
-    discount = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False, default=0)
+    discount = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=True, default=0)
 
     class Meta:
         ordering = ['name']
 
     def get_discount_price(self):
         if self.discount:
-            return self.price * (1 - self.discount / 100)
+            return round(self.price * (1 - self.discount / 100),2)
         return self.price
 
     def __str__(self):
@@ -122,7 +122,7 @@ class Cart(models.Model):
     def get_total_cart_price(self):
         total_price = 0
         for item in self.selected_products.all():
-            total_price += (item.product.price * item.quantity)
+            total_price += (item.product.get_discount_price() * item.quantity)
         return total_price
 
 
@@ -138,6 +138,7 @@ class Order(models.Model):
     phone = models.CharField(max_length=20, null=True, blank=True)
     postal_code = models.CharField(max_length=10, default="")
     note = models.TextField(blank=True)
+    finished = models.BooleanField(default=False)
 
     def __str__(self):
         return f"objednávka #{self.id} - {self.first_name} {self.last_name}"

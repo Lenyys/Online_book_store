@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for order in orders %}
+    <form method="post" action="{% url 'order_finish' order.pk %}">
+        {% csrf_token %}
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                name="finished"
+                value="true"
+                onchange="this.form.submit()"
+                id="order_{{ order.id }}"
+            >
+            <label class="form-check-label" for="order_{{ order.id }}">
+                {{ order }}
+            </label>
+        </div>
+    </form>
+{% endfor %}
+<!--<div class="authors-page">  &lt;!&ndash; použijeme stejný wrapper jako u autorů &ndash;&gt;-->
+<!--    <h1 class="authors-title">Seznam Knih</h1>-->
+
+<!--    <div class="authors-grid"> &lt;!&ndash; znovu použijeme authors-grid &ndash;&gt;-->
+<!--        {% for book in books %}-->
+<!--        <div class="author-card"> &lt;!&ndash; použijeme stejné stylování jako autor &ndash;&gt;-->
+<!--            <div class="author-avatar">-->
+<!--                📘-->
+<!--            </div>-->
+<!--            <h2 class="author-name">{{ book.name }}</h2>-->
+<!--            <div class="author-actions">-->
+<!--                {% if perms.eshop.change_book %}-->
+<!--                <a href="{% url 'book_update' book.id %}?next={{ request.path }}" class="edit-btn"-->
+<!--                   title="Upravit">✏️</a>-->
+<!--                {% endif %}-->
+<!--                {% if perms.eshop.delete_book %}-->
+<!--                <a href="{% url 'book_delete' book.id %}?next={{ request.path }}" class="delete-btn"-->
+<!--                   title="Smazat">❌</a>-->
+<!--                {% endif %}-->
+<!--                {% if user.is_authenticated and user.is_superuser or user.is_staff %}-->
+<!--                <a href="{% url 'staff_book_detail' book.id %}?next={{ request.path }}" class="detail-btn"-->
+<!--                   title="Detail knihy">-->
+<!--                    <i class="bi bi-search"></i>-->
+<!--                </a>-->
+<!--                {% endif %}-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        {% empty %}-->
+<!--        <p class="no-authors">Žádné knihy k zobrazení.</p>-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+
+<!--    <div class="add-author-wrap">-->
+<!--        {% if perms.eshop.add_book %}-->
+<!--        <a class="btn btn-success add-author-btn" href="{% url 'book_create' %}">-->
+<!--            Přidat knihu-->
+<!--        </a>-->
+<!--        {% endif %}-->
+<!--    </div>-->
+<!--</div>-->
+{% endblock %}

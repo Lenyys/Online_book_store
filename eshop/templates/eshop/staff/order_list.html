@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="mt-4 text-center">Objednávky ke zpracování</h1>
+{% for order in orders %}
+    <form method="post" action="{% url 'order_finish' order.pk %}">
+        {% csrf_token %}
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                name="finished"
+                value="true"
+                onchange="this.form.submit()"
+                id="order_{{ order.id }}"
+            >
+            <label class="form-check-label" for="order_{{ order.id }}">
+                {{ order }}
+            </label>
+            {% for item in order.selected_products.all %}
+                <div> {{ item }} </div>
+            {% endfor %}
+        </div>
+    </form>
+{% endfor %}
+{% endblock %}

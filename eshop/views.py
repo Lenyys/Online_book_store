@@ -159,6 +159,10 @@ class BookListView(ListView):
         for book in context['books']:
             if eur_rate:
                 book.converted_price = round(float(book.price) / eur_rate,2)
+                if book.discount:
+                    book.converted_price_eur_discount = round(
+                        book.converted_price * (1 - float(book.discount) / 100), 2)
+                    print(f"book konverted")
             else:
                 book.converted_price = None
         return context
@@ -221,6 +225,9 @@ class BookDetailView(DetailView):
         print(f"EURO: {eur_rate}")
         if eur_rate:
             book.converted_price_eur = round(float(book.price) / eur_rate, 2)
+            if book.discount:
+                book.converted_price_eur_discount = round(
+                    book.converted_price_eur * (1 - float(book.discount)/100), 2)
         else:
             book.converted_price_eur = None
         return context
@@ -618,7 +625,7 @@ class CreateOrderView(View):
                     item.product.save()
                     item.order = order
                     item.cart = None
-                    item.product_price = item.product.price
+                    item.product_price = item.product.get_discount_price()
                     item.save()
 
                 cart.is_temporary = True
@@ -708,3 +715,26 @@ def exchange_rate_page(request):
     return render(request, 'eshop/exchange_rate.html', {
         'exchange_rates_dict': exchange_rates_dict
     })
+
+class OrderFinishView(StaffRequiredMixin, UpdateView):
+    model = Order
+    fields = []
+
+    def post(self, request, *args, **kwargs):
+        order = self.get_object()
+        finished_value = request.POST.get('finished')
+        if finished_value == 'true':
+            order.finished = True
+        else:
+            order.finished = False
+        order.save()
+        return redirect(reverse_lazy("orders"))
+
+
+class OrderListView(StaffRequiredMixin, ListView):
+    model = Order
+    template_name = "eshop/staff/order_list.html"
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        return Order.objects.filter(finished=False)

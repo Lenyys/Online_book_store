@@ -8,7 +8,8 @@ from eshop.views import (BookListView, EBookListView, AudioBookListView, BookDet
                          StaffAuthorDetailView, AuthorDeleteView, AddToCartView, CartDetailView,
                          UpdateCartView, RemoveFromCartView,
                          OrderConfirmationView, CreateOrderView, FavoriteBookView, FavoriteBooksListView,
-                         search_view, autocomplete_search, FavoriteBookRemoveFromFavoritesList, exchange_rate_page)
+                         search_view, autocomplete_search, FavoriteBookRemoveFromFavoritesList, exchange_rate_page,
+                         OrderListView, OrderFinishView)
 
 urlpatterns = [
     path('book_list/', BookListView.as_view(), name='book_list'),
@@ -57,5 +58,9 @@ urlpatterns = [
     path('autocomplete-search/', autocomplete_search, name="autocomplete_search"),
     path('search/', search_view, name="search"),
 
-    path('exchange_rate/', exchange_rate_page, name='exchange_rate')
+    path('exchange_rate/', exchange_rate_page, name='exchange_rate'),
+
+    path("orders/", OrderListView.as_view(), name="orders"),
+    path("order/<int:pk>/finish/", OrderFinishView.as_view(), name="order_finish"),
+
 ]

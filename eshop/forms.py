@@ -10,13 +10,14 @@ from eshop.models import Book, Category, Image, Autor, Order
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['name', 'type', 'autor', 'price', 'description', 'stock_quantity',
+        fields = ['name', 'type', 'autor', 'price','discount', 'description', 'stock_quantity',
                   'category', 'isbn', 'ean']
         labels = {
             'name': 'Název knihy',
             'type': 'Typ knihy',
             'autor': 'Autor',
             'price': 'Cena',
+            'discount': 'Sleva v %',
             'description': 'Popis',
             'stock_quantity': 'Dostupné množství',
             'category': 'Kategorie',
@@ -32,6 +33,9 @@ class BookForm(forms.ModelForm):
                 'class': 'form-control'
             }),
             'price': forms.NumberInput(attrs={
+                'class': 'form-control'
+            }),
+            'discount': forms.NumberInput(attrs={
                 'class': 'form-control'
             }),
             'description': forms.Textarea(attrs={
@@ -68,6 +72,14 @@ class BookForm(forms.ModelForm):
         if not price or price <= 0:
             raise forms.ValidationError("Cena musí být větší než 0 Kč.")
         return price
+
+    def clean_discount(self):
+        discount = self.cleaned_data.get('discount')
+        if not discount:
+            return discount
+        if discount < 0 or discount > 100:
+            raise forms.ValidationError("Sleva je v rozsahu 0-100")
+        return discount
 
     def clean_isbn(self):
         isbn = self.cleaned_data.get('isbn')

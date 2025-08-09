@@ -50,8 +50,20 @@
                             {{ book.name }}
                         </a>
                     </h6>
-                    <p class="card-text mb-3 text-muted small">Cena: <strong>{{ book.price }} Kč</strong><br>
-                        {% if book.converted_price %}
+                    <p class="card-text mb-3 text-muted small">Cena: <strong>{{ book.get_discount_price }} Kč</strong>
+                        <span class="fs-6 text-muted text-decoration-line-through">
+                            {% if book.discount %}
+                            {{ book.price }} Kč
+                            {% endif %}
+                        </span> <br>
+                        {% if book.converted_price_eur_discount %}
+                        ({{ book.converted_price_eur_discount }} EUR)
+                        <span class="fs-6 text-muted text-decoration-line-through">
+                            {% if book.discount %}
+                            {{ book.converted_price }} EUR
+                            {% endif %}
+                        </span>
+                        {% elif book.converted_price %}
                         ({{ book.converted_price }} EUR)
                         {% endif %}
                     </p>

@@ -20,8 +20,20 @@
                 Na skladě: {{ book.stock_quantity }} ks
                 {% endif %}
             </p>
-            <p class="book-price">{{ book.price }} Kč
-                {% if book.converted_price_eur %}
+            <p class="book-price">{{ book.get_discount_price }} Kč
+                <span class="fs-6 text-muted text-decoration-line-through">
+                            {% if book.discount %}
+                            {{ book.price }} Kč
+                            {% endif %}
+                        </span> <br>
+                {% if book.converted_price_eur_discount  %}
+                ({{ book.converted_price_eur_discount }} EUR)
+                <span class="fs-6 text-muted text-decoration-line-through">
+                            {% if book.discount %}
+                            {{ book.converted_price_eur }} Kč
+                            {% endif %}
+                </span>
+                {% elif book.converted_price_eur %}
                 ({{ book.converted_price_eur }} EUR)
                 {% endif %}
             </p>
