@@ -254,6 +254,15 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['first_name', 'last_name', 'email', 'phone', 'delivery_address', 'postal_code', 'note']
+        labels = {
+            'first_name': 'Jméno',
+            'last_name': 'Příjmení',
+            'email': 'E-mail',
+            'phone': 'Mobil',
+            'delivery_address': 'Adresa doručení',
+            'postal_code': 'PSČ',
+            'note': 'Poznámka k objednávce'
+        }
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
