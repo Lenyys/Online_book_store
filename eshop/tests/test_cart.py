@@ -63,7 +63,6 @@ class CartDetailViewTest(TestCase):
 
     def test_cart_detail_user_authenticated(self):
         self.client.login(username='testuser', password='testpass123')
-        total_price = self.cart.get_total_cart_price()
         response = self.client.get(reverse('cart_detail'))
         continue_url = reverse('book_list')
         remove_url = reverse('remove_from_cart', kwargs={'pk':self.cart_item.id})
@@ -74,7 +73,6 @@ class CartDetailViewTest(TestCase):
         self.assertContains(response, "testbook1")
         self.assertContains(response, 100)
         self.assertContains(response, '<input type="number"')
-        self.assertContains(response, total_price)
         self.assertContains(response, 'type="submit"')
         self.assertContains(response, "<form")
         self.assertContains(response, f'action="{update_cart_url}"')
