@@ -50,10 +50,10 @@ class GuiTestWithSelenium(TestCase):
         submit_button.send_keys(Keys.RETURN)
         time.sleep(2)
 
-        assert ('Username' or 'Uživatelské jméno'
-                or 'Uživatel s tímto jménem již existuje.'
-                or 'A user with that username already exists.'
-                in driver.page_source)
+        assert ('Username' in driver.page_source
+                or 'Uživatelské jméno' in driver.page_source
+                or 'Uživatel s tímto jménem již existuje.' in driver.page_source
+                or 'A user with that username already exists.' in driver.page_source)
 
     # @skip
     def test_book_not_in_db(self):
@@ -61,6 +61,5 @@ class GuiTestWithSelenium(TestCase):
         driver.get('http://127.0.0.1:8000/eshop/book_detail/1004/')
         time.sleep(2)
 
-        assert ('Chyba 404: Stránka nenalezena'
-                or 'Page not found'
-                in driver.page_source)
+        assert ('Chyba 404: Stránka nenalezena' in driver.page_source
+                or 'Page not found' in driver.page_source)
