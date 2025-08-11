@@ -8,21 +8,21 @@ from selenium.webdriver.common.by import By
 
 
 class GuiTestWithSelenium(TestCase):
-    @skip
+    # @skip
     def test_book_page(self):
         driver = webdriver.Chrome()
         driver.get('http://127.0.0.1:8000/eshop/book_list/')
         time.sleep(2)
         assert "Kategorie" in driver.page_source
 
-    @skip
+    # @skip
     def test_detai_book_page(self):
         driver = webdriver.Chrome()
         driver.get('http://127.0.0.1:8000/eshop/book_detail/4/')
         time.sleep(2)
         assert "Na skladě:" in driver.page_source
 
-    @skip
+    # @skip
     def test_signup(self):
         driver = webdriver.Chrome()
         driver.get('http://127.0.0.1:8000/accounts/signup/')
@@ -50,11 +50,12 @@ class GuiTestWithSelenium(TestCase):
         submit_button.send_keys(Keys.RETURN)
         time.sleep(2)
 
-        assert ('Username'
+        assert ('Username' or 'Uživatelské jméno'
+                or 'Uživatel s tímto jménem již existuje.'
                 or 'A user with that username already exists.'
                 in driver.page_source)
 
-    @skip
+    # @skip
     def test_book_not_in_db(self):
         driver = webdriver.Chrome()
         driver.get('http://127.0.0.1:8000/eshop/book_detail/1004/')
