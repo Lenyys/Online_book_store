@@ -4,7 +4,7 @@ Tato webová aplikace nabízí jednoduché rozhraní, filtrování, vyhledáván
 a vytváření objednávek 
 
 
-![Ukázka aplikace] (static/screenshots/........)
+![Ukázka aplikace](static/screenshots/home.png)
 
 ## 🚀 Funkce
 - registrace, přihlášení
